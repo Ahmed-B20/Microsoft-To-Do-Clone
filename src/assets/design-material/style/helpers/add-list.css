@@ -15,6 +15,7 @@
     border-top: 1px solid #dfdfdf;
     display: flex;
     align-items: center;
+    /* box-shadow: #5f73c1 0px 1px 3px, #5f73c1 0px 1px 2px; */
 }
 
 .add-item {
@@ -50,14 +51,14 @@
     }
 }
 
-.add-item-container.error input {
+/* .add-item-container.error input {
     color: red;
 }
 
 .add-item-container.error span {
     cursor: default;
     color: red;
-}
+} */
 
 /* .add-item:hover {
     background-color: white;
@@ -72,6 +73,11 @@
 .add-item .single-list img {
     width: 25px;
     height: 25px;
+    /* cursor: pointer; */
+}
+
+.add-item .single-list img.active,
+.add-item span img.active {
     cursor: pointer;
 }
 
@@ -112,4 +118,84 @@
 .add-item span.disabled {
     cursor: default;
     color: black;
+}
+
+
+.lists-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow-y: auto;
+    margin: 3px 3px 3px 0;
+}
+
+.lists-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+.lists-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.lists-container::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+.lists-container::-webkit-scrollbar-thumb:hover {
+    background-color: #5f73c1;
+}
+
+.lists-container li {
+    padding: 10px 15px;
+}
+
+.lists-container li:not(.group-of-lists).active,
+.lists-container li:not(.group-of-lists):hover,
+.lists-container li.group-of-lists p:hover,
+.lists-container li.group-of-lists.active p {
+    background-color: #ebebeb;
+}
+
+.lists-container li.single-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.lists-container li.group-of-lists {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.lists-container li.group-of-lists p {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-basis: 100%;
+    padding: 10px 15px;
+}
+
+.lists-container li.group-of-lists ul {
+    flex-basis: 100%;
+    margin-right: 6px;
+    /* padding: 0 15px; */
+}
+
+.lists-container li.group-of-lists ul li {
+    padding: 10px 30px;
+}
+
+.lists-container li.group-of-lists img,
+.lists-container li.single-list img {
+    width: 15px;
+    height: 15px;
 }

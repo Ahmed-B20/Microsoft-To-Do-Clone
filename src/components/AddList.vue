@@ -1,14 +1,18 @@
 <template>
-    <div class="add-item-container" ref="addItemParent">
+    <div class="add-item-container" :class="{error: toggleError}">
         <div class="add-item">
 
             <div class="single-list">
-                <img src="@/assets/design-material/icons/add.png" alt="add-item" />
-                <input v-model="itemValue" placeholder="Add New List" type="text" name="" id="" />
+                <span @click="addList">
+                    <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/add.png" alt="add-item" />
+                </span>
+                <input @focus="toggleErrorClass" v-model="itemValue" placeholder="Add New List" type="text" name=""
+                    id="" />
             </div>
 
-            <span @click="addList" :class="{ disabled: itemDetect }" ref="addItem">
-                <img src="@/assets/design-material/icons/sticky-notes (1).png" alt="add-item" />
+            <span>
+                <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/add.png"
+                    alt="add-item" />
             </span>
         </div>
     </div>
@@ -32,16 +36,16 @@ export default {
             listObj: {},
             taskNumber: 0,
             allSavedList: [],
+            toggleError: false
         };
     },
 
     computed: {
         itemDetect() {
             if (this.itemValue.length > 0) {
-                this.$refs.addItemParent.classList.remove("error");
-                return false;
-            } else {
                 return true;
+            } else {
+                return false;
             }
         },
     },
@@ -66,9 +70,12 @@ export default {
                 this.listObj = {};
                 this.taskNumber++;
             } else {
-                this.$refs.addItemParent.classList.add("error");
+                this.toggleError = true
             }
         },
+        toggleErrorClass() {
+            this.toggleError = false
+        }
     },
 };
 </script>
