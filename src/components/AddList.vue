@@ -4,7 +4,7 @@
 
             <div class="single-list">
                 <span @click="addList">
-                    <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/add.png" alt="add-item" />
+                    <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/plus.png" alt="add-item" />
                 </span>
                 <input @focus="toggleErrorClass" v-model="itemValue" placeholder="Add New List" type="text" name=""
                     id="" />

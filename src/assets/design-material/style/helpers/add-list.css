@@ -71,8 +71,8 @@
 }
 
 .add-item .single-list img {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     /* cursor: pointer; */
 }
 
@@ -111,8 +111,8 @@
 }
 
 .add-item span img {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
 }
 
 .add-item span.disabled {
@@ -155,8 +155,8 @@
 
 .lists-container li:not(.group-of-lists).active,
 .lists-container li:not(.group-of-lists):hover,
-.lists-container li.group-of-lists p:hover,
-.lists-container li.group-of-lists.active p {
+.lists-container li.group-of-lists .group-of-lists-controller:hover,
+.lists-container li.group-of-lists.active .group-of-lists-controller {
     background-color: #ebebeb;
 }
 
@@ -176,12 +176,18 @@
     padding: 0;
 }
 
-.lists-container li.group-of-lists p {
+.lists-container li.group-of-lists .group-of-lists-controller {
     display: flex;
-    gap: 8px;
+    /* gap: 8px; */
+    justify-content: space-between;
     align-items: center;
     flex-basis: 100%;
     padding: 10px 15px;
+}
+
+.lists-container li.group-of-lists .group-of-lists-controller .toggle img {
+    width: 13px;
+    height: 13px;
 }
 
 .lists-container li.group-of-lists ul {
