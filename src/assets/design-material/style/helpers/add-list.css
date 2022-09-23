@@ -1,0 +1,115 @@
+/* .add-item-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 0 40px 40px;
+    right: 50px;
+    background-image: linear-gradient(to right, var(--main-color), var(--main-color-transparent));
+    z-index: 1;
+} */
+
+.add-item-container {
+    padding: 5px 15px;
+    background-color: #f4f4f4;
+    border-top: 1px solid #dfdfdf;
+    display: flex;
+    align-items: center;
+}
+
+.add-item {
+    display: flex;
+    /* padding: 8px 10px;
+    background-color: #d6dcf4; */
+    font-size: 14px;
+    /* overflow: hidden; */
+    /* position: relative; */
+    /* margin-top: auto; */
+    /* position: absolute;
+    top: 0;
+    left: 0;
+    right: 0; */
+}
+
+.add-item-container.error {
+    border-color: red;
+    animation: shake 0.1s linear;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(-10px);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.add-item-container.error input {
+    color: red;
+}
+
+.add-item-container.error span {
+    cursor: default;
+    color: red;
+}
+
+/* .add-item:hover {
+    background-color: white;
+} */
+
+.add-item .single-list {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.add-item .single-list img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.add-item .single-list input {
+    padding: 5px;
+    flex-grow: 1;
+    color: black;
+    background-color: #f4f4f4;
+}
+
+/* .add-item .single-list:hover {
+    background-color: #e9e9e9;
+} */
+
+/* .add-item .single-list input:hover {
+    background-color: #e9e9e9;
+}
+
+.add-item .single-list input:focus {
+    background-color: #e9e9e9;
+} */
+
+.add-item span {
+    /* position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px; */
+    /* font-weight: bolder;
+    cursor: pointer; */
+    height: fit-content;
+}
+
+.add-item span img {
+    width: 30px;
+    height: 30px;
+}
+
+.add-item span.disabled {
+    cursor: default;
+    color: black;
+}

@@ -1,0 +1,26 @@
+.aside-link {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    margin-top: 10px;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.aside-link a {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 5px 15px;
+    border-radius: 5px;
+    color: black;
+    font-size: 17px;
+}
+
+.aside-link a.router-link-active,
+.aside-link a:hover {
+    background-color: #ebebeb;
+}
+
+.aside-link a img {
+    width: 30px;
+}

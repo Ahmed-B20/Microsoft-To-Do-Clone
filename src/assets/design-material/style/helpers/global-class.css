@@ -1,0 +1,7 @@
+.dashboard-content-container {
+    /* padding: 40px; */
+    /* padding: 0 40px; */
+    flex-grow: 1;
+    /* background-color: var(--main-color); */
+    background-color: #5f73c1;
+}
