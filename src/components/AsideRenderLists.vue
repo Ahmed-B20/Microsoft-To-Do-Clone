@@ -1,5 +1,5 @@
 <template>
-    <ul class="lists-container">
+    <!-- <ul class="lists-container">
         <li class="group-of-lists">
             <div class="group-of-lists-controller">
                 <p><img src="@/assets/design-material/icons/tab.png" alt="single-list"> <span>demo test</span></p>
@@ -57,5 +57,18 @@
         <li class="single-list"><img src="@/assets/design-material/icons/menu.png" alt="single-list"> demo test</li>
         <li class="single-list"><img src="@/assets/design-material/icons/menu.png" alt="single-list"> demo test</li>
         <li class="single-list"><img src="@/assets/design-material/icons/menu.png" alt="single-list"> demo test</li>
-    </ul>
+    </ul> -->
+    <RenderList />
 </template>
+
+<script>
+import RenderList from './RenderList.vue';
+export default {
+    name: 'render-lists',
+    components: {
+        RenderList
+    }
+}
+
+
+</script>
