@@ -6,12 +6,12 @@
                 <span @click="addList">
                     <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/plus.png" alt="add-item" />
                 </span>
-                <input @focus="toggleErrorClass" v-model="itemValue" placeholder="Add New List" type="text" name=""
-                    id="" />
+                <input @keyup.enter="addList" required @focus="toggleErrorClass" v-model="itemValue"
+                    placeholder="Add New List" type="text" name="" id="" />
             </div>
 
             <span @click="addGroupOfList">
-                <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/add.png"
+                <img ref="addGroupOfList" :class="{ active: itemDetect }" src="@/assets/design-material/icons/add.png"
                     alt="add-group-of-list" />
             </span>
         </div>
@@ -19,6 +19,8 @@
 </template>
   
 <script>
+import { allLists } from '@/stores/allLists.js'
+import { mapWritableState } from 'pinia'
 
 export default {
     name: "add-new-item",
@@ -33,8 +35,12 @@ export default {
         return {
             itemValue: "",
             listArray: [],
+            childListsArray: [],
+            childListObj: {},
+            toggleListChildren: false,
             listObj: {},
             taskNumber: 0,
+            childListId: 0,
             allSavedList: [],
             toggleError: false
         };
@@ -48,18 +54,40 @@ export default {
                 return false;
             }
         },
+        ...mapWritableState(allLists, ['lists']),
     },
 
     methods: {
         addList() {
             if (this.itemValue.length > 0) {
-                this.listObj.listName = this.itemValue;
-                this.listObj.id = this.taskNumber;
-                this.listObj.listChildren = false;
 
-                this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
-                this.listArray.push(this.listObj);
-                localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
+
+                if (this.toggleListChildren) {
+                    this.listObj.listChildren = true;
+                    this.childListObj.name = this.itemValue
+                    this.childListObj.id = `${this.childListId}c`
+                    this.childListsArray.push(this.childListObj)
+                    this.listObj.listsArray = this.childListsArray
+                    this.childListId++
+
+                    this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
+                    this.listArray.at(-1).listsArray = this.listObj.listsArray
+                    localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
+                    this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
+
+                } else {
+                    this.listObj.listName = this.itemValue;
+                    this.listObj.id = this.taskNumber;
+                    this.listObj.listChildren = false;
+
+                    this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
+                    this.listArray.push(this.listObj);
+                    localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
+                    this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
+                    this.taskNumber++;
+                }
+
+
 
                 if (localStorage.getItem("allListAndTasks")) {
                     this.allSavedList = JSON.parse(
@@ -69,13 +97,49 @@ export default {
 
                 this.itemValue = "";
                 this.listObj = {};
-                this.taskNumber++;
+                this.childListObj = {}
             } else {
                 this.toggleError = true
             }
         },
         toggleErrorClass() {
             this.toggleError = false
+        },
+        addGroupOfList() {
+            if (this.itemValue.length > 0) {
+                this.listObj.listName = this.itemValue;
+                this.listObj.id = this.taskNumber;
+                this.listObj.listsArray = []
+                this.listObj.listChildren = true;
+                this.toggleListChildren = !this.toggleListChildren
+
+                this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
+                this.listArray.push(this.listObj);
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
+                this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
+
+                if (localStorage.getItem("allListAndTasks")) {
+                    this.allSavedList = JSON.parse(
+                        localStorage.getItem("allListAndTasks")
+                    );
+                }
+
+
+                this.$refs.addGroupOfList.setAttribute('src', this.$refs.addGroupOfList.getAttribute('src').replace('add', 'close'))
+
+                this.itemValue = "";
+                this.listObj = {};
+                this.taskNumber++;
+            } else {
+
+                if (this.toggleListChildren === false) {
+                    this.toggleError = true
+                } else {
+                    this.$refs.addGroupOfList.setAttribute('src', this.$refs.addGroupOfList.getAttribute('src').replace('close', 'add'))
+                    this.toggleListChildren = false
+                    this.childListsArray = []
+                }
+            }
         }
     },
 };

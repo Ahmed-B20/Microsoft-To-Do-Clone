@@ -1,8 +1,7 @@
 <template>
     <transition name="render-list">
         <ul class="lists-container">
-
-            <li v-for="list in arrayOfLists" :key="list.id"
+            <li v-for="list in returnLists" :key="list.id"
                 :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
 
 
@@ -21,118 +20,26 @@
 <script>
 
 import GroupOfLists from './GroupOfLists.vue';
+import { allLists } from '@/stores/allLists.js'
+import { mapState } from 'pinia'
+import { storeToRefs } from 'pinia'
 
 export default {
     name: 'render-list',
     components: {
         GroupOfLists
     },
+    beforeMount() {
+        this.assignArrayOfLists
+    },
     data() {
         return {
-            arrayOfLists: [{
-                listName: 'list one',
-                id: 1,
-                listChildren: true,
-                listsArray: [
-                    {
-                        name: 'children one',
-                        id: 'cl1',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    },
-                    {
-                        name: 'children two',
-                        id: 'cl2',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    },
-                    {
-                        name: 'children three',
-                        id: 'cl3',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    }
-                ]
-            },
-            {
-                listName: 'list three',
-                id: 1,
-                listChildren: true,
-                listsArray: [
-                    {
-                        name: 'children one',
-                        id: 'cl1',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    },
-                    {
-                        name: 'children two',
-                        id: 'cl2',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    },
-                    {
-                        name: 'children three',
-                        id: 'cl3',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    }
-                ]
-            },
-
-            {
-                listName: 'list four',
-                id: 1,
-                listChildren: true,
-                listsArray: [
-                    {
-                        name: 'children one',
-                        id: 'cl1',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    },
-                    {
-                        name: 'children two',
-                        id: 'cl2',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    },
-                    {
-                        name: 'children three',
-                        id: 'cl3',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    }
-                ]
-            },
-            {
-                listName: 'list two',
-                id: 2,
-                listChildren: false,
-                tasks: [
-                    { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                    { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                ]
-            }]
+            arrayOfLists: []
         }
-    }
+    },
+    computed: {
+        ...mapState(allLists, ['returnLists']),
+    },
+
 }
 </script>
