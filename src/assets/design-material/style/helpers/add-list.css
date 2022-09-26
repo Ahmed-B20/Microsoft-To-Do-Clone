@@ -199,8 +199,35 @@
 .lists-container li.group-of-lists ul {
     flex-basis: 100%;
     margin-right: 6px;
-    /* padding: 0 15px; */
+    /* transform-origin: top;
+    transition: all 0.3s linear;
+    transform: translateY(-100%);
+    opacity: 0; */
 }
+
+/* .lists-container li.group-of-lists ul.hide {
+    transition: all 0.3s linear;
+    height: 0;
+    display: none;
+} */
+
+/* .lists-container li.group-of-lists ul.active {
+    animation: toggleChildLists 0.3s linear forwards;
+}
+
+@keyframes toggleChildLists {
+    0%{
+        transform: translateY(-100%);
+    }
+
+    50%{
+        transform: translateY(-50%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+} */
 
 .lists-container li.group-of-lists ul li {
     padding: 10px 30px;

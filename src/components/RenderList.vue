@@ -2,25 +2,12 @@
     <transition name="render-list">
         <ul class="lists-container">
 
-            <li v-for="list in arrayOfLists" :key="list.lastName"
+            <li v-for="list in arrayOfLists" :key="list.id"
                 :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
 
 
                 <template v-if="list.listChildren">
-                    <div class="group-of-lists-controller">
-                        <p><img src="@/assets/design-material/icons/tab.png" alt="single-list">
-                            <span>{{list.listName}}</span>
-                        </p>
-                        <span class="toggle"><img src="@/assets/design-material/icons/arrow-down-sign-to-navigate.png"
-                                alt="arrow-down-sign-to-navigate"></span>
-                    </div>
-                    <ul>
-                        <li v-for="childrenList in  list.listsArray" :key="childrenList.name">
-                            <p><img src="@/assets/design-material/icons/menu.png" alt="single-list">
-                                <span>{{childrenList.name}}</span>
-                            </p>
-                        </li>
-                    </ul>
+                    <GroupOfLists :childrenListsArray='list.listsArray' :listName="list.listName" />
                 </template>
 
                 <p v-else><img src="@/assets/design-material/icons/menu.png" alt="single-list">
@@ -32,16 +19,24 @@
 </template>
 
 <script>
+
+import GroupOfLists from './GroupOfLists.vue';
+
 export default {
     name: 'render-list',
+    components: {
+        GroupOfLists
+    },
     data() {
         return {
             arrayOfLists: [{
                 listName: 'list one',
+                id: 1,
                 listChildren: true,
                 listsArray: [
                     {
                         name: 'children one',
+                        id: 'cl1',
                         tasks: [
                             { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
                             { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
@@ -49,6 +44,7 @@ export default {
                     },
                     {
                         name: 'children two',
+                        id: 'cl2',
                         tasks: [
                             { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
                             { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
@@ -56,6 +52,70 @@ export default {
                     },
                     {
                         name: 'children three',
+                        id: 'cl3',
+                        tasks: [
+                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
+                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
+                        ]
+                    }
+                ]
+            },
+            {
+                listName: 'list three',
+                id: 1,
+                listChildren: true,
+                listsArray: [
+                    {
+                        name: 'children one',
+                        id: 'cl1',
+                        tasks: [
+                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
+                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
+                        ]
+                    },
+                    {
+                        name: 'children two',
+                        id: 'cl2',
+                        tasks: [
+                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
+                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
+                        ]
+                    },
+                    {
+                        name: 'children three',
+                        id: 'cl3',
+                        tasks: [
+                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
+                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
+                        ]
+                    }
+                ]
+            },
+
+            {
+                listName: 'list four',
+                id: 1,
+                listChildren: true,
+                listsArray: [
+                    {
+                        name: 'children one',
+                        id: 'cl1',
+                        tasks: [
+                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
+                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
+                        ]
+                    },
+                    {
+                        name: 'children two',
+                        id: 'cl2',
+                        tasks: [
+                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
+                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
+                        ]
+                    },
+                    {
+                        name: 'children three',
+                        id: 'cl3',
                         tasks: [
                             { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
                             { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
@@ -65,23 +125,14 @@ export default {
             },
             {
                 listName: 'list two',
+                id: 2,
                 listChildren: false,
-                listsArray: [
-                    {
-                        name: 'children one',
-                        tasks: [
-                            { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
-                            { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
-                        ]
-                    }
+                tasks: [
+                    { name: 'task one', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] },
+                    { name: 'task two', important: false, note: 'mmmmm', date: '29/9/2022', myDay: true, steps: ['one', 'two', 'three'] }
                 ]
             }]
         }
-    },
-    computed: {
-        // checkClass() {
-        //     return list.listCihldren ? "group-of-lists" : "single-list"
-        // }
     }
 }
 </script>

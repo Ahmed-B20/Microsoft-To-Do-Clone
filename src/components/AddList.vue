@@ -10,9 +10,9 @@
                     id="" />
             </div>
 
-            <span>
+            <span @click="addGroupOfList">
                 <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/add.png"
-                    alt="add-item" />
+                    alt="add-group-of-list" />
             </span>
         </div>
     </div>
@@ -55,6 +55,7 @@ export default {
             if (this.itemValue.length > 0) {
                 this.listObj.listName = this.itemValue;
                 this.listObj.id = this.taskNumber;
+                this.listObj.listChildren = false;
 
                 this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
                 this.listArray.push(this.listObj);
