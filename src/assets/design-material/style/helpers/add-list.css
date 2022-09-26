@@ -160,7 +160,7 @@
     background-color: #ebebeb;
 }
 
-.lists-container li.single-list {
+.lists-container li.single-list p {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -185,6 +185,12 @@
     padding: 10px 15px;
 }
 
+.lists-container li.group-of-lists .group-of-lists-controller p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .lists-container li.group-of-lists .group-of-lists-controller .toggle img {
     width: 13px;
     height: 13px;
@@ -198,6 +204,13 @@
 
 .lists-container li.group-of-lists ul li {
     padding: 10px 30px;
+}
+
+.lists-container li.group-of-lists ul li p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
 }
 
 .lists-container li.group-of-lists img,

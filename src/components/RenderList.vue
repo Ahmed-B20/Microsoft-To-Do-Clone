@@ -4,19 +4,29 @@
 
             <li v-for="list in arrayOfLists" :key="list.lastName"
                 :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
-                <div class="group-of-lists-controller">
-                    <p><img src="@/assets/design-material/icons/tab.png" alt="single-list"> <span>demo test</span>
-                    </p>
-                    <span v-if="list.listChildren" class="toggle"><img
-                            src="@/assets/design-material/icons/arrow-down-sign-to-navigate.png"
-                            alt="arrow-down-sign-to-navigate"></span>
-                </div>
-                <ul v-if="list.listChildren">
-                    <li><img src="@/assets/design-material/icons/menu.png" alt="single-list"> demo test</li>
-                </ul>
-            </li>
 
-            <!-- <li class="single-list"><img src="@/assets/design-material/icons/menu.png" alt="single-list"> demo test</li> -->
+
+                <template v-if="list.listChildren">
+                    <div class="group-of-lists-controller">
+                        <p><img src="@/assets/design-material/icons/tab.png" alt="single-list">
+                            <span>{{list.listName}}</span>
+                        </p>
+                        <span class="toggle"><img src="@/assets/design-material/icons/arrow-down-sign-to-navigate.png"
+                                alt="arrow-down-sign-to-navigate"></span>
+                    </div>
+                    <ul>
+                        <li v-for="childrenList in  list.listsArray" :key="childrenList.name">
+                            <p><img src="@/assets/design-material/icons/menu.png" alt="single-list">
+                                <span>{{childrenList.name}}</span>
+                            </p>
+                        </li>
+                    </ul>
+                </template>
+
+                <p v-else><img src="@/assets/design-material/icons/menu.png" alt="single-list">
+                    <span>{{list.listName}}</span>
+                </p>
+            </li>
         </ul>
     </transition>
 </template>
@@ -27,8 +37,8 @@ export default {
     data() {
         return {
             arrayOfLists: [{
-                lastName: 'list one',
-                listChildren: 'true',
+                listName: 'list one',
+                listChildren: true,
                 listsArray: [
                     {
                         name: 'children one',
@@ -54,8 +64,8 @@ export default {
                 ]
             },
             {
-                lastName: 'list two',
-                listChildren: 'false',
+                listName: 'list two',
+                listChildren: false,
                 listsArray: [
                     {
                         name: 'children one',
