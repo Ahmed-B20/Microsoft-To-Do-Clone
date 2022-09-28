@@ -64,6 +64,8 @@ export default {
 
                 if (this.toggleListChildren) {
                     this.listObj.listChildren = true;
+                    this.listObj.tasks = [];
+
                     this.childListObj.name = this.itemValue
                     this.childListObj.id = `${this.childListId}c`
                     this.childListsArray.push(this.childListObj)
@@ -79,6 +81,7 @@ export default {
                     this.listObj.listName = this.itemValue;
                     this.listObj.id = this.taskNumber;
                     this.listObj.listChildren = false;
+                    this.listObj.tasks = [];
 
                     this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
                     this.listArray.push(this.listObj);

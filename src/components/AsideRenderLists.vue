@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <RenderList />
 </template>
 
@@ -10,4 +10,4 @@ export default {
         RenderList
     }
 }
-</script>
+</script> -->

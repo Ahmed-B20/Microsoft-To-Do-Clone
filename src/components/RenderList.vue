@@ -16,13 +16,17 @@
         </ul>
     </transition>
 
-    <teleport v-if="teleportToggle" to='.dashboard-content-container'>
+    <!-- <teleport v-if="teleportToggle" to='.view-content-container'>
         <content-view>
             <template v-slot:title>
                 {{listName}}
             </template>
+
+            <template v-slot:allTask>
+                <li v-for="(index, task) in allTasks" :key="index">{{task}}</li>
+            </template>
         </content-view>
-    </teleport>
+    </teleport> -->
 
 </template>
 
@@ -46,7 +50,9 @@ export default {
         return {
             arrayOfLists: [],
             teleportToggle: false,
-            listName: ''
+            listName: '',
+            listIndex: 0,
+            allTasks: []
         }
     },
     computed: {
@@ -57,15 +63,20 @@ export default {
             console.log();
             if (event.target.tagName === 'LI') {
                 this.listName = event.target.getAttribute('data-name')
-            } else {
+                this.listIndex = event.target.getAttribute('data-id')
+            } else if (event.target.tagName === 'P') {
                 this.listName = event.target.parentElement.getAttribute('data-name')
+                this.listIndex = event.target.parentElement.getAttribute('data-id')
+            } else {
+                this.listName = event.target.parentElement.parentElement.getAttribute('data-name')
+                this.listIndex = event.target.parentElement.parentElement.getAttribute('data-id')
             }
 
-            console.log(this.listName);
+            this.allTasks = this.returnLists[this.listIndex].tasks
 
             this.teleportToggle = true
+            this.$router.push({ name: 'list', params: { listId: this.listIndex } })
         }
     }
-
 }
 </script>

@@ -8,69 +8,7 @@
 
 
         <ul class="tasks">
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
-
-            <li>Lorem ipsum dolor sit</li>
+            <slot name="allTask"></slot>
         </ul>
 
 
@@ -89,11 +27,16 @@
 <script>
 export default {
     name: 'MainContent',
+    props: ['chosenListId', 'tasks'],
     data() {
         return {
             inputValue: '',
             activeToggle: false,
-            errorToggle: false
+            errorToggle: false,
+            allLists: [],
+            chosenList: [],
+            chosenListTasks: [],
+            taskObj: {}
         }
     },
     methods: {
@@ -101,8 +44,18 @@ export default {
             if (this.inputValue.length > 0) {
                 this.errorToggle = false
 
+                this.allLists = JSON.parse(localStorage.getItem("allListAndTasks")) || []
+                this.chosenList = this.allLists[this.chosenListId]
+                console.log(this.chosenList);
 
+                this.chosenListTasks = this.chosenList.tasks
+                console.log(this.chosenListTask);
+                this.taskObj.name = this.inputValue
+                this.chosenListTasks.push(this.taskObj)
                 this.$refs.taskInput.value = ''
+                this.taskObj = {}
+
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.allLists))
             } else {
                 this.errorToggle = true
             }

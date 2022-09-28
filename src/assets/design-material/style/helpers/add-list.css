@@ -23,6 +23,7 @@
     /* padding: 8px 10px;
     background-color: #d6dcf4; */
     font-size: 14px;
+    width: 100%;
     /* overflow: hidden; */
     /* position: relative; */
     /* margin-top: auto; */
@@ -68,6 +69,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-grow: 1;
 }
 
 .add-item .single-list img {
@@ -107,7 +109,9 @@
     right: 10px; */
     /* font-weight: bolder;
     cursor: pointer; */
-    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .add-item span img {
