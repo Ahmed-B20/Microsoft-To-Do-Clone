@@ -3,11 +3,17 @@
         <template v-slot:title>
             {{listName}}
         </template>
+
+        <template v-slot:allTask>
+            <li v-for="task in allTask" :key="task.id" :data-id="task.id">{{task.name}}</li>
+        </template>
     </content-view>
 </template>
 
 <script>
 import ContentView from '../components/ContentView.vue';
+import { allLists } from '@/stores/allLists.js'
+import { mapState } from 'pinia'
 
 export default {
     name: 'List',
@@ -17,10 +23,12 @@ export default {
     },
     beforeMount: function () {
 
-        this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
+        // this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
+        this.allList = this.returnLists || []
 
         this.chosenList = this.allList[this.listId]
         this.listName = this.chosenList.listName
+        this.allTask = this.chosenList.tasks;
 
         this.$watch(
             () => this.listId,
@@ -31,7 +39,7 @@ export default {
                     this.chosenList = this.allList[this.listId]
                     this.listName = this.chosenList.listName
 
-                    console.log(this.listId);
+                    this.allTask = this.chosenList.tasks;
                 }
             }
         )
@@ -40,8 +48,12 @@ export default {
         return {
             allList: [],
             chosenList: [],
-            listName: ''
+            listName: '',
+            allTask: []
         }
+    },
+    computed: {
+        ...mapState(allLists, ['returnLists']),
     },
     methods: {
         // getList() {

@@ -18,13 +18,17 @@
                     <img src="@/assets/design-material/icons/plus.png" alt="add-task" />
                 </span>
 
-                <input placeholder="add task" v-model="inputValue" ref="taskInput" type="text">
+                <input @keyup.enter="addTaskToList" required placeholder="add task" v-model="inputValue" ref="taskInput"
+                    type="text">
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { allLists } from '@/stores/allLists.js'
+import { mapState } from 'pinia'
+
 export default {
     name: 'MainContent',
     props: ['chosenListId', 'tasks'],
@@ -36,25 +40,34 @@ export default {
             allLists: [],
             chosenList: [],
             chosenListTasks: [],
-            taskObj: {}
+            taskObj: {},
+            taskId: 0
         }
+    },
+    computed: {
+        ...mapState(allLists, ['returnLists']),
     },
     methods: {
         addTaskToList() {
             if (this.inputValue.length > 0) {
                 this.errorToggle = false
 
-                this.allLists = JSON.parse(localStorage.getItem("allListAndTasks")) || []
+                console.log(this.returnLists);
+
+                // this.allLists = JSON.parse(localStorage.getItem("allListAndTasks")) || []
+                this.allLists = this.returnLists || []
                 this.chosenList = this.allLists[this.chosenListId]
                 console.log(this.chosenList);
 
                 this.chosenListTasks = this.chosenList.tasks
                 console.log(this.chosenListTask);
                 this.taskObj.name = this.inputValue
+                this.taskObj.id = this.taskId
                 this.chosenListTasks.push(this.taskObj)
                 this.$refs.taskInput.value = ''
                 this.taskObj = {}
 
+                this.taskId++
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.allLists))
             } else {
                 this.errorToggle = true
