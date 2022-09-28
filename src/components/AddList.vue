@@ -106,7 +106,7 @@ export default {
             this.toggleError = false
         },
         addGroupOfList() {
-            if (this.itemValue.length > 0) {
+            if (this.itemValue.length > 0 && !this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
                 this.listObj.listName = this.itemValue;
                 this.listObj.id = this.taskNumber;
                 this.listObj.listsArray = []

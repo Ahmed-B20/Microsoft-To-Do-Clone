@@ -152,6 +152,7 @@
 
 .lists-container li {
     padding: 10px 15px;
+    cursor: pointer;
 }
 
 .lists-container li:not(.group-of-lists).active,
@@ -165,7 +166,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .lists-container li.group-of-lists {

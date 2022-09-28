@@ -1,7 +1,9 @@
 <template>
     <div class="view-content-container">
         <div class="title">
-            <h1>lorem title</h1>
+            <h1>
+                <slot name="title"></slot>
+            </h1>
         </div>
 
 
