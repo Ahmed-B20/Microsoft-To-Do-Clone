@@ -50,7 +50,7 @@
     cursor: pointer;
 }
 
-.view-content-container .tasks li .check.complete {
+.view-content-container .tasks li.complete .check {
     background-color: black;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .view-content-container .tasks li .check:hover img,
-.view-content-container .tasks li .check.complete img {
+.view-content-container .tasks li.complete .check img {
     visibility: visible;
 }
 

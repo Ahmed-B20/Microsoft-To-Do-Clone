@@ -6,15 +6,7 @@
             </template>
 
             <template #allTaskSlot>
-                <li :class="{complete: task.complete}" v-for="task in returnLists[listId].tasks" :key="task.id"
-                    :data-id="task.id">
-                    <span :data-id="task.id" @click="completeTask" class="check">
-                        <img src="@/assets/design-material/icons/check.png" alt="check" />
-                    </span>
-                    <span class="task-name" :class="{complete: task.complete}">
-                        {{task.name}}
-                    </span>
-                </li>
+                <SingleTask :listId="listId" />
             </template>
         </content-view>
     </keep-alive>
@@ -22,14 +14,17 @@
 
 <script>
 import ContentView from '../components/ContentView.vue';
+import SingleTask from '../components/SingleTask.vue';
+
 import { allLists } from '@/stores/allLists.js'
-import { mapState } from 'pinia'
+import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'List',
     props: ['listId'],
     components: {
-        ContentView
+        ContentView,
+        SingleTask
     },
     provide() {
         return {
@@ -71,6 +66,7 @@ export default {
     },
     computed: {
         ...mapState(allLists, ['returnLists']),
+        ...mapWritableState(allLists, ['lists']),
     },
     watch: {
         // allTask() {
@@ -79,7 +75,8 @@ export default {
     },
     methods: {
         completeTask() {
-            console.log(event.target.getAttribute('data-id'));
+            console.log('j');
+            this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
         }
     }
 }
