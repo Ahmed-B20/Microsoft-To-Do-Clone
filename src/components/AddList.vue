@@ -28,6 +28,8 @@ export default {
         if (JSON.parse(localStorage.getItem("allListAndTasks"))) {
             this.allSavedList = JSON.parse(localStorage.getItem("allListAndTasks"));
         }
+
+        this.taskNumber = this.lists.length
     },
 
 

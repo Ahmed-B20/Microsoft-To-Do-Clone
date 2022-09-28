@@ -8,7 +8,7 @@
             <template #allTaskSlot>
                 <li :class="{complete: task.complete}" v-for="task in returnLists[listId].tasks" :key="task.id"
                     :data-id="task.id">
-                    <span class="check">
+                    <span :data-id="task.id" @click="completeTask" class="check">
                         <img src="@/assets/design-material/icons/check.png" alt="check" />
                     </span>
                     <span class="task-name" :class="{complete: task.complete}">
@@ -76,6 +76,11 @@ export default {
         // allTask() {
         //     console.log(this.allTask);
         // }
+    },
+    methods: {
+        completeTask() {
+            console.log(event.target.getAttribute('data-id'));
+        }
     }
 }
 </script>
