@@ -3,6 +3,8 @@
 @import url('./helpers/add-fonts.css');
 @import url('./helpers/var.css');
 @import url('./helpers/global-class.css');
+@import url('./helpers/main-content-view.css');
+
 
 @import url('./helpers/main-content.css');
 @import url('./helpers/user-info.css');

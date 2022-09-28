@@ -22,7 +22,6 @@
 import GroupOfLists from './GroupOfLists.vue';
 import { allLists } from '@/stores/allLists.js'
 import { mapState } from 'pinia'
-import { storeToRefs } from 'pinia'
 
 export default {
     name: 'render-list',

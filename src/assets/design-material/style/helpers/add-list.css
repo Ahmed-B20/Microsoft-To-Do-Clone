@@ -142,6 +142,7 @@
 /* Handle */
 .lists-container::-webkit-scrollbar-thumb {
     background: #888;
+    border-radius: 3px;
 }
 
 /* Handle on hover */

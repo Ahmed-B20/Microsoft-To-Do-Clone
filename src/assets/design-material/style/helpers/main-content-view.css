@@ -1,0 +1,113 @@
+.view-content-container {
+    height: 100vh;
+    position: relative;
+    padding: 10px 0;
+}
+
+.view-content-container .title {
+    position: absolute;
+    top: 0;
+    left: 40px;
+    right: 40px;
+    background-color: #5f73c1f0;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    font-weight: bolder;
+}
+
+.view-content-container .tasks {
+    margin-right: 5px;
+    overflow-y: auto;
+    padding: 100px 40px 88px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.view-content-container .tasks li {
+    background-color: white;
+    border-radius: 3px;
+    padding: 15px 10px;
+    font-size: 15px;
+}
+
+.view-content-container .tasks::-webkit-scrollbar {
+    width: 5px;
+}
+
+.view-content-container .tasks::-webkit-scrollbar-track {
+    background: #5f73c1;
+}
+
+.view-content-container .tasks::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+
+.view-content-container .add-task {
+    position: absolute;
+    bottom: 0;
+    left: 40px;
+    right: 40px;
+    padding: 10px 0 30px 0;
+    background-color: #5f73c1f0;
+    /* position: relative; */
+}
+
+.view-content-container .add-task .add-task-container {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border: 1px solid #5f73c1;
+}
+
+.view-content-container .add-task .add-task-container span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-content-container .add-task .add-task-container span.active img {
+    cursor: pointer;
+}
+
+.view-content-container .add-task .add-task-container span img {
+    width: 20px;
+}
+
+.view-content-container .add-task .add-task-container input {
+    height: 100%;
+    width: 100%;
+    padding: 8px;
+    flex-grow: 1;
+    font-size: 16px;
+}
+
+.view-content-container .add-task .add-task-container.error {
+    border-color: red;
+    animation: shake 0.1s linear;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(-10px);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
