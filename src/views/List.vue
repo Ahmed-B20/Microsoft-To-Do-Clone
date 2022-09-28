@@ -1,13 +1,23 @@
 <template>
-    <content-view :chosenListId="listId">
-        <template v-slot:title>
-            {{listName}}
-        </template>
+    <keep-alive>
+        <content-view :key="listId">
+            <template v-slot:title>
+                {{listName}}
+            </template>
 
-        <template v-slot:allTask>
-            <li v-for="task in allTask" :key="task.id" :data-id="task.id">{{task.name}}</li>
-        </template>
-    </content-view>
+            <template #allTaskSlot>
+                <li :class="{complete: task.complete}" v-for="task in returnLists[listId].tasks" :key="task.id"
+                    :data-id="task.id">
+                    <span class="check">
+                        <img src="@/assets/design-material/icons/check.png" alt="check" />
+                    </span>
+                    <span class="task-name" :class="{complete: task.complete}">
+                        {{task.name}}
+                    </span>
+                </li>
+            </template>
+        </content-view>
+    </keep-alive>
 </template>
 
 <script>
@@ -21,6 +31,12 @@ export default {
     components: {
         ContentView
     },
+    provide() {
+        return {
+            // explicitly provide a computed property
+            chosenListId: () => this.listId
+        }
+    },
     beforeMount: function () {
 
         // this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
@@ -29,6 +45,7 @@ export default {
         this.chosenList = this.allList[this.listId]
         this.listName = this.chosenList.listName
         this.allTask = this.chosenList.tasks;
+
 
         this.$watch(
             () => this.listId,
@@ -55,13 +72,9 @@ export default {
     computed: {
         ...mapState(allLists, ['returnLists']),
     },
-    methods: {
-        // getList() {
-        //     this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
-
-        //     this.chosenList = this.allList[this.listId]
-
-        //     console.log(this.chosenList);
+    watch: {
+        // allTask() {
+        //     console.log(this.allTask);
         // }
     }
 }

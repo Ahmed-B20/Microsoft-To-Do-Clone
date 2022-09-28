@@ -60,7 +60,6 @@ export default {
     },
     methods: {
         showListTasks() {
-            console.log();
             if (event.target.tagName === 'LI') {
                 this.listName = event.target.getAttribute('data-name')
                 this.listIndex = event.target.getAttribute('data-id')

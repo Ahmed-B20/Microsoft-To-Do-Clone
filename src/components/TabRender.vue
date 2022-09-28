@@ -20,7 +20,7 @@
 import AddTask from './AddTask.vue'
 
 export default {
-    name: 'RenderContent',
+    name: 'TabRender',
     components: {
         AddTask
     },

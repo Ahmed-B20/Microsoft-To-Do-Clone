@@ -1,18 +1,18 @@
 <template>
-    <content-view>
-            <template v-slot:title>
-                Tasks
-            </template>
-        </content-view>
+    <tab-render>
+        <template v-slot:title>
+            Tasks
+        </template>
+    </tab-render>
 </template>
 
 <script>
-    import ContentView from '../components/ContentView.vue';
+import TabRender from '../components/TabRender.vue';
 
-    export default {
-        name:'Tasks',
-        components:{
-            ContentView
-        }
+export default {
+    name: 'Tasks',
+    components: {
+        TabRender
     }
+}
 </script>

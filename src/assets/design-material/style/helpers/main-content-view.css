@@ -33,6 +33,41 @@
     border-radius: 3px;
     padding: 15px 10px;
     font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.view-content-container .tasks li .check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #5f73c1;
+    cursor: pointer;
+}
+
+.view-content-container .tasks li .check.complete {
+    background-color: black;
+}
+
+
+.view-content-container .tasks li .check img {
+    visibility: hidden;
+    transition: all 0.2s linear;
+    width: 10px;
+}
+
+.view-content-container .tasks li .check:hover img,
+.view-content-container .tasks li .check.complete img {
+    visibility: visible;
+}
+
+.view-content-container .tasks li .task-name.complete {
+    text-decoration: line-through;
 }
 
 .view-content-container .tasks::-webkit-scrollbar {
