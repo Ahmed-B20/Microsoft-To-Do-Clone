@@ -7,7 +7,8 @@
             {{task.name}}
         </span>
 
-        <img src="@" alt="">
+        <img :data-id="task.id" @click="importantToggle" class="important-toggle"
+            src="@/assets/design-material/icons/important-hover.png" alt="">
     </li>
 </template>
 
@@ -28,6 +29,10 @@ export default {
         // }
     },
     methods: {
+        importantToggle() {
+            // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
+            event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+        },
         completeTask() {
             if (event.target.tagName === 'SPAN') {
                 if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete) {

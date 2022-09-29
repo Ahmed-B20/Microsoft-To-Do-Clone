@@ -70,6 +70,11 @@
     text-decoration: line-through;
 }
 
+.view-content-container .tasks li .important-toggle {
+    margin-left: auto;
+    width: 20px;
+}
+
 .view-content-container .tasks::-webkit-scrollbar {
     width: 5px;
 }
