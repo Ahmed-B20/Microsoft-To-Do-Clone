@@ -1,16 +1,21 @@
 <template>
-    <li :class="{complete: task.complete}" v-for="(task,index) in returnLists[listId].tasks" :key="task.id"
-        :data-id="task.id">
-        <span :data-id="index" @click="completeTask" class="check">
-            <img src="@/assets/design-material/icons/check.png" alt="check" />
-        </span>
-        <span class="task-name" :class="{complete: task.complete}">
-            {{task.name}}
-        </span>
+    <transition-group name="tasks-transition">
+        <li :class="{complete: task.complete}" v-for="(task,index) in returnLists[listId].tasks" :key="task.id"
+            :data-id="task.id">
+            <span :data-id="index" @click="completeTask" class="check">
+                <img src="@/assets/design-material/icons/check.png" alt="check" />
+            </span>
+            <span class="task-name" :class="{complete: task.complete}">
+                {{task.name}}
+            </span>
 
-        <img :data-id="index" @click="importantToggle" class="important-toggle"
-            src="@/assets/design-material/icons/important-hover.png" alt="">
-    </li>
+            <img v-if="task.important" :data-id="index" @click="importantToggle" class="important-toggle"
+                src="@/assets/design-material/icons/important-task.png" alt="">
+
+            <img v-else :data-id="index" @click="importantToggle" class="important-toggle"
+                src="@/assets/design-material/icons/important-hover.png" alt="">
+        </li>
+    </transition-group>
 </template>
 
 <script>
