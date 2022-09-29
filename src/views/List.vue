@@ -6,15 +6,22 @@
             </template>
 
             <template #allTaskSlot>
-                <SingleTask :listId="listId" />
+                <SingleTask @openDescriptionEvent="openDescription" :listId="listId" />
             </template>
         </content-view>
     </keep-alive>
+
+    <transition name="to-left">
+        <TaskDescription @closeDescription="closeDescriptionMethod" :descriptionTaskList="descriptionTaskList"
+            :descriptionTaskIndex="descriptionTaskIndex" v-show="toggleOpenDescription" />
+    </transition>
 </template>
 
 <script>
 import ContentView from '../components/ContentView.vue';
 import SingleTask from '../components/SingleTask.vue';
+import TaskDescription from '../components/TaskDescription.vue'
+
 
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
@@ -24,7 +31,8 @@ export default {
     props: ['listId'],
     components: {
         ContentView,
-        SingleTask
+        SingleTask,
+        TaskDescription
     },
     provide() {
         return {
@@ -61,7 +69,10 @@ export default {
             allList: [],
             chosenList: [],
             listName: '',
-            allTask: []
+            allTask: [],
+            toggleOpenDescription: false,
+            descriptionTaskList: 0,
+            descriptionTaskIndex: 0,
         }
     },
     computed: {
@@ -77,6 +88,14 @@ export default {
         completeTask() {
             console.log('j');
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
+        },
+        openDescription(listId, index) {
+            this.descriptionTaskList = listId
+            this.descriptionTaskIndex = index
+            this.toggleOpenDescription = !this.toggleOpenDescription
+        },
+        closeDescriptionMethod(value) {
+            this.toggleOpenDescription = value
         }
     }
 }

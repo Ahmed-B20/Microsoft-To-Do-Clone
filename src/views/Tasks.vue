@@ -12,7 +12,7 @@ import TabRender from '../components/TabRender.vue';
 export default {
     name: 'Tasks',
     components: {
-        TabRender
+        TabRender,
     }
 }
 </script>

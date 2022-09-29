@@ -1,7 +1,7 @@
 <template>
     <transition-group name="tasks-transition">
-        <li :class="{complete: task.complete}" v-for="(task,index) in returnLists[listId].tasks" :key="task.id"
-            :data-id="task.id">
+        <li @click="openDescription" :class="{complete: task.complete}"
+            v-for="(task,index) in returnLists[listId].tasks" :key="task.id" :data-id="task.id">
             <span :data-id="index" @click="completeTask" class="check">
                 <img src="@/assets/design-material/icons/check.png" alt="check" />
             </span>
@@ -40,6 +40,10 @@ export default {
         // }
     },
     methods: {
+
+        openDescription() {
+            this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'))
+        },
         importantToggle() {
             // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
 

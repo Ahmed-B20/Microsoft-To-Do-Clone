@@ -4,4 +4,66 @@
     flex-grow: 1;
     /* background-color: var(--main-color); */
     background-color: #5f73c1;
+    display: flex;
+    overflow: hidden;
 }
+
+.dashboard-content-container .view-content-container {
+    flex-grow: 1;
+    flex-basis: 67%;
+}
+
+.dashboard-content-container .task-description {
+    flex-basis: 33%;
+    background-color: white;
+    padding: 30px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+}
+
+.to-left-move,
+.to-left-enter-active,
+.to-left-leave-active {
+    transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. declare enter from and leave to state */
+.to-left-enter-from,
+.to-left-leave-to {
+    opacity: 0;
+    transform: translateX(33%);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+/* .to-left-leave-active {
+    position: absolute;
+} */
+
+.dashboard-content-container .task-description .task-time-and-delete {
+    margin-top: auto;
+    border-top: 1px solid #dfdfdf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    position: relative;
+}
+
+.dashboard-content-container .task-description .task-time-and-delete span {
+    /* margin-left: auto; */
+    height: 40px;
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+}
+
+.dashboard-content-container .task-description .task-time-and-delete span img {
+    height: 20px;
+}
+
