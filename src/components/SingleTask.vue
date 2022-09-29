@@ -1,13 +1,14 @@
 <template>
-    <li :class="{complete: task.complete}" v-for="task in returnLists[listId].tasks" :key="task.id" :data-id="task.id">
-        <span :data-id="task.id" @click="completeTask" class="check">
+    <li :class="{complete: task.complete}" v-for="(task,index) in returnLists[listId].tasks" :key="task.id"
+        :data-id="task.id">
+        <span :data-id="index" @click="completeTask" class="check">
             <img src="@/assets/design-material/icons/check.png" alt="check" />
         </span>
         <span class="task-name" :class="{complete: task.complete}">
             {{task.name}}
         </span>
 
-        <img :data-id="task.id" @click="importantToggle" class="important-toggle"
+        <img :data-id="index" @click="importantToggle" class="important-toggle"
             src="@/assets/design-material/icons/important-hover.png" alt="">
     </li>
 </template>
@@ -23,6 +24,11 @@ export default {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
     },
+    data() {
+        return {
+            importantTask: {}
+        }
+    },
     watch: {
         // allTask() {
         //     console.log(this.allTask);
@@ -31,7 +37,40 @@ export default {
     methods: {
         importantToggle() {
             // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
-            event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+
+
+            if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important) {
+                this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = false
+
+                event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+
+                this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
+
+
+                this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id'), 1)
+
+
+                this.lists[this.listId].tasks.push(this.importantTask)
+                this.importantTask = {}
+
+            } else {
+                event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+
+                this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = true
+
+                this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
+
+
+
+                this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id'), 1)
+
+
+                this.lists[this.listId].tasks.unshift(this.importantTask)
+                this.importantTask = {}
+            }
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
         },
         completeTask() {
             if (event.target.tagName === 'SPAN') {
@@ -39,7 +78,6 @@ export default {
                     this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = false
                 } else {
                     this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
-
                 }
             } else {
                 if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete) {

@@ -52,6 +52,7 @@ export default {
                 this.taskObj.name = this.inputValue
                 this.taskObj.id = this.taskId
                 this.taskObj.complete = false
+                this.taskObj.important = false
                 this.chosenListTasks.push(this.taskObj)
                 this.$refs.taskInput.value = ''
                 this.inputValue = ''
