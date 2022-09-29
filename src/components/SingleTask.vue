@@ -6,6 +6,8 @@
         <span class="task-name" :class="{complete: task.complete}">
             {{task.name}}
         </span>
+
+        <img src="@" alt="">
     </li>
 </template>
 
@@ -28,11 +30,21 @@ export default {
     methods: {
         completeTask() {
             if (event.target.tagName === 'SPAN') {
-                this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
+                if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete) {
+                    this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = false
+                } else {
+                    this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
+
+                }
             } else {
-                this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = true
+                if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete) {
+                    this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = false
+                } else {
+                    this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = true
+                }
             }
 
+            this.completeTaskStatus = !this.completeTaskStatus
             console.log(this.lists);
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))

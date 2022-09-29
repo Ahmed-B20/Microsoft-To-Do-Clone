@@ -46,6 +46,9 @@ export default {
                 this.chosenList = this.allLists[this.chosenListId()]
 
                 this.chosenListTasks = this.chosenList.tasks
+
+                this.taskId = this.chosenList.tasks.length
+
                 this.taskObj.name = this.inputValue
                 this.taskObj.id = this.taskId
                 this.taskObj.complete = false
