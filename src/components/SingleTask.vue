@@ -1,6 +1,6 @@
 <template>
     <transition-group name="tasks-transition">
-        <li @click="openDescription" :class="{complete: task.complete}"
+        <li @click.self="openDescription" :class="{complete: task.complete}"
             v-for="(task,index) in returnLists[listId].tasks" :key="task.id" :data-id="task.id">
             <span :data-id="index" @click="completeTask" class="check">
                 <img src="@/assets/design-material/icons/check.png" alt="check" />
@@ -31,7 +31,8 @@ export default {
     },
     data() {
         return {
-            importantTask: {}
+            importantTask: {},
+            shrink: false
         }
     },
     watch: {
@@ -42,7 +43,8 @@ export default {
     methods: {
 
         openDescription() {
-            this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'))
+            this.shrink = !this.shrink
+            this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
         },
         importantToggle() {
             // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]

@@ -24,9 +24,12 @@
 }
 
 .to-left-move,
-.to-left-enter-active,
+.to-left-enter-active {
+    transition: all 0.2s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
 .to-left-leave-active {
-    transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+    transition: all 0.1s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 /* 2. declare enter from and leave to state */
@@ -66,4 +69,3 @@
 .dashboard-content-container .task-description .task-time-and-delete span img {
     height: 20px;
 }
-

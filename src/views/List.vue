@@ -1,6 +1,6 @@
 <template>
     <keep-alive>
-        <content-view :key="listId">
+        <content-view :class="[toggleShrink? 'shrink': 'grow']" :key="listId">
             <template v-slot:title>
                 {{listName}}
             </template>
@@ -73,6 +73,7 @@ export default {
             toggleOpenDescription: false,
             descriptionTaskList: 0,
             descriptionTaskIndex: 0,
+            toggleShrink: false
         }
     },
     computed: {
@@ -89,10 +90,11 @@ export default {
             console.log('j');
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
         },
-        openDescription(listId, index) {
+        openDescription(listId, index, shrink) {
             this.descriptionTaskList = listId
             this.descriptionTaskIndex = index
             this.toggleOpenDescription = !this.toggleOpenDescription
+            this.toggleShrink = shrink
         },
         closeDescriptionMethod(value) {
             this.toggleOpenDescription = value

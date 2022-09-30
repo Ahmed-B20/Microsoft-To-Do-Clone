@@ -4,6 +4,68 @@
     padding: 10px 0;
 }
 
+.view-content-container.shrink {
+    animation: shrink 0.3s cubic-bezier(0.55, 0, 0.1, 1) forwards;
+}
+
+.view-content-container.grow {
+    animation: grow 0.1s cubic-bezier(0.55, 0, 0.1, 1) forwards;
+}
+
+@keyframes shrink {
+    0%{
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+    25%{
+        width: 90%;
+        flex-basis: 90%;
+    }
+
+    50%{
+        width: 80%;
+        flex-basis: 80%;
+    }
+
+    75%{
+        width: 70%;
+        flex-basis: 70%;
+    }
+
+    100% {
+        width: 67%;
+        flex-basis: 67%;
+    }
+}
+
+@keyframes grow {
+    0% {
+        width: 67%;
+        flex-basis: 67%;
+    }
+
+    25%{
+        width: 70%;
+        flex-basis: 70%;
+    }
+
+    50%{
+        width: 80%;
+        flex-basis: 80%;
+    }
+
+    75%{
+        width: 90%;
+        flex-basis: 90%;
+    }
+
+    100%{
+        width: 100%;
+        flex-basis: 100%;
+    }
+}
+
 .view-content-container .title {
     position: absolute;
     top: 0;
