@@ -9,17 +9,17 @@
         <div class="task-main-content">
             <div class="task-box task-info-and-steps">
                 <h2 :class="{complete: task.complete}">
-                    <span :data-id="index" @click="completeTask" class="check">
+                    <span :data-id="taskIndex" @click="completeAsideTask" class="check">
                         <img src="@/assets/design-material/icons/check.png" alt="check" />
                     </span>
                     <span class="task-name" :class="{complete: task.complete}">
                         {{task.name}}
                     </span>
 
-                    <img v-if="task.important" :data-id="index" @click="importantToggle" class="important-toggle"
+                    <img v-if="task.important" :data-id="taskIndex" @click="importantAsideToggle" class="important-toggle"
                         src="@/assets/design-material/icons/important-task.png" alt="">
 
-                    <img v-else :data-id="index" @click="importantToggle" class="important-toggle"
+                    <img v-else :data-id="taskIndex" @click="importantAsideToggle" class="important-toggle"
                         src="@/assets/design-material/icons/important-hover.png" alt="">
                 </h2>
 
@@ -70,7 +70,10 @@
 
             <div class="task-box task-notes">
                 <h3>Task Description</h3>
-                <textarea>Add Task Description</textarea>
+                <textarea placeholder="Add Task Description" @blur="emptyTextValue" :data-id="index" v-model="textValue"
+                    @keyup="addNote">
+                    {{taskNoteText}}
+                </textarea>
 
                 <div class="date">
                     12/6/520
@@ -99,6 +102,15 @@ export default {
     props: ['descriptionTaskList', 'descriptionTaskIndex'],
     beforeMount() {
         this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+
+        this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
+
+            console.log(singleTask.id);
+
+            if (singleTask.id == this.task.id) {
+                this.taskIndex = index
+            }
+        })
     },
     data() {
         return {
@@ -108,12 +120,22 @@ export default {
             errorToggle: false,
             stepsArray: [],
             stepObj: {},
-            stepId: 0
+            stepId: 0,
+            textValue: '',
+            taskIndex: 0
         }
     },
     computed: {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
+
+        taskNoteText() {
+            if (this.task.note.length > 0) {
+                return this.textValue = this.task.note
+            } else {
+                return this.textValue = ''
+            }
+        }
     },
     watch: {
         inputValue() {
@@ -127,6 +149,14 @@ export default {
         }
     },
     methods: {
+        addNote() {
+            console.log(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note);
+            this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note = this.textValue
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+        },
+        emptyTextValue() {
+            this.textValue = ''
+        },
         deleteTask() {
             console.log(this.descriptionTaskList);
             console.log(this.descriptionTaskIndex);
@@ -140,19 +170,19 @@ export default {
         closeDescription() {
             this.$emit('closeDescription', false)
         },
-        importantToggle() {
+        importantAsideToggle() {
             // this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
 
 
-            if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].important) {
-                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].important = false
+            if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
 
                 event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
 
-                this.importantTask = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+                this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
 
 
-                this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
+                this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
 
 
                 this.lists[this.descriptionTaskList].tasks.push(this.importantTask)
@@ -161,13 +191,13 @@ export default {
             } else {
                 event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
 
-                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].important = true
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = true
 
-                this.importantTask = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+                this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
 
 
 
-                this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
+                this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
 
 
                 this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
@@ -176,27 +206,37 @@ export default {
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
+            this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
+                if (singleTask.id == this.task.id) {
+                    this.taskIndex = index
+                }
+            })
+
         },
-        completeTask() {
+        completeAsideTask() {
             if (event.target.tagName === 'SPAN') {
-                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete = false
+                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
                 } else {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete = true
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = true
                 }
             } else {
-                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete = false
+                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
                 } else {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete = true
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = true
                 }
             }
 
             this.completeTaskStatus = !this.completeTaskStatus
-            console.log(this.descriptionTaskList);
-            console.log(this.descriptionTaskIndex);
-
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+            this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
+                if (singleTask.id == this.task.id) {
+                    console.log(index);
+                    this.taskIndex = index
+                }
+            })
         },
 
         completeStep() {

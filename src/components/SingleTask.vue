@@ -5,8 +5,23 @@
             <span :data-id="index" @click="completeTask" class="check">
                 <img src="@/assets/design-material/icons/check.png" alt="check" />
             </span>
-            <span class="task-name" :class="{complete: task.complete}">
-                {{task.name}}
+
+            <span class="task-main-info">
+                <span class="task-name" :class="{complete: task.complete}">
+                    {{task.name}}
+                </span>
+
+                <span class="info-icons">
+                    <span v-if="task.steps.length > 0" class="steps">
+                        {{(task.steps.filter((step)=>{return step.complete === true}).length)}} Of {{task.steps.length}}
+
+                        <img src="@/assets/design-material/icons/process.png" alt="task steps" title="task steps">
+                    </span>
+
+                    <span class="note" v-if="task.note">
+                        Note <img src="@/assets/design-material/icons/notes.png" alt="task notes" title="task notes">
+                    </span>
+                </span>
             </span>
 
             <img v-if="task.important" :data-id="index" @click="importantToggle" class="important-toggle"
@@ -34,7 +49,8 @@ export default {
             importantTask: {},
             shrink: this.toggleShrink,
             taskId: 0,
-            oldTaskId: 0
+            oldTaskId: 0,
+            stepsCount: 0
         }
     },
     watch: {
@@ -43,9 +59,8 @@ export default {
         // }
     },
     methods: {
-
         openDescription() {
-            
+
             console.log(event.target.getAttribute('data-id'));
 
             if (!this.toggleShrink) {

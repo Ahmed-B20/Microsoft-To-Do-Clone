@@ -94,7 +94,8 @@
 .view-content-container .tasks li {
     background-color: white;
     border-radius: 3px;
-    padding: 15px 10px;
+    padding: 5px 10px;
+    height: 55px;
     font-size: 15px;
     display: flex;
     align-items: center;
@@ -127,6 +128,38 @@
 .view-content-container .tasks li .check:hover img,
 .view-content-container .tasks li.complete .check img {
     visibility: visible;
+}
+
+.view-content-container .tasks li .task-main-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.view-content-container .tasks li .task-main-info .info-icons {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.view-content-container .tasks li .task-main-info .info-icons .steps {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.view-content-container .tasks li .task-main-info .info-icons .note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding-left: 10px;
+    border-left: 1px solid #dfdfdf;
+}
+
+.view-content-container .tasks li .task-main-info .info-icons .steps img,
+.view-content-container .tasks li .task-main-info .info-icons .note img {
+    height: 15px;
 }
 
 .view-content-container .tasks li .task-name.complete {
