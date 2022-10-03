@@ -13,7 +13,7 @@
 
     <transition name="to-left">
         <TaskDescription @closeDescription="closeDescriptionMethod" :descriptionTaskList="descriptionTaskList"
-            :descriptionTaskIndex="descriptionTaskIndex" v-show="toggleOpenDescription" />
+            :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink" />
     </transition>
 </template>
 
@@ -93,11 +93,14 @@ export default {
         openDescription(listId, index, shrink) {
             this.descriptionTaskList = listId
             this.descriptionTaskIndex = index
-            this.toggleOpenDescription = !this.toggleOpenDescription
+            // this.toggleOpenDescription = !this.toggleOpenDescription
             this.toggleShrink = shrink
+            console.log('fff');
+
         },
         closeDescriptionMethod(value) {
             this.toggleOpenDescription = value
+            console.log('f');
         }
     }
 }

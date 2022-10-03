@@ -1,21 +1,18 @@
 <template>
-    <transition-group name="tasks-transition">
-        <li @click.self="openDescription" :class="{complete: task.complete}"
-            v-for="(task,index) in returnLists[listId].tasks" :key="task.id" :data-id="task.id">
-            <span :data-id="index" @click="completeTask" class="check">
-                <img src="@/assets/design-material/icons/check.png" alt="check" />
-            </span>
-            <span class="task-name" :class="{complete: task.complete}">
-                {{task.name}}
-            </span>
+    <li>
+        <span :data-id="index" @click="completeTask" class="check">
+            <img src="@/assets/design-material/icons/check.png" alt="check" />
+        </span>
+        <span class="task-name" :class="{complete: task.complete}">
+            {{task.name}}
+        </span>
 
-            <img v-if="task.important" :data-id="index" @click="importantToggle" class="important-toggle"
-                src="@/assets/design-material/icons/important-task.png" alt="">
+        <img v-if="task.important" :data-id="index" @click="importantToggle" class="important-toggle"
+            src="@/assets/design-material/icons/important-task.png" alt="">
 
-            <img v-else :data-id="index" @click="importantToggle" class="important-toggle"
-                src="@/assets/design-material/icons/important-hover.png" alt="">
-        </li>
-    </transition-group>
+        <img v-else :data-id="index" @click="importantToggle" class="important-toggle"
+            src="@/assets/design-material/icons/important-hover.png" alt="">
+    </li>
 </template>
 
 <script>
@@ -23,51 +20,18 @@ import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 
 export default {
-    name: 'SingleTask',
-    props: ['listId'],
+    name: 'singleTaskElement',
+    props: ['task', 'index'],
     computed: {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
     },
-    data() {
-        return {
-            importantTask: {},
-            shrink: false,
-            taskId: 0,
-            oldTaskId: 0
-        }
-    },
-    watch: {
-        // allTask() {
-        //     console.log(this.allTask);
-        // }
-    },
+
     methods: {
 
         openDescription() {
-
-            if (!this.shrink) {
-                this.shrink = !this.shrink
-                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
-            }
-
-            // this.shrink = !this.shrink
-            // this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
-
-            // this.taskId = event.target.getAttribute('data-id')
-
-            // if (+this.taskId != +this.oldTaskId) {
-            //     this.oldTaskId = event.target.getAttribute('data-id')
-
-
-            //     this.shrink = true
-            //     this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
-            // } else {
-            //     this.shrink = false
-
-            //     this.oldTaskId = 0
-            //     this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
-            // }
+            this.shrink = !this.shrink
+            this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
         },
         importantToggle() {
             // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
