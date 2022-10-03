@@ -87,7 +87,6 @@ export default {
     },
     methods: {
         completeTask() {
-            console.log('j');
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
         },
         openDescription(listId, index, shrink) {
@@ -95,9 +94,7 @@ export default {
             this.descriptionTaskIndex = index
             // this.toggleOpenDescription = !this.toggleOpenDescription
             this.toggleShrink = shrink
-            console.log('fff');
 
-            console.log(this.toggleShrink);
         },
         closeDescriptionMethod(value) {
             this.toggleShrink = value

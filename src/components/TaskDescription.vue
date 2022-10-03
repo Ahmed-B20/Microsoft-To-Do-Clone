@@ -16,8 +16,8 @@
                         {{task.name}}
                     </span>
 
-                    <img v-if="task.important" :data-id="taskIndex" @click="importantAsideToggle" class="important-toggle"
-                        src="@/assets/design-material/icons/important-task.png" alt="">
+                    <img v-if="task.important" :data-id="taskIndex" @click="importantAsideToggle"
+                        class="important-toggle" src="@/assets/design-material/icons/important-task.png" alt="">
 
                     <img v-else :data-id="taskIndex" @click="importantAsideToggle" class="important-toggle"
                         src="@/assets/design-material/icons/important-hover.png" alt="">
@@ -26,17 +26,20 @@
                 <div class="task-steps-container">
                     <div class="steps-container">
                         <ul>
-                            <li v-for="(step,index) in task.steps" :class="{complete: step.complete}">
-                                <span :data-id="index" @click="completeStep" class="check">
-                                    <img src="@/assets/design-material/icons/check.png" alt="check" />
-                                </span>
-                                <span class="task-name" :class="{complete: step.complete}">
-                                    {{step.name}}
-                                </span>
+                            <transition-group name="show-steps">
+                                <li v-for="(step,index) in task.steps" :key="step.id"
+                                    :class="{complete: step.complete}">
+                                    <span :data-id="index" @click="completeStep" class="check">
+                                        <img src="@/assets/design-material/icons/check.png" alt="check" />
+                                    </span>
+                                    <span class="task-name" :class="{complete: step.complete}">
+                                        {{step.name}}
+                                    </span>
 
-                                <img :data-id="index" class="important-toggle"
-                                    src="@/assets/design-material/icons/more.png" alt="">
-                            </li>
+                                    <img :data-id="index" class="important-toggle"
+                                        src="@/assets/design-material/icons/more.png" alt="">
+                                </li>
+                            </transition-group>
                         </ul>
                     </div>
 
@@ -105,7 +108,6 @@ export default {
 
         this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
 
-            console.log(singleTask.id);
 
             if (singleTask.id == this.task.id) {
                 this.taskIndex = index
@@ -122,7 +124,8 @@ export default {
             stepObj: {},
             stepId: 0,
             textValue: '',
-            taskIndex: 0
+            taskIndex: 0,
+            stepElement: ''
         }
     },
     computed: {
@@ -150,7 +153,6 @@ export default {
     },
     methods: {
         addNote() {
-            console.log(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note);
             this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note = this.textValue
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
         },
@@ -158,8 +160,7 @@ export default {
             this.textValue = ''
         },
         deleteTask() {
-            console.log(this.descriptionTaskList);
-            console.log(this.descriptionTaskIndex);
+
 
             this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
 
@@ -233,7 +234,6 @@ export default {
 
             this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
                 if (singleTask.id == this.task.id) {
-                    console.log(index);
                     this.taskIndex = index
                 }
             })
@@ -241,27 +241,39 @@ export default {
 
         completeStep() {
 
-            console.log(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.getAttribute('data-id')]);
 
             if (event.target.tagName === 'SPAN') {
-                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.getAttribute('data-id')].complete) {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.getAttribute('data-id')].complete = false
+                this.stepElement = event.target.parentElement
+                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete) {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = false
                 } else {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.getAttribute('data-id')].complete = true
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = true
                 }
             } else {
-                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
+                this.stepElement = event.target.parentElement.parentElement
+                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
                 } else {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
                 }
             }
 
             this.completeTaskStatus = !this.completeTaskStatus
-            console.log(this.descriptionTaskList);
-            console.log(this.descriptionTaskIndex);
+
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+            if (this.stepElement.classList.contains('add-animation-x')) {
+                this.stepElement.classList.remove('add-animation-x')
+                setTimeout(() => {
+                    this.stepElement.classList.add('add-animation-x')
+                }, 0)
+            } else {
+                this.stepElement.classList.remove('add-animation-x')
+                setTimeout(() => {
+                    this.stepElement.classList.add('add-animation-x')
+                }, 0)
+            }
         },
         addStep() {
             if (this.inputValue.length > 0) {
@@ -273,14 +285,12 @@ export default {
                 this.stepObj.name = this.inputValue
                 this.stepObj.complete = false
 
-                console.log(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps);
 
                 this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.push(this.stepObj)
 
 
 
                 this.completeTaskStatus = !this.completeTaskStatus
-                console.log(this.lists);
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.stepId++

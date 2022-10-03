@@ -13,22 +13,22 @@
 }
 
 @keyframes shrink {
-    0%{
+    0% {
         width: 100%;
         flex-basis: 100%;
     }
 
-    25%{
+    25% {
         width: 90%;
         flex-basis: 90%;
     }
 
-    50%{
+    50% {
         width: 80%;
         flex-basis: 80%;
     }
 
-    75%{
+    75% {
         width: 70%;
         flex-basis: 70%;
     }
@@ -45,22 +45,22 @@
         flex-basis: 67%;
     }
 
-    25%{
+    25% {
         width: 70%;
         flex-basis: 70%;
     }
 
-    50%{
+    50% {
         width: 80%;
         flex-basis: 80%;
     }
 
-    75%{
+    75% {
         width: 90%;
         flex-basis: 90%;
     }
 
-    100%{
+    100% {
         width: 100%;
         flex-basis: 100%;
     }
@@ -70,7 +70,7 @@
     position: absolute;
     top: 0;
     left: 40px;
-    right: 50px;
+    right: 45px;
     background-color: #5f73c1f0;
     /* height: 100px;
     display: flex;
@@ -95,12 +95,49 @@
     background-color: white;
     border-radius: 3px;
     padding: 5px 10px;
-    height: 55px;
+    min-height: 55px;
     font-size: 15px;
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    transform-origin: center center;
+}
+
+.view-content-container .tasks li.add-animation {
+    animation: pop 0.3s linear forwards;
+}
+
+.view-content-container .tasks li.add-animation-x {
+    animation: shift 0.3s linear forwards;
+}
+
+@keyframes shift {
+    0% {
+        transform: scale(0.98);
+    }
+
+    50% {
+        transform: scale(1.00005);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes pop {
+    0% {
+        transform: scaleY(0.8);
+    }
+
+    50% {
+        transform: scaleY(1.1);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
 }
 
 .view-content-container .tasks li .check {
@@ -125,7 +162,7 @@
     width: 10px;
 }
 
-.view-content-container .tasks li .check:hover img,
+/* .view-content-container .tasks li .check:hover img, */
 .view-content-container .tasks li.complete .check img {
     visibility: visible;
 }
@@ -189,7 +226,7 @@
     position: absolute;
     bottom: 0;
     left: 40px;
-    right: 50px;
+    right: 45px;
     padding: 10px 0 45px 0;
     background-color: #5f73c1f0;
     /* position: relative; */

@@ -54,14 +54,37 @@ export default {
         }
     },
     watch: {
-        // allTask() {
-        //     console.log(this.allTask);
-        // }
+        toggleShrink() {
+
+            this.taskId.classList.remove('add-animation-x')
+
+            if (this.taskId.classList.contains('add-animation')) {
+                this.taskId.classList.remove('add-animation')
+                setTimeout(() => {
+                    this.taskId.classList.add('add-animation')
+                }, 0)
+            } else {
+                this.taskId.classList.remove('add-animation')
+                setTimeout(() => {
+                    this.taskId.classList.add('add-animation')
+                }, 0)
+            }
+        }
     },
     methods: {
         openDescription() {
+            this.taskId = event.target
 
-            console.log(event.target.getAttribute('data-id'));
+            this.taskId.classList.remove('add-animation-x')
+
+            if (this.taskId.classList.contains('add-animation')) {
+                this.taskId.classList.remove('add-animation')
+                setTimeout(() => {
+                    this.taskId.classList.add('add-animation')
+                }, 0)
+            } else {
+                this.taskId.classList.add('add-animation')
+            }
 
             if (!this.toggleShrink) {
                 this.shrink = !this.toggleShrink
@@ -92,6 +115,11 @@ export default {
         importantToggle() {
             // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
 
+            this.taskId = event.target.parentElement
+
+
+            this.taskId.classList.remove('add-animation-x')
+            this.taskId.classList.remove('add-animation')
 
             if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important) {
                 this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = false
@@ -128,12 +156,14 @@ export default {
         },
         completeTask() {
             if (event.target.tagName === 'SPAN') {
+                this.taskId = event.target.parentElement
                 if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete) {
                     this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = false
                 } else {
                     this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
                 }
             } else {
+                this.taskId = event.target.parentElement.parentElement
                 if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete) {
                     this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = false
                 } else {
@@ -142,10 +172,22 @@ export default {
             }
 
             this.completeTaskStatus = !this.completeTaskStatus
-            console.log(this.lists);
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
+            if (this.taskId.classList.contains('add-animation-x')) {
+                this.taskId.classList.remove('add-animation-x')
+                setTimeout(() => {
+                    this.taskId.classList.add('add-animation-x')
+                }, 0)
+                console.log('one');
+            } else {
+                this.taskId.classList.remove('add-animation-x')
+                setTimeout(() => {
+                    this.taskId.classList.add('add-animation-x')
+                }, 0)
+                console.log('one1');
+            }
         }
     }
 }

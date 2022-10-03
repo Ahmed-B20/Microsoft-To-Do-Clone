@@ -6,6 +6,7 @@
     background-color: #5f73c1;
     display: flex;
     overflow: hidden;
+    position: relative;
 }
 
 .dashboard-content-container .view-content-container {
@@ -22,6 +23,16 @@
     gap: 10px;
     min-width: 350px;
     height: 100%;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-content-container .task-description {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
 }
 
 .dashboard-content-container .task-description .close-container {
@@ -135,6 +146,24 @@
     border-bottom: 1px solid #dfdfdf;
 }
 
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li.add-animation-x {
+    animation: shift 0.3s linear forwards;
+}
+
+@keyframes shift {
+    0% {
+        transform: scale(0.98);
+    }
+
+    50% {
+        transform: scale(1.00005);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li:last-of-type {
     border-bottom: none;
 }
@@ -161,7 +190,7 @@
     width: 8px;
 }
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .check:hover img,
+/* .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .check:hover img, */
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li.complete .check img {
     visibility: visible;
 }
@@ -173,6 +202,26 @@
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .important-toggle {
     margin-left: auto;
     width: 15px;
+}
+
+.show-steps-move,
+.show-steps-enter-active,
+.show-steps-leave-active {
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. declare enter from and leave to state */
+.show-steps-enter-from,
+.show-steps-leave-to {
+    opacity: 0;
+    transform: scaleY(0.01) translateY(20px);
+    transform-origin: center top;
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.show-steps-leave-active {
+    position: absolute;
 }
 
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container hr {
@@ -256,7 +305,7 @@
 }
 
 .dashboard-content-container .task-description .task-notes {
-    flex-grow: 1;
+    /* flex-grow: 1; */
 }
 
 .dashboard-content-container .task-description .task-notes h3 {
