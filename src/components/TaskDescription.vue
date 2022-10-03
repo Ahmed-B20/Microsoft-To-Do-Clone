@@ -2,12 +2,13 @@
     <div class="task-description">
 
         <div class="close-container">
-            <img src="@/assets/design-material/icons/close.png" alt="" class="close-description">
+            <img @click="closeDescription" src="@/assets/design-material/icons/close.png" alt=""
+                class="close-description">
         </div>
 
         <div class="task-main-content">
             <div class="task-box task-info-and-steps">
-                <h2>
+                <h2 :class="{complete: task.complete}">
                     <span :data-id="index" @click="completeTask" class="check">
                         <img src="@/assets/design-material/icons/check.png" alt="check" />
                     </span>
@@ -23,35 +24,29 @@
                 </h2>
 
                 <div class="task-steps-container">
-                    <ul>
-                        <li><span :data-id="index" @click="completeTask" class="check">
-                                <img src="@/assets/design-material/icons/check.png" alt="check" />
-                            </span>
-                            <span class="task-name" :class="{complete: task.complete}">
-                                {{task.name}}
-                            </span>
+                    <div class="steps-container">
+                        <ul>
+                            <li v-for="(step,index) in task.steps" :class="{complete: step.complete}">
+                                <span :data-id="index" @click="completeStep" class="check">
+                                    <img src="@/assets/design-material/icons/check.png" alt="check" />
+                                </span>
+                                <span class="task-name" :class="{complete: step.complete}">
+                                    {{step.name}}
+                                </span>
 
-                            <img :data-id="index" @click="importantToggle" class="important-toggle"
-                                src="@/assets/design-material/icons/more.png" alt="">
-                        </li>
-
-                        <li><span :data-id="index" @click="completeTask" class="check">
-                                <img src="@/assets/design-material/icons/check.png" alt="check" />
-                            </span>
-                            <span class="task-name" :class="{complete: task.complete}">
-                                {{task.name}}
-                            </span>
-
-                            <img :data-id="index" @click="importantToggle" class="important-toggle"
-                                src="@/assets/design-material/icons/more.png" alt="">
-                        </li>
-                    </ul>
+                                <img :data-id="index" class="important-toggle"
+                                    src="@/assets/design-material/icons/more.png" alt="">
+                            </li>
+                        </ul>
+                    </div>
 
 
-                    <div class="add-steps">
-                        <img src="@/assets/design-material/icons/plus.png" alt="add-steps" />
+                    <div class="add-steps" :class="{error:errorToggle}">
+                        <img :class="{active:activeToggle}" @click="addStep"
+                            src="@/assets/design-material/icons/plus.png" alt="add-steps" />
 
-                        <input required placeholder="Add New step" type="text" name="" id="" />
+                        <input v-model="inputValue" @keyup.enter="addStep" required placeholder="Add New step"
+                            type="text" />
                     </div>
                 </div>
             </div>
@@ -107,11 +102,29 @@ export default {
     },
     data() {
         return {
-            task: {}
+            task: {},
+            inputValue: '',
+            activeToggle: false,
+            errorToggle: false,
+            stepsArray: [],
+            stepObj: {},
+            stepId: 0
         }
     },
     computed: {
+        ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
+    },
+    watch: {
+        inputValue() {
+            if (this.inputValue.length > 0) {
+                this.activeToggle = true
+                this.errorToggle = false
+
+            } else {
+                this.activeToggle = false
+            }
+        }
     },
     methods: {
         deleteTask() {
@@ -123,6 +136,119 @@ export default {
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
             this.$emit('closeDescription', false)
+        },
+        closeDescription() {
+            this.$emit('closeDescription', false)
+        },
+        importantToggle() {
+            // this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+
+
+            if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].important) {
+                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].important = false
+
+                event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+
+                this.importantTask = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+
+
+                this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
+
+
+                this.lists[this.descriptionTaskList].tasks.push(this.importantTask)
+                this.importantTask = {}
+
+            } else {
+                event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+
+                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].important = true
+
+                this.importantTask = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+
+
+
+                this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
+
+
+                this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
+                this.importantTask = {}
+            }
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+        },
+        completeTask() {
+            if (event.target.tagName === 'SPAN') {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete = false
+                } else {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete = true
+                }
+            } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete = false
+                } else {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete = true
+                }
+            }
+
+            this.completeTaskStatus = !this.completeTaskStatus
+            console.log(this.descriptionTaskList);
+            console.log(this.descriptionTaskIndex);
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+        },
+
+        completeStep() {
+
+            console.log(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.getAttribute('data-id')]);
+
+            if (event.target.tagName === 'SPAN') {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.getAttribute('data-id')].complete) {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.getAttribute('data-id')].complete = false
+                } else {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.getAttribute('data-id')].complete = true
+                }
+            } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
+                } else {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
+                }
+            }
+
+            this.completeTaskStatus = !this.completeTaskStatus
+            console.log(this.descriptionTaskList);
+            console.log(this.descriptionTaskIndex);
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+        },
+        addStep() {
+            if (this.inputValue.length > 0) {
+                this.errorToggle = false
+
+                this.stepId = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.length
+
+                this.stepObj.id = this.stepId
+                this.stepObj.name = this.inputValue
+                this.stepObj.complete = false
+
+                console.log(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps);
+
+                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.push(this.stepObj)
+
+
+
+                this.completeTaskStatus = !this.completeTaskStatus
+                console.log(this.lists);
+
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.stepId++
+                this.stepObj = {}
+                this.inputValue = ''
+            } else {
+                this.errorToggle = true
+            }
         }
     }
 }

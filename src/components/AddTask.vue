@@ -66,7 +66,7 @@ export default {
                 this.taskObj.addTime = today
                 this.taskObj.endTime = ''
                 this.taskObj.note = ''
-                this.taskObj.steps = ''
+                this.taskObj.steps = []
                 this.chosenListTasks.push(this.taskObj)
                 this.$refs.taskInput.value = ''
                 this.inputValue = ''

@@ -98,9 +98,30 @@
     width: 20px;
 }
 
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container .steps-container {
+    padding: 2px;
+    max-height: 72px;
+    overflow: auto;
+    padding-right: 0;
+}
+
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container .steps-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container .steps-container::-webkit-scrollbar-track {
+    background: white;
+}
+
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container .steps-container::-webkit-scrollbar-thumb {
+    background: #5f73c1;
+    border-radius: 3px;
+}
+
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul {
     display: flex;
     flex-direction: column;
+    margin-right: 2px;
 }
 
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li {
@@ -110,7 +131,7 @@
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    padding: 8px 2px;
+    padding: 8px 0;
     border-bottom: 1px solid #dfdfdf;
 }
 
@@ -119,8 +140,8 @@
 }
 
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .check {
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -137,7 +158,7 @@
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .check img {
     visibility: hidden;
     transition: all 0.2s linear;
-    width: 10px;
+    width: 8px;
 }
 
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .check:hover img,
@@ -169,8 +190,31 @@
     padding-top: 5px;
 }
 
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container .add-steps.error {
+    border-color: red;
+    animation: shake 0.1s linear;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(-10px);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container .add-steps img {
     width: 15px;
+}
+
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container .add-steps img.active {
+    cursor: pointer;
 }
 
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container .add-steps input {

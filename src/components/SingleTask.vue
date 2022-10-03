@@ -1,7 +1,7 @@
 <template>
     <transition-group name="tasks-transition">
         <li @click.self="openDescription" :class="{complete: task.complete}"
-            v-for="(task,index) in returnLists[listId].tasks" :key="task.id" :data-id="task.id">
+            v-for="(task,index) in returnLists[listId].tasks" :key="task.id" :data-id="index">
             <span :data-id="index" @click="completeTask" class="check">
                 <img src="@/assets/design-material/icons/check.png" alt="check" />
             </span>
@@ -24,7 +24,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'SingleTask',
-    props: ['listId'],
+    props: ['listId', 'toggleShrink'],
     computed: {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
@@ -32,7 +32,7 @@ export default {
     data() {
         return {
             importantTask: {},
-            shrink: false,
+            shrink: this.toggleShrink,
             taskId: 0,
             oldTaskId: 0
         }
@@ -45,9 +45,14 @@ export default {
     methods: {
 
         openDescription() {
+            
+            console.log(event.target.getAttribute('data-id'));
 
-            if (!this.shrink) {
-                this.shrink = !this.shrink
+            if (!this.toggleShrink) {
+                this.shrink = !this.toggleShrink
+                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
+            } else {
+                this.shrink = !this.toggleShrink
                 this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
             }
 

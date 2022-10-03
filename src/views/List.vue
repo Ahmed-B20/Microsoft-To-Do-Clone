@@ -6,7 +6,7 @@
             </template>
 
             <template #allTaskSlot>
-                <SingleTask @openDescriptionEvent="openDescription" :listId="listId" />
+                <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId" />
             </template>
         </content-view>
     </keep-alive>
@@ -97,10 +97,10 @@ export default {
             this.toggleShrink = shrink
             console.log('fff');
 
+            console.log(this.toggleShrink);
         },
         closeDescriptionMethod(value) {
-            this.toggleOpenDescription = value
-            console.log('f');
+            this.toggleShrink = value
         }
     }
 }
