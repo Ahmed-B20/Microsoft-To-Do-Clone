@@ -11,6 +11,10 @@
 
                 <p v-else><img src="@/assets/design-material/icons/menu.png" alt="single-list">
                     <span>{{list.listName}}</span>
+
+                    <span class="tasks-count" v-if="!list.listChildren">
+                        {{list.tasks.length}}
+                    </span>
                 </p>
             </li>
         </ul>
@@ -71,10 +75,16 @@ export default {
                 this.listIndex = event.target.parentElement.parentElement.getAttribute('data-id')
             }
 
-            this.allTasks = this.returnLists[this.listIndex].tasks
 
-            this.teleportToggle = true
-            this.$router.push({ name: 'list', params: { listId: this.listIndex } })
+            if (!!this.listIndex) {
+                this.allTasks = this.returnLists[this.listIndex].tasks
+
+                this.teleportToggle = true
+
+                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
+            } else {
+                console.log('dd');
+            }
         }
     }
 }

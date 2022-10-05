@@ -140,9 +140,15 @@ export default {
                 if (this.toggleListChildren === false) {
                     this.toggleError = true
                 } else {
-                    this.$refs.addGroupOfList.setAttribute('src', this.$refs.addGroupOfList.getAttribute('src').replace('close', 'add'))
-                    this.toggleListChildren = false
-                    this.childListsArray = []
+
+                    if (this.childListsArray.length > 0) {
+                        this.$refs.addGroupOfList.setAttribute('src', this.$refs.addGroupOfList.getAttribute('src').replace('close', 'add'))
+                        this.toggleListChildren = false
+                        this.childListsArray = []
+                    } else {
+                        console.log('ff');
+                    }
+
                 }
             }
         }
