@@ -10,6 +10,7 @@ const routes = [
   { path: "/planned", component: Planned },
   { path: "/tasks", component: Tasks },
   { path: "/list/:listId", name:'list', component: List, props:true },
+  { path: "/list/:listId/:childId", name:'child-list', component: List, props:true },
 ];
 
 export default routes;

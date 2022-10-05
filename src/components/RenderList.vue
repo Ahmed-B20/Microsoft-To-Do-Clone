@@ -6,7 +6,7 @@
 
 
                 <template v-if="list.listChildren">
-                    <GroupOfLists :childrenListsArray='list.listsArray' :listName="list.listName" />
+                    <GroupOfLists :childrenListsArray='list.listsArray' :listName="list.listName" :parentId="list.id" />
                 </template>
 
                 <p v-else><img src="@/assets/design-material/icons/menu.png" alt="single-list">
@@ -64,26 +64,31 @@ export default {
     },
     methods: {
         showListTasks() {
-            if (event.target.tagName === 'LI') {
+            if (event.target.tagName === 'LI' && event.target.classList.contains("single-list")) {
                 this.listName = event.target.getAttribute('data-name')
                 this.listIndex = event.target.getAttribute('data-id')
-            } else if (event.target.tagName === 'P') {
+                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
+            } else if (event.target.tagName === 'P' && event.target.parentElement.classList.contains("single-list")) {
                 this.listName = event.target.parentElement.getAttribute('data-name')
                 this.listIndex = event.target.parentElement.getAttribute('data-id')
-            } else {
+                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
+            } else if (event.target.parentElement.parentElement.classList.contains("single-list")) {
                 this.listName = event.target.parentElement.parentElement.getAttribute('data-name')
                 this.listIndex = event.target.parentElement.parentElement.getAttribute('data-id')
+                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
             }
 
 
             if (!!this.listIndex) {
-                this.allTasks = this.returnLists[this.listIndex].tasks
+                // this.allTasks = this.returnLists[this.listIndex].tasks
 
-                this.teleportToggle = true
 
-                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
+                // this.teleportToggle = true
+                console.log('gkj');
+
+                // this.$router.push({ name: 'list', params: { listId: this.listIndex } })
             } else {
-                console.log('dd');
+                // console.log(event.target.parentElement);
             }
         }
     }

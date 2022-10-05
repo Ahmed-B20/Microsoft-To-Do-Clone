@@ -44,7 +44,7 @@ export default {
             taskNumber: 0,
             childListId: 0,
             allSavedList: [],
-            toggleError: false
+            toggleError: false,
         };
     },
 
@@ -68,8 +68,10 @@ export default {
                     this.listObj.listChildren = true;
                     this.listObj.tasks = [];
 
-                    this.childListObj.name = this.itemValue
-                    this.childListObj.id = `${this.childListId}c`
+                    this.childListObj.listName = this.itemValue
+                    this.childListObj.id = `${this.childListId}`
+                    this.childListObj.tasks = [];
+
                     this.childListsArray.push(this.childListObj)
                     this.listObj.listsArray = this.childListsArray
                     this.childListId++

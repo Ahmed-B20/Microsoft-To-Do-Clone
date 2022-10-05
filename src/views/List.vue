@@ -2,11 +2,14 @@
     <keep-alive>
         <content-view :class="[toggleShrink? 'shrink': 'grow']" :key="listId">
             <template v-slot:title>
-                {{listName}}
+                {{listName}} 
             </template>
 
+
             <template #allTaskSlot>
-                <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId" />
+                <!-- <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId" /> -->
+                <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId"
+                    :childId="childId" />
             </template>
         </content-view>
     </keep-alive>
@@ -28,7 +31,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'List',
-    props: ['listId'],
+    props: ['listId', 'childId'],
     components: {
         ContentView,
         SingleTask,
@@ -42,38 +45,78 @@ export default {
     },
     beforeMount: function () {
 
+        console.log(this.listId);
+
         // this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
         this.allList = this.returnLists || []
 
-        this.chosenList = this.allList[this.listId]
-        this.listName = this.chosenList.listName
-        this.allTask = this.chosenList.tasks;
+        if (!!this.$route.params.childId) {
+            this.chosenList = this.allList[this.$route.params.listId]
+            console.log(this.allList[this.$route.params.listId].listsArray);
+            this.listName = this.chosenList.listsArray[this.$route.params.childId].listName
+
+            console.log(this.chosenList.listsArray[this.$route.params.childId].listName);
+
+            this.allTasks = this.chosenList.listsArray[this.$route.params.childId].tasks;
+        } else {
+            this.chosenList = this.allList[this.listId]
+            this.listName = this.chosenList.listName
+            this.allTasks = this.chosenList.tasks;
+        }
+
+        console.log(this.$route.params.childId);
+
+        // if (!!this.$route.params.childId) {
 
 
-        this.$watch(
-            () => this.listId,
-            (toParams, previousParams) => {
-                if (toParams != previousParams) {
-                    this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
+        // this.$watch(
+        //     () => this.$route.params.childId,
+        //     (toParams, previousParams) => {
+        //         console.log(toParams, previousParams);
+        //         if (toParams != previousParams) {
+        //             this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
 
-                    this.chosenList = this.allList[this.listId]
-                    this.listName = this.chosenList.listName
+        //             console.log(this.$route.params.childId);
 
-                    this.allTask = this.chosenList.tasks;
-                }
-            }
-        )
+        //             this.chosenList = this.allList[this.$route.params.listId]
+        //             console.log(this.allList[this.$route.params.listId].listsArray);
+        //             this.listName = this.chosenList.listsArray[this.$route.params.childId].listName
+
+        //             console.log(this.listName);
+
+        //             this.allTasks = this.chosenList.listsArray[this.$route.params.childId].tasks;
+
+        //         }
+        //     }
+        // )
+        // } else {
+        // this.$watch(
+        //     () => this.listId,
+        //     (toParams, previousParams) => {
+        //         console.log(toParams, previousParams);
+        //         if (toParams != previousParams) {
+        //             this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
+        //             console.log(this.$route.params.childId);
+        //             this.chosenList = this.allList[this.listId]
+        //             this.listName = this.chosenList.listName
+        //             console.log(this.listName);
+        //             this.allTasks = this.chosenList.tasks;
+        //         }
+        //     }
+        // )
+        // }
     },
     data() {
         return {
             allList: [],
             chosenList: [],
             listName: '',
-            allTask: [],
+            allTasks: [],
             toggleOpenDescription: false,
             descriptionTaskList: 0,
             descriptionTaskIndex: 0,
-            toggleShrink: false
+            toggleShrink: false,
+            // sendedArray: []
         }
     },
     computed: {
@@ -84,6 +127,23 @@ export default {
         // allTask() {
         //     console.log(this.allTask);
         // }
+        listId() {
+            if (!this.childId) {
+                this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
+                this.chosenList = this.allList[this.listId]
+                this.listName = this.chosenList.listName
+                this.allTasks = this.chosenList.tasks;
+            }
+        },
+        childId() {
+
+            if (!!this.childId) {
+                this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
+                this.chosenList = this.allList[this.$route.params.listId]
+                this.listName = this.chosenList.listsArray[this.$route.params.childId].listName
+                this.allTasks = this.chosenList.listsArray[this.$route.params.childId].tasks;
+            }
+        }
     },
     methods: {
         completeTask() {

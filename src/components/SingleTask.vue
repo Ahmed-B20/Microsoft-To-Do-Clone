@@ -1,7 +1,7 @@
 <template>
     <transition-group name="tasks-transition">
-        <li @click.self="openDescription" :class="{complete: task.complete}"
-            v-for="(task,index) in returnLists[listId].tasks" :key="task.id" :data-id="index">
+        <li @click.self="openDescription" :class="{complete: task.complete}" v-for="(task,index) in returnAllTasks"
+            :key="task.id" :data-id="index">
             <span :data-id="index" @click="completeTask" class="check">
                 <img src="@/assets/design-material/icons/check.png" alt="check" />
             </span>
@@ -39,10 +39,23 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'SingleTask',
-    props: ['listId', 'toggleShrink'],
+    props: ['listId', 'toggleShrink', 'childId'],
     computed: {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
+
+        returnAllTasks() {
+
+            console.log(this.childId);
+
+            if (!!this.childId) {
+                console.log(this.childId);
+                console.log(this.listId);
+                return this.returnLists[this.listId].listsArray[this.childId].tasks
+            } else {
+                return this.returnLists[this.listId].tasks
+            }
+        }
     },
     data() {
         return {
