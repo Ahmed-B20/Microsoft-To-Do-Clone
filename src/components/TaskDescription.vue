@@ -102,7 +102,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'DescriptionTask',
-    props: ['descriptionTaskList', 'descriptionTaskIndex'],
+    props: ['descriptionTaskList', 'descriptionTaskIndex', 'element'],
     beforeMount() {
         this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
 
@@ -149,7 +149,7 @@ export default {
             } else {
                 this.activeToggle = false
             }
-        }
+        },
     },
     methods: {
         addNote() {
@@ -169,10 +169,18 @@ export default {
             this.$emit('closeDescription', false)
         },
         closeDescription() {
+            this.element.classList.remove('add-animation-x')
             this.$emit('closeDescription', false)
         },
         importantAsideToggle() {
             // this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+
+            console.log(this.element);
+
+            this.element.classList.remove('add-animation-x')
+            this.element.classList.remove('add-animation')
+
+            console.log(this.element);
 
 
             if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
@@ -213,6 +221,8 @@ export default {
                 }
             })
 
+
+
         },
         completeAsideTask() {
             if (event.target.tagName === 'SPAN') {
@@ -237,6 +247,20 @@ export default {
                     this.taskIndex = index
                 }
             })
+
+            if (this.element.classList.contains('add-animation-x')) {
+                this.element.classList.remove('add-animation-x')
+                setTimeout(() => {
+                    this.element.classList.add('add-animation-x')
+                }, 0)
+                console.log('one');
+            } else {
+                this.element.classList.remove('add-animation-x')
+                setTimeout(() => {
+                    this.element.classList.add('add-animation-x')
+                }, 0)
+                console.log('one1');
+            }
         },
 
         completeStep() {

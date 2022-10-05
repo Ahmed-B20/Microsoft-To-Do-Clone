@@ -45,15 +45,14 @@ export default {
         ...mapWritableState(allLists, ['lists']),
 
         returnAllTasks() {
-
-            console.log(this.childId);
-
             if (!!this.childId) {
-                console.log(this.childId);
-                console.log(this.listId);
-                return this.returnLists[this.listId].listsArray[this.childId].tasks
+                if (this.returnLists[this.listId].listsArray[this.childId].tasks.length > 0) {
+                    return this.returnLists[this.listId].listsArray[this.childId].tasks
+                }
             } else {
-                return this.returnLists[this.listId].tasks
+                if (this.returnLists[this.listId].tasks.length > 0) {
+                    return this.returnLists[this.listId].tasks
+                }
             }
         }
     },
@@ -68,6 +67,8 @@ export default {
     },
     watch: {
         toggleShrink() {
+
+            console.log(this.taskId);
 
             this.taskId.classList.remove('add-animation-x')
 
@@ -101,10 +102,10 @@ export default {
 
             if (!this.toggleShrink) {
                 this.shrink = !this.toggleShrink
-                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
+                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskId)
             } else {
                 this.shrink = !this.toggleShrink
-                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
+                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskId)
             }
 
             // this.shrink = !this.shrink

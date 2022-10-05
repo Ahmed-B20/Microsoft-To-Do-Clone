@@ -2,7 +2,7 @@
     <keep-alive>
         <content-view :class="[toggleShrink? 'shrink': 'grow']" :key="listId">
             <template v-slot:title>
-                {{listName}} 
+                {{listName}}
             </template>
 
 
@@ -15,8 +15,8 @@
     </keep-alive>
 
     <transition name="to-left">
-        <TaskDescription @closeDescription="closeDescriptionMethod" :descriptionTaskList="descriptionTaskList"
-            :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink" />
+        <TaskDescription :toggleShrink="toggleShrink" @closeDescription="closeDescriptionMethod" :descriptionTaskList="descriptionTaskList"
+            :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink" :element="element" />
     </transition>
 </template>
 
@@ -116,6 +116,7 @@ export default {
             descriptionTaskList: 0,
             descriptionTaskIndex: 0,
             toggleShrink: false,
+            element: '',
             // sendedArray: []
         }
     },
@@ -149,11 +150,12 @@ export default {
         completeTask() {
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
         },
-        openDescription(listId, index, shrink) {
+        openDescription(listId, index, shrink, element) {
             this.descriptionTaskList = listId
             this.descriptionTaskIndex = index
             // this.toggleOpenDescription = !this.toggleOpenDescription
             this.toggleShrink = shrink
+            this.element = element
 
         },
         closeDescriptionMethod(value) {
