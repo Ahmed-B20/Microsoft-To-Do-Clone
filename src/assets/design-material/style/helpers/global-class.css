@@ -21,7 +21,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    min-width: 350px;
+    min-width: 360px;
     height: 100%;
 }
 
@@ -344,18 +344,18 @@
 
 .to-left-move,
 .to-left-enter-active {
-    transition: all 0.2s cubic-bezier(0.55, 0, 0.1, 1);
+    transition: all 0.4s ease-in-out;
 }
 
 .to-left-leave-active {
-    transition: all 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    transition: all 0.4s ease-in-out;
 }
 
 /* 2. declare enter from and leave to state */
 .to-left-enter-from,
 .to-left-leave-to {
     opacity: 0;
-    transform: translateX(33%);
+    transform: translateX(360px);
 }
 
 /* 3. ensure leaving items are taken out of layout flow so that moving
