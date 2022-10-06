@@ -88,16 +88,32 @@
             <div class="time">Created on {{task.addTime}}</div>
 
             <span class="delete">
-                <img @click="deleteTask" src="@/assets/design-material/icons/delete.png" alt="">
+                <img @click="togglePopup" src="@/assets/design-material/icons/delete.png" alt="">
             </span>
         </div>
     </div>
+
+    <PopUp :showPopUp="showPopUp">
+        <template #title>
+            Delete Task
+        </template>
+
+        <template #content>
+            task {{task.name}} will be permanently deleted.
+        </template>
+
+        <template #button>
+            <button class="delete" @click="deleteTask">Delete</button>
+            <button class="close" @click="togglePopup">Cancel</button>
+        </template>
+    </PopUp>
 </template>
 
 <script>
 import { allLists } from '@/stores/allLists.js'
 
 import { mapState, mapWritableState } from 'pinia'
+import PopUp from './PopUp.vue'
 
 
 export default {
@@ -107,12 +123,13 @@ export default {
         this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
 
         this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
-
-
             if (singleTask.id == this.task.id) {
                 this.taskIndex = index
             }
         })
+    },
+    components: {
+        PopUp
     },
     data() {
         return {
@@ -125,7 +142,8 @@ export default {
             stepId: 0,
             textValue: '',
             taskIndex: 0,
-            stepElement: ''
+            stepElement: '',
+            showPopUp: false
         }
     },
     computed: {
@@ -159,14 +177,16 @@ export default {
         emptyTextValue() {
             this.textValue = ''
         },
+        togglePopup() {
+            this.showPopUp = !this.showPopUp
+        },
         deleteTask() {
-
-
             this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
             this.$emit('closeDescription', false)
+            this.showPopUp = !this.showPopUp
         },
         closeDescription() {
             this.element.classList.remove('add-animation-x')

@@ -158,6 +158,7 @@
 .lists-container li {
     padding: 10px 15px;
     cursor: pointer;
+    transform-origin: top center;
 }
 
 .lists-container li:not(.group-of-lists).active,
@@ -264,4 +265,23 @@
 .lists-container li.single-list img {
     width: 15px;
     height: 15px;
+}
+
+.render-list-move,
+.render-list-enter-active,
+.render-list-leave-active {
+    transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. declare enter from and leave to state */
+.render-list-enter-from,
+.render-list-leave-to {
+    opacity: 0;
+    transform: scaleY(0.01);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.render-list-leave-active {
+    position: absolute;
 }

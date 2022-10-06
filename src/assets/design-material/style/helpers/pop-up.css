@@ -1,0 +1,90 @@
+.pop-up-parent {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: none;
+    background-color: #0000007d;
+}
+
+.pop-up-parent.active {
+    display: block;
+}
+
+.pop-up-parent .pop-up-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pop-up-parent .pop-up-container .pop-up-content {
+    background-color: #f3f3f3;
+    box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    height: fit-content;
+    border-radius: 4px;
+}
+
+.pop-up-parent .pop-up-container .pop-up-content h1.title {
+    font-size: 25px;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.pop-up-parent .pop-up-container .pop-up-content p.content {
+    font-size: 17px;
+    text-align: center;
+    margin: 10px 0 20px 0;
+}
+
+.pop-up-parent .pop-up-container .pop-up-content .button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.pop-up-parent .pop-up-container .pop-up-content .button-container button {
+    padding: 8px 20px;
+    border-radius: 4px;
+}
+
+.pop-up-parent .pop-up-container .pop-up-content .button-container button.delete {
+    background-color: #dc282b;
+    color: white;
+    box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+}
+
+.pop-up-parent .pop-up-container .pop-up-content .button-container button.close {
+    background-color: #fbfbfb;
+    color: black;
+    box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+}
+
+.pop-up-toggle-enter-active,
+.pop-up-toggle-leave-active {
+    transition: all 0.2s linear;
+}
+
+.pop-up-toggle-enter-from,
+.pop-up-toggle-leave-to {
+    transform: translateY(-30px);
+    opacity: 0;
+}
+
+.delay-enter-active,
+.delay-leave-active {
+    transition: all 0.5s linear;
+}
+
+.delay-enter-from,
+.delay-leave-to {
+    display: none;
+}

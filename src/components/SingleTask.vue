@@ -60,7 +60,7 @@ export default {
         return {
             importantTask: {},
             shrink: this.toggleShrink,
-            taskId: 0,
+            taskElement: '',
             oldTaskId: 0,
             stepsCount: 0
         }
@@ -68,53 +68,53 @@ export default {
     watch: {
         toggleShrink() {
 
-            console.log(this.taskId);
+            this.taskElement = event.target
 
-            this.taskId.classList.remove('add-animation-x')
+            this.taskElement.classList.remove('add-animation-x')
 
-            if (this.taskId.classList.contains('add-animation')) {
-                this.taskId.classList.remove('add-animation')
+            if (this.taskElement.classList.contains('add-animation')) {
+                this.taskElement.classList.remove('add-animation')
                 setTimeout(() => {
-                    this.taskId.classList.add('add-animation')
+                    this.taskElement.classList.add('add-animation')
                 }, 0)
             } else {
-                this.taskId.classList.remove('add-animation')
+                this.taskElement.classList.remove('add-animation')
                 setTimeout(() => {
-                    this.taskId.classList.add('add-animation')
+                    this.taskElement.classList.add('add-animation')
                 }, 0)
             }
         }
     },
     methods: {
         openDescription() {
-            this.taskId = event.target
+            this.taskElement = event.target
 
-            this.taskId.classList.remove('add-animation-x')
+            this.taskElement.classList.remove('add-animation-x')
 
-            if (this.taskId.classList.contains('add-animation')) {
-                this.taskId.classList.remove('add-animation')
+            if (this.taskElement.classList.contains('add-animation')) {
+                this.taskElement.classList.remove('add-animation')
                 setTimeout(() => {
-                    this.taskId.classList.add('add-animation')
+                    this.taskElement.classList.add('add-animation')
                 }, 0)
             } else {
-                this.taskId.classList.add('add-animation')
+                this.taskElement.classList.add('add-animation')
             }
 
             if (!this.toggleShrink) {
                 this.shrink = !this.toggleShrink
-                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskId)
+                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
             } else {
                 this.shrink = !this.toggleShrink
-                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskId)
+                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
             }
 
             // this.shrink = !this.shrink
             // this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
 
-            // this.taskId = event.target.getAttribute('data-id')
+            // this.taskElement = event.target.getAttribute('data-id')
 
-            // if (+this.taskId != +this.oldTaskId) {
-            //     this.oldTaskId = event.target.getAttribute('data-id')
+            // if (+this.taskElement != +this.oldtaskElement) {
+            //     this.oldtaskElement = event.target.getAttribute('data-id')
 
 
             //     this.shrink = true
@@ -122,18 +122,18 @@ export default {
             // } else {
             //     this.shrink = false
 
-            //     this.oldTaskId = 0
+            //     this.oldtaskElement = 0
             //     this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
             // }
         },
         importantToggle() {
             // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
 
-            this.taskId = event.target.parentElement
+            this.taskElement = event.target.parentElement
 
 
-            this.taskId.classList.remove('add-animation-x')
-            this.taskId.classList.remove('add-animation')
+            this.taskElement.classList.remove('add-animation-x')
+            this.taskElement.classList.remove('add-animation')
 
             if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important) {
                 this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = false
@@ -170,14 +170,14 @@ export default {
         },
         completeTask() {
             if (event.target.tagName === 'SPAN') {
-                this.taskId = event.target.parentElement
+                this.taskElement = event.target.parentElement
                 if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete) {
                     this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = false
                 } else {
                     this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
                 }
             } else {
-                this.taskId = event.target.parentElement.parentElement
+                this.taskElement = event.target.parentElement.parentElement
                 if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete) {
                     this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = false
                 } else {
@@ -189,16 +189,16 @@ export default {
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
-            if (this.taskId.classList.contains('add-animation-x')) {
-                this.taskId.classList.remove('add-animation-x')
+            if (this.taskElement.classList.contains('add-animation-x')) {
+                this.taskElement.classList.remove('add-animation-x')
                 setTimeout(() => {
-                    this.taskId.classList.add('add-animation-x')
+                    this.taskElement.classList.add('add-animation-x')
                 }, 0)
                 console.log('one');
             } else {
-                this.taskId.classList.remove('add-animation-x')
+                this.taskElement.classList.remove('add-animation-x')
                 setTimeout(() => {
-                    this.taskId.classList.add('add-animation-x')
+                    this.taskElement.classList.add('add-animation-x')
                 }, 0)
                 console.log('one1');
             }

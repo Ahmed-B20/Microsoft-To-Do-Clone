@@ -47,7 +47,7 @@ export default {
             this.listIndex = event.target.getAttribute('data-id')
             this.teleportToggle = true
             console.log(this.parentId, this.listIndex);
-            this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex } })
+            this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex, closeDescription: false } })
 
             // console.log(this.listIndex);
         }

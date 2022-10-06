@@ -1,22 +1,25 @@
 <template>
     <transition name="render-list">
         <ul class="lists-container">
-            <li @click="showListTasks" v-for="list in returnLists" :data-name="list.listName" :data-id="list.id"
-                :key="list.id" :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
+            <transition-group name="render-list">
+                <li @click="showListTasks" v-for="list in returnLists" :data-name="list.listName" :data-id="list.id"
+                    :key="list.id" :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
 
 
-                <template v-if="list.listChildren">
-                    <GroupOfLists :childrenListsArray='list.listsArray' :listName="list.listName" :parentId="list.id" />
-                </template>
+                    <template v-if="list.listChildren">
+                        <GroupOfLists :childrenListsArray='list.listsArray' :listName="list.listName"
+                            :parentId="list.id" />
+                    </template>
 
-                <p v-else><img src="@/assets/design-material/icons/menu.png" alt="single-list">
-                    <span>{{list.listName}}</span>
+                    <p v-else><img src="@/assets/design-material/icons/menu.png" alt="single-list">
+                        <span>{{list.listName}}</span>
 
-                    <span class="tasks-count" v-if="!list.listChildren">
-                        {{list.tasks.length}}
-                    </span>
-                </p>
-            </li>
+                        <span class="tasks-count" v-if="!list.listChildren">
+                            {{list.tasks.length}}
+                        </span>
+                    </p>
+                </li>
+            </transition-group>
         </ul>
     </transition>
 
@@ -56,7 +59,8 @@ export default {
             teleportToggle: false,
             listName: '',
             listIndex: 0,
-            allTasks: []
+            allTasks: [],
+            closeDescription: false
         }
     },
     computed: {
@@ -67,15 +71,15 @@ export default {
             if (event.target.tagName === 'LI' && event.target.classList.contains("single-list")) {
                 this.listName = event.target.getAttribute('data-name')
                 this.listIndex = event.target.getAttribute('data-id')
-                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
+                this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
             } else if (event.target.tagName === 'P' && event.target.parentElement.classList.contains("single-list")) {
                 this.listName = event.target.parentElement.getAttribute('data-name')
                 this.listIndex = event.target.parentElement.getAttribute('data-id')
-                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
+                this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
             } else if (event.target.parentElement.parentElement.classList.contains("single-list")) {
                 this.listName = event.target.parentElement.parentElement.getAttribute('data-name')
                 this.listIndex = event.target.parentElement.parentElement.getAttribute('data-id')
-                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
+                this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
             }
 
 

@@ -15,8 +15,9 @@
     </keep-alive>
 
     <transition name="to-left">
-        <TaskDescription :toggleShrink="toggleShrink" @closeDescription="closeDescriptionMethod" :descriptionTaskList="descriptionTaskList"
-            :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink" :element="element" />
+        <TaskDescription :toggleShrink="toggleShrink" @closeDescription="closeDescriptionMethod"
+            :descriptionTaskList="descriptionTaskList" :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink"
+            :element="element" />
     </transition>
 </template>
 
@@ -31,7 +32,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'List',
-    props: ['listId', 'childId'],
+    props: ['listId', 'childId', 'closeDescription'],
     components: {
         ContentView,
         SingleTask,
@@ -46,6 +47,8 @@ export default {
     beforeMount: function () {
 
         console.log(this.listId);
+        this.toggleShrink = this.closeDescription
+
 
         // this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
         this.allList = this.returnLists || []
@@ -134,6 +137,8 @@ export default {
                 this.chosenList = this.allList[this.listId]
                 this.listName = this.chosenList.listName
                 this.allTasks = this.chosenList.tasks;
+                this.toggleShrink = this.closeDescription
+                console.log(this.closeDescription);
             }
         },
         childId() {
@@ -143,12 +148,15 @@ export default {
                 this.chosenList = this.allList[this.$route.params.listId]
                 this.listName = this.chosenList.listsArray[this.$route.params.childId].listName
                 this.allTasks = this.chosenList.listsArray[this.$route.params.childId].tasks;
+                this.toggleShrink = this.closeDescription
             }
         }
     },
     methods: {
         completeTask() {
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
+
+            console.log('ffff');
         },
         openDescription(listId, index, shrink, element) {
             this.descriptionTaskList = listId
