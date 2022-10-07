@@ -226,7 +226,7 @@
     opacity: 0; */
     transform-origin: top center;
     transition: all 0.3s linear;
-    max-height: 0;
+    /* max-height: 0; */
 }
 
 

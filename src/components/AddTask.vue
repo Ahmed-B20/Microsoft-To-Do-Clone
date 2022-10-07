@@ -18,7 +18,7 @@ import { mapState, mapWritableState } from 'pinia'
 export default {
     name: 'MainContent',
     // props: ['chosenListIdProp'],
-    inject: ['chosenListId'],
+    inject: ['chosenListId', 'chosenChildIdListId'],
     data() {
         return {
             inputValue: '',
@@ -40,10 +40,16 @@ export default {
             if (this.inputValue.length > 0) {
                 this.errorToggle = false
 
+                this.allLists = this.returnLists || []
+
+                console.log(this.chosenListId, this.chosenChildIdListId);
 
                 // this.allLists = JSON.parse(localStorage.getItem("allListAndTasks")) || []
-                this.allLists = this.returnLists || []
-                this.chosenList = this.allLists[this.chosenListId()]
+                if (!!this.chosenListId && !this.chosenChildIdListId) {
+                    this.chosenList = this.allLists[this.chosenListId]
+                } else {
+                    this.chosenList = this.allLists[this.chosenListId].listsArray[this.chosenChildIdListId]
+                }
 
                 this.chosenListTasks = this.chosenList.tasks
 
