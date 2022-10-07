@@ -1,9 +1,16 @@
 <template>
     <div class="view-content-container">
         <div class="title">
+
+            <div class="toggle">
+                <slot name="toggle-sidebar"></slot>
+            </div>
+            
             <h1>
                 <slot name="title"></slot>
             </h1>
+
+            <slot name="toggle-description"></slot>
         </div>
 
 

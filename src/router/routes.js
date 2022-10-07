@@ -5,6 +5,7 @@ import Tasks from "@/views/Tasks.vue";
 import List from "@/views/List.vue";
 
 const routes = [
+  { path: "/", component: MyDay },
   { path: "/my-day", component: MyDay },
   { path: "/important", component: Important },
   { path: "/planned", component: Planned },

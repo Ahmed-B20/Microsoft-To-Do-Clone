@@ -1,8 +1,16 @@
 <template>
     <keep-alive>
         <content-view :class="[toggleShrink? 'shrink': 'grow']" :key="listId">
+            <template #toggle-sidebar>
+                <button @click="openSideBarDescription">test</button>
+            </template>
+
             <template v-slot:title>
                 {{listName}}
+            </template>
+
+            <template #toggle-description>
+                <button @click="openListDescription">test</button>
             </template>
 
 
@@ -29,6 +37,8 @@ import TaskDescription from '../components/TaskDescription.vue'
 
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
+
+import { toggleAside } from '@/stores/toggleAside.js'
 
 export default {
     name: 'List',
@@ -126,6 +136,7 @@ export default {
     computed: {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
+        ...mapWritableState(toggleAside, ['toggleState']),
     },
     watch: {
         // allTask() {
@@ -153,6 +164,9 @@ export default {
         }
     },
     methods: {
+        openSideBarDescription() {
+            this.toggleState = !this.toggleState
+        },
         completeTask() {
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
 
