@@ -74,8 +74,8 @@ export default {
     provide() {
         return {
             // explicitly provide a computed property
-            chosenListId: this.comListId,
-            chosenChildIdListId: this.comChildId
+            chosenListId: () => this.comListId,
+            chosenChildIdListId: () => this.comChildId
         }
     },
     beforeMount: function () {

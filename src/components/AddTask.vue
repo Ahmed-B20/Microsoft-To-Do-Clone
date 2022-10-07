@@ -42,13 +42,14 @@ export default {
 
                 this.allLists = this.returnLists || []
 
-                console.log(this.chosenListId, this.chosenChildIdListId);
+                console.log(this.chosenListId(), this.chosenChildIdListId());
 
                 // this.allLists = JSON.parse(localStorage.getItem("allListAndTasks")) || []
-                if (!!this.chosenListId && !this.chosenChildIdListId) {
-                    this.chosenList = this.allLists[this.chosenListId]
+                if (!!this.chosenListId() && !this.chosenChildIdListId()) {
+                    this.chosenList = this.allLists[this.chosenListId()]
                 } else {
-                    this.chosenList = this.allLists[this.chosenListId].listsArray[this.chosenChildIdListId]
+                    console.log(this.allLists[this.chosenListId()].listsArray[this.chosenChildIdListId()]);
+                    this.chosenList = this.allLists[this.chosenListId()].listsArray[this.chosenChildIdListId()]
                 }
 
                 this.chosenListTasks = this.chosenList.tasks
