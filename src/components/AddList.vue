@@ -16,11 +16,27 @@
             </span>
         </div>
     </div>
+
+    <PopUp :showPopUp="showPopUp">
+        <template #title>
+            Warning Message
+        </template>
+
+        <template #content>
+            you must at list add one child list to {{groupOfListsName}}
+        </template>
+
+        <template #button>
+            <button class="close" @click="togglePopup">Cancel</button>
+        </template>
+    </PopUp>
 </template>
   
 <script>
 import { allLists } from '@/stores/allLists.js'
 import { mapWritableState } from 'pinia'
+import PopUp from './PopUp.vue'
+
 
 export default {
     name: "add-new-item",
@@ -31,8 +47,9 @@ export default {
 
         this.taskNumber = this.lists.length
     },
-
-
+    components: {
+        PopUp
+    },
     data() {
         return {
             itemValue: "",
@@ -45,6 +62,8 @@ export default {
             childListId: 0,
             allSavedList: [],
             toggleError: false,
+            showPopUp: false,
+            groupOfListsName: ''
         };
     },
 
@@ -60,6 +79,11 @@ export default {
     },
 
     methods: {
+        togglePopup() {
+            console.log(this.groupOfListsName);
+
+            this.showPopUp = !this.showPopUp
+        },
         addList() {
             if (this.itemValue.length > 0) {
 
@@ -113,6 +137,10 @@ export default {
             this.toggleError = false
         },
         addGroupOfList() {
+            if (!this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
+                this.groupOfListsName = this.itemValue
+            }
+            console.log(this.groupOfListsName);
             if (this.itemValue.length > 0 && !this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
                 this.listObj.listName = this.itemValue;
                 this.listObj.id = this.taskNumber;
@@ -148,7 +176,7 @@ export default {
                         this.toggleListChildren = false
                         this.childListsArray = []
                     } else {
-                        console.log('ff');
+                        this.showPopUp = !this.showPopUp
                     }
 
                 }

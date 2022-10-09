@@ -11,16 +11,21 @@
 
     <transition name="toggle-group-of-list">
         <!-- <ul :class="{active:groupOfListsToggle}"> -->
-        <ul v-show="groupOfListsToggle">
-            <li @click="showListTasks" :data-name="childrenList.name" :data-id="childrenList.id"
-                v-for="childrenList in childrenListsArray" :key="childrenList.id">
-                <p :data-name="childrenList.name" :data-id="childrenList.id">
-                    <img :data-name="childrenList.name" :data-id="childrenList.id"
-                        src="@/assets/design-material/icons/menu.png" alt="single-list">
-                    <span :data-name="childrenList.name" :data-id="childrenList.id">{{childrenList.listName}}</span>
-                </p>
-            </li>
-        </ul>
+        <transition name="toggle-group-of-list">
+            <ul v-if="groupOfListsToggle">
+                <transition-group name="render-list">
+                    <li @click="showListTasks" :data-name="childrenList.name" :data-id="childrenList.id"
+                        v-for="childrenList in childrenListsArray" :key="childrenList.id">
+                        <p :data-name="childrenList.name" :data-id="childrenList.id">
+                            <img :data-name="childrenList.name" :data-id="childrenList.id"
+                                src="@/assets/design-material/icons/menu.png" alt="single-list">
+                            <span :data-name="childrenList.name"
+                                :data-id="childrenList.id">{{childrenList.listName}}</span>
+                        </p>
+                    </li>
+                </transition-group>
+            </ul>
+        </transition>
     </transition>
 </template>
 
