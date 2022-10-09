@@ -24,8 +24,8 @@
 
     <transition name="to-left">
         <TaskDescription :toggleShrink="toggleShrink" @closeDescription="closeDescriptionMethod"
-            :descriptionTaskList="descriptionTaskList" :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink"
-            :element="element" />
+            :descriptionTaskList="descriptionTaskList" :descriptionTaskChildList="descriptionTaskChildList"
+            :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink" :element="element" />
     </transition>
 
     <!-- <transition name="to-bottom">
@@ -150,8 +150,9 @@ export default {
             listName: '',
             allTasks: [],
             toggleOpenDescription: false,
-            descriptionTaskList: 0,
-            descriptionTaskIndex: 0,
+            descriptionTaskList: null,
+            descriptionTaskChildList: null,
+            descriptionTaskIndex: null,
             toggleShrink: false,
             element: '',
             // sendedArray: []
@@ -204,8 +205,12 @@ export default {
             console.log('ffff');
         },
         openDescription(listId, index, shrink, element) {
+            if (!!this.childId) {
+                this.descriptionTaskChildList = this.childId
+            }
             this.descriptionTaskList = listId
             this.descriptionTaskIndex = index
+
             // this.toggleOpenDescription = !this.toggleOpenDescription
             this.toggleShrink = shrink
             this.element = element

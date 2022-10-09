@@ -119,15 +119,30 @@ import PopUp from './PopUp.vue'
 
 export default {
     name: 'DescriptionTask',
-    props: ['descriptionTaskList', 'descriptionTaskIndex', 'element'],
+    props: ['descriptionTaskChildList', 'descriptionTaskList', 'descriptionTaskIndex', 'element'],
     beforeMount() {
-        this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+        if (!!this.descriptionTaskChildList) {
 
-        this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
-            if (singleTask.id == this.task.id) {
-                this.taskIndex = index
-            }
-        })
+            console.log(this.descriptionTaskChildList);
+
+            console.log(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]);
+
+            this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
+                .tasks[this.descriptionTaskIndex]
+            this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
+                .tasks.forEach((singleTask, index) => {
+                    if (singleTask.id == this.task.id) {
+                        this.taskIndex = index
+                    }
+                })
+        } else {
+            this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+            this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
+                if (singleTask.id == this.task.id) {
+                    this.taskIndex = index
+                }
+            })
+        }
     },
     components: {
         PopUp
