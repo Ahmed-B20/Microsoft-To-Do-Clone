@@ -73,8 +73,9 @@
 
             <div class="task-box task-notes">
                 <h3>Task Description</h3>
-                <textarea placeholder="Add Task Description" @blur="emptyTextValue" :data-id="index" v-model="textValue"
-                    @keyup="addNote">
+                <!-- <textarea placeholder="Add Task Description" @blur="emptyTextValue" :data-id="index" v-model="textValue"
+                    @keyup="addNote"> -->
+                <textarea placeholder="Add Task Description" :data-id="index" v-model="textValue" @keyup="addNote">
                     {{taskNoteText}}
                 </textarea>
 

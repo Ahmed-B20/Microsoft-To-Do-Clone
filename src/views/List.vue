@@ -1,8 +1,16 @@
 <template>
     <keep-alive>
         <content-view :class="[toggleShrink? 'shrink': 'grow']" :key="listId">
+            <template #toggle-sidebar>
+                <button @click="openSideBarDescription">test</button>
+            </template>
+
             <template v-slot:title>
                 {{listName}}
+            </template>
+
+            <template #toggle-description>
+                <button @click="openListDescription">test</button>
             </template>
 
 
@@ -19,16 +27,40 @@
             :descriptionTaskList="descriptionTaskList" :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink"
             :element="element" />
     </transition>
+
+    <!-- <transition name="to-bottom">
+        <DropDown>
+            <template #rename>
+                <span>rename list</span>
+            </template>
+
+            <template #move-list>
+                <span>move list</span>
+            </template>
+
+            <template #sort-by>
+                <span>sort by</span>
+            </template>
+
+            <template #delete-list>
+                <span>delete list</span>
+            </template>
+        </DropDown>
+    </transition> -->
 </template>
 
 <script>
 import ContentView from '../components/ContentView.vue';
 import SingleTask from '../components/SingleTask.vue';
 import TaskDescription from '../components/TaskDescription.vue'
+import DropDown from '../components/DropDown.vue';
 
 
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
+
+import { toggleAside } from '@/stores/toggleAside.js'
+// import { computed } from "vue";
 
 export default {
     name: 'List',
@@ -36,12 +68,14 @@ export default {
     components: {
         ContentView,
         SingleTask,
-        TaskDescription
+        TaskDescription,
+        DropDown
     },
     provide() {
         return {
             // explicitly provide a computed property
-            chosenListId: () => this.listId
+            chosenListId: () => this.comListId,
+            chosenChildIdListId: () => this.comChildId
         }
     },
     beforeMount: function () {
@@ -126,6 +160,14 @@ export default {
     computed: {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
+        ...mapWritableState(toggleAside, ['toggleState']),
+
+        comListId() {
+            return this.listId
+        },
+        comChildId() {
+            return this.childId
+        }
     },
     watch: {
         // allTask() {
@@ -153,6 +195,9 @@ export default {
         }
     },
     methods: {
+        openSideBarDescription() {
+            this.toggleState = !this.toggleState
+        },
         completeTask() {
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
 

@@ -1,0 +1,20 @@
+.drop-down {
+    position: absolute;
+    background-color: white;
+    height: 200px;
+    width: 280px;
+    top: 70px;
+    right: 45px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+}
+
+.drop-down ul {
+    display: flex;
+    flex-direction: column;
+}
+
+.drop-down ul li {
+    padding: 15px;
+}

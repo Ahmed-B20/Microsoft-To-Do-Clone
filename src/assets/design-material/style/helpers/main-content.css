@@ -15,7 +15,14 @@
     /* padding: 15px; */
 }
 
-@media (max-width:769px) {
+.main-content aside .toggle-aside {
+    display: none;
+    padding: 15px;
+    width: fit-content;
+    cursor: pointer;
+}
+
+@media (max-width:768px) {
     .main-content aside {
         position: absolute;
         left: 0;
@@ -23,5 +30,28 @@
         bottom: 0;
         z-index: 3;
         box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+        /* transform: translateX(-280px); */
     }
+
+    .main-content aside .toggle-aside {
+        display: block;
+    }
+}
+
+
+
+.to-right-move,
+.to-right-enter-active {
+    transition: all 0.2s ease-in-out;
+}
+
+.to-right-leave-active {
+    transition: all 0.2s ease-in-out;
+}
+
+/* 2. declare enter from and leave to state */
+.to-right-enter-from,
+.to-right-leave-to {
+    opacity: 1;
+    transform: translateX(-280px);
 }

@@ -1,6 +1,6 @@
 <template>
-  <div class="main-content">
-    <transition>
+  <div class="main-content" id="main-content">
+    <transition name="to-right">
       <AsideBar />
     </transition>
 
@@ -12,11 +12,36 @@
 import AsideBar from "./AsideBar.vue";
 import TabContent from "./TabContent.vue";
 
+import { toggleAside } from '@/stores/toggleAside.js'
+import { mapState, mapWritableState } from 'pinia'
+
 export default {
   name: "dashboard-content",
   components: {
     TabContent,
     AsideBar,
   },
+
+  created() {
+    window.addEventListener("resize", this.myEventHandler);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.myEventHandler);
+  },
+  computed: {
+    ...mapWritableState(toggleAside, ['toggleState']),
+  },
+  methods: {
+    myEventHandler() {
+      let width = document.getElementById('main-content').offsetWidth;
+      console.log(width);
+
+      if (width <= 768) {
+        if (!this.toggleState) {
+          this.toggleState = true
+        }
+      }
+    }
+  }
 };
 </script>
