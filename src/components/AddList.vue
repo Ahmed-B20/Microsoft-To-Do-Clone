@@ -86,8 +86,6 @@ export default {
         },
         addList() {
             if (this.itemValue.length > 0) {
-
-
                 if (this.toggleListChildren) {
                     this.listObj.listChildren = true;
                     this.listObj.tasks = [];
@@ -104,7 +102,6 @@ export default {
                     this.listArray.at(-1).listsArray = this.listObj.listsArray
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
                     this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
-
                 } else {
                     this.listObj.listName = this.itemValue;
                     this.listObj.id = this.taskNumber;
@@ -117,8 +114,6 @@ export default {
                     this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
                     this.taskNumber++;
                 }
-
-
 
                 if (localStorage.getItem("allListAndTasks")) {
                     this.allSavedList = JSON.parse(

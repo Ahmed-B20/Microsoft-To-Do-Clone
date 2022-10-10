@@ -135,53 +135,75 @@ export default {
             this.taskElement.classList.remove('add-animation-x')
             this.taskElement.classList.remove('add-animation')
 
-            if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important) {
-                this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = false
-
-                event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-
-                this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
-
-
-                this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id'), 1)
-
-
-                this.lists[this.listId].tasks.push(this.importantTask)
-                this.importantTask = {}
-
+            if (!!this.childId) {
+                if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].important) {
+                    this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].important = false
+                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')]
+                    this.lists[this.listId].listsArray[this.childId].tasks.splice(event.target.getAttribute('data-id'), 1)
+                    this.lists[this.listId].listsArray[this.childId].tasks.push(this.importantTask)
+                    this.importantTask = {}
+                } else {
+                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+                    this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].important = true
+                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')]
+                    this.lists[this.listId].listsArray[this.childId].tasks.splice(event.target.getAttribute('data-id'), 1)
+                    this.lists[this.listId].listsArray[this.childId].tasks.unshift(this.importantTask)
+                    this.importantTask = {}
+                }
             } else {
-                event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
-
-                this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = true
-
-                this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
-
-
-
-                this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id'), 1)
-
-
-                this.lists[this.listId].tasks.unshift(this.importantTask)
-                this.importantTask = {}
+                if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important) {
+                    this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = false
+                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+                    this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
+                    this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id'), 1)
+                    this.lists[this.listId].tasks.push(this.importantTask)
+                    this.importantTask = {}
+                } else {
+                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+                    this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = true
+                    this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
+                    this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id'), 1)
+                    this.lists[this.listId].tasks.unshift(this.importantTask)
+                    this.importantTask = {}
+                }
             }
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
         },
         completeTask() {
-            if (event.target.tagName === 'SPAN') {
-                this.taskElement = event.target.parentElement
-                if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete) {
-                    this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = false
+            if (!!this.childId) {
+                if (event.target.tagName === 'SPAN') {
+                    this.taskElement = event.target.parentElement
+                    if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].complete) {
+                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].complete = false
+                    } else {
+                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].complete = true
+                    }
                 } else {
-                    this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
+                    this.taskElement = event.target.parentElement.parentElement
+                    if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id')].complete) {
+                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id')].complete = false
+                    } else {
+                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id')].complete = true
+                    }
                 }
             } else {
-                this.taskElement = event.target.parentElement.parentElement
-                if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete) {
-                    this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = false
+                if (event.target.tagName === 'SPAN') {
+                    this.taskElement = event.target.parentElement
+                    if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete) {
+                        this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = false
+                    } else {
+                        this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
+                    }
                 } else {
-                    this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = true
+                    this.taskElement = event.target.parentElement.parentElement
+                    if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete) {
+                        this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = false
+                    } else {
+                        this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = true
+                    }
                 }
             }
 

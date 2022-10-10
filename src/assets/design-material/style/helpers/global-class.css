@@ -271,6 +271,48 @@
     padding: 5px;
 }
 
+.dashboard-content-container .task-description .rename-task {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dashboard-content-container .task-description .rename-task input {
+    flex-grow: 1;
+}
+
+.dashboard-content-container .task-description .rename-task input.error {
+    border-color: red;
+    animation: shake 0.1s linear;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(-10px);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.dashboard-content-container .task-description .rename-task img {
+    height: 25px;
+}
+
+.dashboard-content-container .task-description .rename-task img.renameTask {
+    cursor: default;
+}
+
+.dashboard-content-container .task-description .rename-task img.renameTask.active {
+    cursor: pointer;
+}
+
 .dashboard-content-container .task-description .add-to-my-day {
     display: flex;
     align-items: center;

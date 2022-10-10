@@ -192,6 +192,8 @@ export default {
                 this.listName = this.chosenList.listsArray[this.$route.params.childId].listName
                 this.allTasks = this.chosenList.listsArray[this.$route.params.childId].tasks;
                 this.toggleShrink = this.closeDescription
+            } else {
+                this.descriptionTaskChildList = null
             }
         }
     },

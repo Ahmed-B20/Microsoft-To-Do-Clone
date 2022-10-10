@@ -54,6 +54,21 @@
                 </div>
             </div>
 
+            <div @click.self="renameTask" class="task-box rename-task">
+                <template v-if="showRename">
+                    <img @click="newTaskName" class="renameTask" :class="{ active: itemDetect }"
+                        src="@/assets/design-material/icons/plus.png" alt="add-item" />
+                    <input @keyup.enter="newTaskName" required @focus="toggleErrorClass" v-model="newName"
+                        placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                    <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                </template>
+
+                <template v-else>
+                    <img @click="renameTask" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                    <span @click="renameTask">Rename Task</span>
+                </template>
+            </div>
+
             <div class="task-box add-to-my-day">
                 <img src="@/assets/design-material/icons/sun.png" alt="my day tab" />
                 <span>MyDay</span>
@@ -121,12 +136,10 @@ export default {
     name: 'DescriptionTask',
     props: ['descriptionTaskChildList', 'descriptionTaskList', 'descriptionTaskIndex', 'element'],
     beforeMount() {
+
+        console.log(this.descriptionTaskChildList, this.descriptionTaskList);
+
         if (!!this.descriptionTaskChildList) {
-
-            console.log(this.descriptionTaskChildList);
-
-            console.log(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]);
-
             this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
                 .tasks[this.descriptionTaskIndex]
             this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
@@ -159,7 +172,10 @@ export default {
             textValue: '',
             taskIndex: 0,
             stepElement: '',
-            showPopUp: false
+            showPopUp: false,
+            showRename: false,
+            newName: '',
+            toggleError: false,
         }
     },
     computed: {
@@ -172,22 +188,56 @@ export default {
             } else {
                 return this.textValue = ''
             }
-        }
+        },
+        itemDetect() {
+            if (this.newName.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        },
     },
     watch: {
         inputValue() {
             if (this.inputValue.length > 0) {
                 this.activeToggle = true
                 this.errorToggle = false
-
             } else {
                 this.activeToggle = false
             }
         },
     },
     methods: {
+        toggleErrorClass() {
+            this.toggleError = false
+        },
+        renameTask() {
+            this.showRename = !this.showRename
+            console.log('fff');
+        },
+        closeRename() {
+            this.showRename = !this.showRename
+        },
+        newTaskName() {
+            if (this.newName.length > 0) {
+                if (!!this.descriptionTaskChildList) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].name = this.newName
+                } else {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].name = this.newName
+                }
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+                this.newName = ''
+            } else {
+                this.toggleError = true
+            }
+        },
         addNote() {
-            this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note = this.textValue
+            if (!!this.descriptionTaskChildList) {
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].note = this.textValue
+            } else {
+                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note = this.textValue
+            }
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
         },
         emptyTextValue() {
@@ -197,10 +247,12 @@ export default {
             this.showPopUp = !this.showPopUp
         },
         deleteTask() {
-            this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
-
+            if (!!this.descriptionTaskChildList) {
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.descriptionTaskIndex, 1)
+            } else {
+                this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
+            }
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
             this.$emit('closeDescription', false)
             this.showPopUp = !this.showPopUp
         },
@@ -210,79 +262,103 @@ export default {
         },
         importantAsideToggle() {
             // this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
-
-            console.log(this.element);
-
             this.element.classList.remove('add-animation-x')
             this.element.classList.remove('add-animation')
 
-            console.log(this.element);
-
-
-            if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
-
-                event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-
-                this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
-
-
-                this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
-
-
-                this.lists[this.descriptionTaskList].tasks.push(this.importantTask)
-                this.importantTask = {}
-
-            } else {
-                event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
-
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = true
-
-                this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
-
-
-
-                this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
-
-
-                this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
-                this.importantTask = {}
-            }
-
-            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
-            this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
-                if (singleTask.id == this.task.id) {
-                    this.taskIndex = index
+            if (!!this.descriptionTaskChildList) {
+                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = false
+                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+                    this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.importantTask)
+                    this.importantTask = {}
+                } else {
+                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = true
+                    this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.importantTask)
+                    this.importantTask = {}
                 }
-            })
 
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((singleTask, index) => {
+                    if (singleTask.id == this.task.id) {
+                        this.taskIndex = index
+                    }
+                })
+            } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
+                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+                    this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
+                    this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
+                    this.lists[this.descriptionTaskList].tasks.push(this.importantTask)
+                    this.importantTask = {}
 
+                } else {
+                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = true
+                    this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
+                    this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
+                    this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
+                    this.importantTask = {}
+                }
 
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
+                    if (singleTask.id == this.task.id) {
+                        this.taskIndex = index
+                    }
+                })
+            }
         },
         completeAsideTask() {
-            if (event.target.tagName === 'SPAN') {
-                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
+            if (!!this.descriptionTaskChildList) {
+                if (event.target.tagName === 'SPAN') {
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete) {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete = false
+                    } else {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete = true
+                    }
                 } else {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = true
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete) {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete = false
+                    } else {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete = true
+                    }
                 }
+
+                this.completeTaskStatus = !this.completeTaskStatus
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((singleTask, index) => {
+                    if (singleTask.id == this.task.id) {
+                        this.taskIndex = index
+                    }
+                })
             } else {
-                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
+                if (event.target.tagName === 'SPAN') {
+                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
+                    } else {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = true
+                    }
                 } else {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = true
+                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
+                    } else {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = true
+                    }
                 }
+                this.completeTaskStatus = !this.completeTaskStatus
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
+                    if (singleTask.id == this.task.id) {
+                        this.taskIndex = index
+                    }
+                })
             }
-
-            this.completeTaskStatus = !this.completeTaskStatus
-            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
-            this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
-                if (singleTask.id == this.task.id) {
-                    this.taskIndex = index
-                }
-            })
 
             if (this.element.classList.contains('add-animation-x')) {
                 this.element.classList.remove('add-animation-x')
@@ -300,29 +376,41 @@ export default {
         },
 
         completeStep() {
-
-
-            if (event.target.tagName === 'SPAN') {
-                this.stepElement = event.target.parentElement
-                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete) {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = false
+            if (!!this.descriptionTaskChildList) {
+                if (event.target.tagName === 'SPAN') {
+                    this.stepElement = event.target.parentElement
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete) {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = false
+                    } else {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = true
+                    }
                 } else {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = true
+                    this.stepElement = event.target.parentElement.parentElement
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
+                    } else {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
+                    }
                 }
             } else {
-                this.stepElement = event.target.parentElement.parentElement
-                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
+                if (event.target.tagName === 'SPAN') {
+                    this.stepElement = event.target.parentElement
+                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete) {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = false
+                    } else {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = true
+                    }
                 } else {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
+                    this.stepElement = event.target.parentElement.parentElement
+                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
+                    } else {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
+                    }
                 }
             }
-
             this.completeTaskStatus = !this.completeTaskStatus
-
-
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
             if (this.stepElement.classList.contains('add-animation-x')) {
                 this.stepElement.classList.remove('add-animation-x')
                 setTimeout(() => {
@@ -338,18 +426,19 @@ export default {
         addStep() {
             if (this.inputValue.length > 0) {
                 this.errorToggle = false
-
-                this.stepId = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.length
-
-                this.stepObj.id = this.stepId
-                this.stepObj.name = this.inputValue
-                this.stepObj.complete = false
-
-
-                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.push(this.stepObj)
-
-
-
+                if (!!this.descriptionTaskChildList) {
+                    this.stepId = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.length
+                    this.stepObj.id = this.stepId
+                    this.stepObj.name = this.inputValue
+                    this.stepObj.complete = false
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.push(this.stepObj)
+                } else {
+                    this.stepId = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.length
+                    this.stepObj.id = this.stepId
+                    this.stepObj.name = this.inputValue
+                    this.stepObj.complete = false
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.push(this.stepObj)
+                }
                 this.completeTaskStatus = !this.completeTaskStatus
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
