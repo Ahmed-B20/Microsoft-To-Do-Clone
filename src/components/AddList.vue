@@ -1,6 +1,6 @@
 <template>
     <div class="add-item-container" :class="{error: toggleError}">
-        <div @blur="closeAddGroup" tabindex="0" class="add-item">
+        <div class="add-item">
             <div class="single-list">
                 <span @click="addList">
                     <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/plus.png" alt="add-item" />
