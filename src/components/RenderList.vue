@@ -1,10 +1,9 @@
 <template>
     <transition name="render-list">
         <dev class="lists-parent">
-            <ul ref="listParent" class="lists-container">
+            <ul tabindex="0" @blur="closeDropDown" ref="listParent" class="lists-container">
                 <transition-group name="render-list">
-                    <!-- @blur="closeDropDown" -->
-                    <li tabindex="0" @contextmenu="openDropDown" @click="showListTasks" v-for="(list,index) in lists"
+                    <li @contextmenu="openDropDown" @click="showListTasks" v-for="(list,index) in lists"
                         :data-name="list.listName" :data-id="index" :key="list.id"
                         :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
 
@@ -28,15 +27,28 @@
                 <transition name="to-bottom">
                     <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left" v-if="toggleDropDown">
                         <template #RenameList>
-                            <div @click="completeStep">
-                                <img src="@/assets/design-material/icons/check.png" alt="">
-                                <span>Rename list</span>
+                            <div class="renameList" @click.self="renameList">
+                                <template v-if="showRename">
+                                    <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                                        src="@/assets/design-material/icons/plus.png" alt="add-item" />
+                                    <input @keyup.enter="newListName" required @focus="toggleErrorClass"
+                                        v-model="newName" placeholder="New Name" type="text" name="" id=""
+                                        :class="{error:toggleError}" />
+                                    <img @click="closeRename" src="@/assets/design-material/icons/close.png"
+                                        alt="close rename" />
+                                </template>
+
+                                <template v-else>
+                                    <img @click="renameList" src="@/assets/design-material/icons/rename.png"
+                                        alt="rename task" />
+                                    <span @click="renameList">Rename Task</span>
+                                </template>
                             </div>
                         </template>
 
                         <template #MoveListTo>
-                            <div @click="completeStep">
-                                <img src="@/assets/design-material/icons/check.png" alt="">
+                            <div @click="MoveListTo">
+                                <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
                                 <span>Move list to...</span>
                             </div>
                         </template>
@@ -125,7 +137,10 @@ export default {
             listName: '',
             DuplicatedList: {},
             elementDomRect: null,
-            parentElementDomRect: null
+            parentElementDomRect: null,
+            showRename: false,
+            newName: '',
+            toggleError: false,
         }
     },
     computed: {
@@ -216,6 +231,9 @@ export default {
             this.DuplicatedList = {}
         },
         showListTasks() {
+            this.toggleDropDown = false
+
+
             if (event.target.tagName === 'LI' && event.target.classList.contains("single-list")) {
                 this.listName = event.target.getAttribute('data-name')
                 this.listIndex = event.target.getAttribute('data-id')
@@ -242,7 +260,33 @@ export default {
             } else {
                 // console.log(event.target.parentElement);
             }
-        }
+        },
+        closeRename() {
+            this.showRename = !this.showRename
+        },
+        renameList() {
+            this.showRename = !this.showRename
+            console.log('fff');
+        },
+        newListName() {
+            if (this.newName.length > 0) {
+                if (!!this.descriptionTaskChildList) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].listName = this.newName
+                } else {
+                    this.lists[this.listId].listName = this.newName
+                }
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+                console.log('ww');
+
+                this.newName = ''
+                this.showRename = !this.showRename
+                this.toggleDropDown = !this.toggleDropDown
+
+            } else {
+                this.toggleError = true
+            }
+        },
     }
 }
 </script>

@@ -1,7 +1,6 @@
 <template>
     <div class="add-item-container" :class="{error: toggleError}">
-        <div class="add-item">
-
+        <div @blur="closeAddGroup" tabindex="0" class="add-item">
             <div class="single-list">
                 <span @click="addList">
                     <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/plus.png" alt="add-item" />
@@ -165,7 +164,6 @@ export default {
                 if (this.toggleListChildren === false) {
                     this.toggleError = true
                 } else {
-
                     if (this.childListsArray.length > 0) {
                         this.$refs.addGroupOfList.setAttribute('src', this.$refs.addGroupOfList.getAttribute('src').replace('close', 'add'))
                         this.toggleListChildren = false
@@ -173,9 +171,22 @@ export default {
                     } else {
                         this.showPopUp = !this.showPopUp
                     }
-
                 }
             }
+        },
+        closeAddGroup() {
+            if (this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
+                if (this.childListsArray.length > 0) {
+                    this.$refs.addGroupOfList.setAttribute('src', this.$refs.addGroupOfList.getAttribute('src').replace('close', 'add'))
+                    this.toggleListChildren = false
+                    this.childListsArray = []
+                } else {
+                    this.showPopUp = true
+                }
+            }
+
+
+            console.log('lll');
         }
     },
 };
