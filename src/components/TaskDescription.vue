@@ -140,7 +140,9 @@
         </template>
 
         <template #content>
-            task {{task.name}} will be permanently deleted.
+            {{dropDownStepId? `step ${step.name} will be permanently deleted`: `task ${task.name} will be permanently
+            deleted.`}}
+
         </template>
 
         <template #button>
@@ -207,7 +209,8 @@ export default {
             right: null,
             dropDownSlots: ['MarkAsComplete', 'PromoteToTask', 'DeleteStep'],
             dropDownStepId: null,
-            promoteTask: {}
+            promoteTask: {},
+            step: {}
         }
     },
     computed: {
@@ -279,7 +282,6 @@ export default {
             this.showPopUp = !this.showPopUp
         },
         deleteTask() {
-
             if (!!this.dropDownStepId) {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
@@ -288,6 +290,10 @@ export default {
                 }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.showPopUp = !this.showPopUp
+
+                if (this.toggleDropDown === false) {
+                    this.dropDownStepId = null
+                }
             } else {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.descriptionTaskIndex, 1)
@@ -523,6 +529,12 @@ export default {
 
             if (this.toggleDropDown === false) {
                 this.dropDownStepId = null
+            }
+
+            if (!!this.descriptionTaskChildList) {
+                this.step = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
+            } else {
+                this.step = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
             }
         },
         closeDropDown() {
