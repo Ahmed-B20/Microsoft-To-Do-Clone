@@ -1,5 +1,5 @@
 <template>
-    <div :style="{top: top + 'px', right: right + 'px'}" class="drop-down">
+    <div :style="{top: top + 'px', right: right + 'px',left: left + 'px'}" class="drop-down">
         <ul class="drop-down-item">
             <li v-for="(name, index) in  dropDownSlots" :key="index">
                 <slot :name='name'></slot>
@@ -11,6 +11,6 @@
 <script>
 export default {
     name: 'DropDown',
-    props: ['top', 'right', 'dropDownSlots']
+    props: ['top', 'right', 'dropDownSlots', 'left']
 }
 </script>
