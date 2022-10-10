@@ -25,9 +25,10 @@
 
                 <div class="task-steps-container">
                     <div class="steps-container">
-                        <ul>
+                        <ul class="task-steps">
                             <transition-group name="show-steps">
-                                <li v-for="(step,index) in task.steps" :key="step.id"
+                                <li @blur="closeDropDown" tabindex="0" :data-id="index"
+                                    v-for="(step,index) in task.steps" :key="step.id"
                                     :class="{complete: step.complete}">
                                     <span :data-id="index" @click="completeStep" class="check">
                                         <img src="@/assets/design-material/icons/check.png" alt="check" />
@@ -36,13 +37,37 @@
                                         {{step.name}}
                                     </span>
 
-                                    <img :data-id="index" class="important-toggle"
+                                    <img @click="openDropDown" :data-id="index" class="important-toggle"
                                         src="@/assets/design-material/icons/more.png" alt="">
                                 </li>
                             </transition-group>
                         </ul>
                     </div>
 
+                    <transition name="to-bottom">
+                        <DropDown :dropDownSlots="dropDownSlots" :top="top" :right="right" v-if="toggleDropDown">
+                            <template #MarkAsComplete>
+                                <div @click="completeStep">
+                                    <img src="@/assets/design-material/icons/check.png" alt="">
+                                    <span>Mark as complete</span>
+                                </div>
+                            </template>
+
+                            <template #PromoteToTask>
+                                <div @click="PromoteToTask">
+                                    <img src="@/assets/design-material/icons/plus.png" alt="">
+                                    <span>Promote to task</span>
+                                </div>
+                            </template>
+
+                            <template #DeleteStep>
+                                <div @click="togglePopup">
+                                    <img src="@/assets/design-material/icons/delete.png" alt="">
+                                    <span>Delete step</span>
+                                </div>
+                            </template>
+                        </DropDown>
+                    </transition>
 
                     <div class="add-steps" :class="{error:errorToggle}">
                         <img :class="{active:activeToggle}" @click="addStep"
@@ -130,7 +155,7 @@ import { allLists } from '@/stores/allLists.js'
 
 import { mapState, mapWritableState } from 'pinia'
 import PopUp from './PopUp.vue'
-
+import DropDown from '../components/DropDown.vue';
 
 export default {
     name: 'DescriptionTask',
@@ -158,7 +183,8 @@ export default {
         }
     },
     components: {
-        PopUp
+        PopUp,
+        DropDown
     },
     data() {
         return {
@@ -176,6 +202,12 @@ export default {
             showRename: false,
             newName: '',
             toggleError: false,
+            toggleDropDown: false,
+            top: null,
+            right: null,
+            dropDownSlots: ['MarkAsComplete', 'PromoteToTask', 'DeleteStep'],
+            dropDownStepId: null,
+            promoteTask: {}
         }
     },
     computed: {
@@ -247,14 +279,25 @@ export default {
             this.showPopUp = !this.showPopUp
         },
         deleteTask() {
-            if (!!this.descriptionTaskChildList) {
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.descriptionTaskIndex, 1)
+
+            if (!!this.dropDownStepId) {
+                if (!!this.descriptionTaskChildList) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
+                } else {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
+                }
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.showPopUp = !this.showPopUp
             } else {
-                this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
+                if (!!this.descriptionTaskChildList) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.descriptionTaskIndex, 1)
+                } else {
+                    this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
+                }
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.$emit('closeDescription', false)
+                this.showPopUp = !this.showPopUp
             }
-            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-            this.$emit('closeDescription', false)
-            this.showPopUp = !this.showPopUp
         },
         closeDescription() {
             this.element.classList.remove('add-animation-x')
@@ -377,39 +420,59 @@ export default {
 
         completeStep() {
             if (!!this.descriptionTaskChildList) {
-                if (event.target.tagName === 'SPAN') {
-                    this.stepElement = event.target.parentElement
-                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete) {
-                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = false
+                if (!!this.dropDownStepId) {
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[this.dropDownStepId].complete) {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[this.dropDownStepId].complete = false
                     } else {
-                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = true
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[this.dropDownStepId].complete = true
                     }
                 } else {
-                    this.stepElement = event.target.parentElement.parentElement
-                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
-                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
+                    if (event.target.tagName === 'SPAN') {
+                        this.stepElement = event.target.parentElement
+                        if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete) {
+                            this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = false
+                        } else {
+                            this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = true
+                        }
                     } else {
-                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
+                        this.stepElement = event.target.parentElement.parentElement
+                        if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
+                            this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
+                        } else {
+                            this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
+                        }
                     }
                 }
             } else {
-                if (event.target.tagName === 'SPAN') {
-                    this.stepElement = event.target.parentElement
-                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete) {
-                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = false
+                if (!!this.dropDownStepId) {
+                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[this.dropDownStepId].complete) {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[this.dropDownStepId].complete = false
                     } else {
-                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = true
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[this.dropDownStepId].complete = true
                     }
                 } else {
-                    this.stepElement = event.target.parentElement.parentElement
-                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
-                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
+                    if (event.target.tagName === 'SPAN') {
+                        this.stepElement = event.target.parentElement
+                        if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete) {
+                            this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = false
+                        } else {
+                            this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.getAttribute('data-id')].complete = true
+                        }
                     } else {
-                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
+                        this.stepElement = event.target.parentElement.parentElement
+                        if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete) {
+                            this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = false
+                        } else {
+                            this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[event.target.parentElement.getAttribute('data-id')].complete = true
+                        }
                     }
                 }
             }
+            // this.dropDownStepId = null
             this.completeTaskStatus = !this.completeTaskStatus
+
+            console.log(this.stepElement);
+
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             if (this.stepElement.classList.contains('add-animation-x')) {
                 this.stepElement.classList.remove('add-animation-x')
@@ -447,6 +510,84 @@ export default {
                 this.inputValue = ''
             } else {
                 this.errorToggle = true
+            }
+        },
+        openDropDown() {
+            this.toggleDropDown = !this.toggleDropDown
+            console.log(event.target.parentElement.getBoundingClientRect());
+            this.dropDownStepId = event.target.parentElement.getAttribute('data-id');
+            this.stepElement = event.target.parentElement
+            this.top = event.target.parentElement.getBoundingClientRect().top + 35
+            this.right = 35
+            console.log(this.stepElement);
+
+            if (this.toggleDropDown === false) {
+                this.dropDownStepId = null
+            }
+        },
+        closeDropDown() {
+            this.toggleDropDown = false
+        },
+        PromoteToTask() {
+            // this.dropDownStepId = event.target.parentElement.getAttribute('data-id');
+
+            console.log(this.dropDownStepId);
+
+            let today = new Date();
+            let dd = String(today.getDate()).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            let yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+
+            if (!!this.descriptionTaskChildList) {
+                let step = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
+
+                console.log(step);
+
+                this.promoteTask.name = step.name
+                this.promoteTask.id = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.length
+                this.promoteTask.complete = false
+                this.promoteTask.important = false
+
+
+                this.promoteTask.addTime = today
+                this.promoteTask.endTime = ''
+                this.promoteTask.note = ''
+                this.promoteTask.steps = []
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.promoteTask)
+
+                this.promoteTask = {}
+            } else {
+                let step = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
+
+                this.promoteTask.name = step.name
+                this.promoteTask.id = this.lists[this.descriptionTaskList].tasks.length
+                this.promoteTask.complete = false
+                this.promoteTask.important = false
+
+
+                this.promoteTask.addTime = today
+                this.promoteTask.endTime = ''
+                this.promoteTask.note = ''
+                this.promoteTask.steps = []
+
+                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
+
+                this.lists[this.descriptionTaskList].tasks.push(this.promoteTask)
+
+                this.promoteTask = {}
+            }
+            this.completeTaskStatus = !this.completeTaskStatus
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+            this.toggleDropDown = false
+
+            if (this.toggleDropDown === false) {
+                this.dropDownStepId = null
             }
         }
     }

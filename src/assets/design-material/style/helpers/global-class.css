@@ -129,13 +129,13 @@
     border-radius: 3px;
 }
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps {
     display: flex;
     flex-direction: column;
     margin-right: 2px;
 }
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps li {
     background-color: white;
     font-size: 15px;
     display: flex;
@@ -144,9 +144,10 @@
     cursor: pointer;
     padding: 8px 0;
     border-bottom: 1px solid #dfdfdf;
+    position: relative;
 }
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li.add-animation-x {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps li.add-animation-x {
     animation: shift 0.3s linear forwards;
 }
 
@@ -164,11 +165,11 @@
     }
 }
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li:last-of-type {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps li:last-of-type {
     border-bottom: none;
 }
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .check {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps li .check {
     width: 17px;
     height: 17px;
     border-radius: 50%;
@@ -179,27 +180,27 @@
     cursor: pointer;
 }
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li.complete .check {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps li.complete .check {
     background-color: #f4f4f4;
 }
 
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .check img {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps li .check img {
     visibility: hidden;
     transition: all 0.2s linear;
     width: 8px;
 }
 
 /* .dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .check:hover img, */
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li.complete .check img {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps li.complete .check img {
     visibility: visible;
 }
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .task-name.complete {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps li .task-name.complete {
     text-decoration: line-through;
 }
 
-.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul li .important-toggle {
+.dashboard-content-container .task-description .task-info-and-steps .task-steps-container ul.task-steps li .important-toggle {
     margin-left: auto;
     width: 15px;
 }
