@@ -46,7 +46,7 @@
                             </div>
                         </template>
 
-                        <template #MoveListTo>
+                        <template #MoveListTo v-if="ReturnGroupOfLists">
                             <div @click="MoveListTo">
                                 <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
                                 <span>Move list to...</span>
@@ -141,11 +141,28 @@ export default {
             showRename: false,
             newName: '',
             toggleError: false,
+            ReturnGroupOfListsArray: []
         }
+    },
+    beforeMount() {
+        this.lists.forEach((list) => {
+            if (list.listChildren) {
+                if (list.listChildren) {
+                    this.ReturnGroupOfListsArray.push(list)
+                }
+            }
+        })
     },
     computed: {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
+        ReturnGroupOfLists() {
+            if (this.ReturnGroupOfListsArray.length > 0) {
+                return true
+            } else {
+                return false
+            }
+        }
     },
     methods: {
         openDropDown() {
@@ -208,7 +225,7 @@ export default {
             // this.lists.push(this.DuplicatedList)
             this.lists.forEach(((list, index) => {
                 if (+this.listId + 1 <= index) {
-                    list.id = index 
+                    list.id = index
                 }
             }))
 
@@ -278,6 +295,18 @@ export default {
                 }
             }
         },
+    },
+    watch: {
+        lists() {
+            console.log('gg');
+            this.lists.forEach((list) => {
+                if (list.listChildren) {
+                    if (list.listChildren) {
+                        this.ReturnGroupOfListsArray.push(list)
+                    }
+                }
+            })
+        }
     }
 }
 </script>
