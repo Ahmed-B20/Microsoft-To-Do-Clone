@@ -83,13 +83,19 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 10px;
 }
 
 .view-content-container .title .toggle {
     flex-basis: 100%;
     display: none;
 }
+
+.view-content-container .title .toggle img {
+    height: 20px;
+    cursor: pointer;
+}
+
 
 @media (max-width: 768px) {
     .view-content-container .title .toggle {

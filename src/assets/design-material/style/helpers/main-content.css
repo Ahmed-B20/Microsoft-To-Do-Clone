@@ -20,6 +20,15 @@
     padding: 15px;
     width: fit-content;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+}
+
+.main-content aside .toggle-aside img {
+    height: 20px;
+    cursor: pointer;
 }
 
 @media (max-width:768px) {

@@ -1,6 +1,8 @@
 <template>
   <aside v-if="toggleState">
-    <button class="toggle-aside" @click="toggleAside">test</button>
+    <button class="toggle-aside" @click="toggleAside">
+      <img src="@/assets/design-material/icons/menu.png" alt="close-sidebar">
+    </button>
     <UserInfo />
     <AsideLinks />
     <!-- <AsideRenderLists /> -->
