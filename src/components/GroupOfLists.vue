@@ -211,7 +211,6 @@ export default {
                 childList.id = +this.groupOfListId + index
                 this.ungroupListsArray.push(childList)
 
-
                 if (index + 1 === arr.length) {
                     this.lists.splice(this.groupOfListId, 0, ...this.ungroupListsArray)
                     this.lists.splice(+this.groupOfListId + arr.length, 1)

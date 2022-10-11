@@ -79,12 +79,11 @@
 
         <template v-slot:content>
             <div v-if="moveGroupListToggle" class="select-parent">
-                <select name="" id="">
-                    <option value="">1</option>
-                    <option value="">1</option>
-                    <option value="">1</option>
-                    <option value="">1</option>
-                    <option value="">1</option>
+                <select ref="selectedGroupOfList" name="" id="">
+                    <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
+                        :value="groupOfList.id">
+                        {{groupOfList.listName}}
+                    </option>
                 </select>
             </div>
             <p v-else>
@@ -223,6 +222,8 @@ export default {
         closePopUp() {
             this.showPopUp = !this.showPopUp
             this.toggleDropDown = !this.toggleDropDown
+            this.moveGroupListToggle = false
+
         },
         deleteList() {
             this.lists.splice(this.listId, 1)
@@ -319,19 +320,49 @@ export default {
             }
         },
         MoveListTo() {
+            console.log(this.$refs.selectedGroupOfList.value);
+            this.lists[this.listId].id = this.lists[this.$refs.selectedGroupOfList.value].listsArray.length
+            this.lists[this.$refs.selectedGroupOfList.value].listsArray.push(this.lists[this.listId])
 
+            this.lists.splice(this.listId, 1)
+
+            this.lists.forEach((list, index) => {
+                if (index >= this.listId) {
+                    list.id = list.id - 1
+                }
+            })
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.toggleDropDown = false
+            this.showPopUp = !this.showPopUp
+            this.listId = null
+            this.moveGroupListToggle = !this.moveGroupListToggle
         }
     },
     watch: {
-        lists() {
-            console.log('gg');
-            this.lists.forEach((list) => {
-                if (list.listChildren) {
+        // lists() {
+        //     this.ReturnGroupOfListsArray = []
+        //     console.log('gg');
+        //     this.lists.forEach((list) => {
+        //         if (list.listChildren) {
+        //             if (list.listChildren) {
+        //                 this.ReturnGroupOfListsArray.push(list)
+        //             }
+        //         }
+        //     })
+        // },
+        lists: {
+            handler(newValue, oldValue) {
+                this.ReturnGroupOfListsArray = []
+                this.lists.forEach((list) => {
                     if (list.listChildren) {
-                        this.ReturnGroupOfListsArray.push(list)
+                        if (list.listChildren) {
+                            this.ReturnGroupOfListsArray.push(list)
+                        }
                     }
-                }
-            })
+                })
+            },
+            deep: true
         }
     }
 }
