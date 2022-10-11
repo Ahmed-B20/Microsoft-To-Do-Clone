@@ -91,6 +91,7 @@ export default {
 
                     this.childListObj.listName = this.itemValue
                     this.childListObj.id = `${this.childListId}`
+                    this.childListObj.listChildren = false
                     this.childListObj.tasks = [];
 
                     this.childListsArray.push(this.childListObj)

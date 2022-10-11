@@ -1,5 +1,6 @@
 <template>
-    <div ref="groupOfLists" tabindex="0" @blur="closeDropDown" @contextmenu="openDropDown" @click="toggleGroup" class="group-of-lists-controller">
+    <div ref="groupOfLists" tabindex="0" @blur="closeDropDown" @contextmenu="openDropDown" @click="toggleGroup"
+        class="group-of-lists-controller">
         <p>
             <img src="@/assets/design-material/icons/tab.png" alt="single-list">
             {{listName}}
@@ -35,15 +36,15 @@
                 </div>
             </template>
 
-            <template #UngroupLists>
+            <template v-if="showSlotForGroupOfList" #UngroupLists>
                 <div @click="ungroupLists">
                     <img src="@/assets/design-material/icons/ungroup.png" alt="">
                     <span>Ungroup lists</span>
                 </div>
             </template>
 
-            <template #DeleteGroup>
-                <div @click="deleteGroup">
+            <template v-if="!showSlotForGroupOfList" #DeleteGroup>
+                <div @click="togglePopUp">
                     <img src="@/assets/design-material/icons/delete.png" alt="">
                     <span>Delete group</span>
                 </div>
@@ -69,12 +70,29 @@
             </ul>
         </transition>
     </transition>
+
+    <PopUp :showPopUp="showPopUp">
+        <template #title>
+            Delete Group Of Lists
+        </template>
+
+        <template #content>
+            Group of list: {{listName}} will be permanently deleted
+        </template>
+
+        <template #button>
+            <button class="delete" @click="deleteGroup">Delete</button>
+            <button class="close" @click="togglePopUp">Cancel</button>
+        </template>
+    </PopUp>
 </template>
 
 <script>
 import PopUp from './PopUp.vue'
 import DropDown from '../components/DropDown.vue';
 
+import { allLists } from '@/stores/allLists.js'
+import { mapState, mapWritableState } from 'pinia'
 export default {
     name: 'group-of-list',
     props: ['childrenListsArray', 'listName', 'parentId'],
@@ -94,12 +112,27 @@ export default {
             parentElementDomRect: null,
             groupOfListId: null,
             groupOfListName: '',
+            ungroupListsArray: [],
         }
     },
     beforeMount() {
         // console.log(this.listName);
     },
+    computed: {
+        ...mapWritableState(allLists, ['lists']),
+        showSlotForGroupOfList() {
+            console.log(this.lists[this.groupOfListId].listsArray.length > 0);
+            if (this.lists[this.groupOfListId].listsArray.length > 0) {
+                return true
+            } else {
+                return false
+            }
+        }
+    },
     methods: {
+        togglePopUp() {
+            this.showPopUp = !this.showPopUp
+        },
         toggleGroup() {
             this.groupOfListsToggle = !this.groupOfListsToggle
         },
@@ -152,6 +185,49 @@ export default {
         },
         closeDropDown() {
             this.toggleDropDown = false
+        },
+        deleteGroup() {
+            console.log(this.groupOfListId);
+            console.log(this.lists);
+            this.lists.splice(this.groupOfListId, 1)
+
+            this.lists.forEach((list, index) => {
+                if (index >= this.groupOfListId) {
+                    list.id = list.id - 1
+                    console.log(list.id);
+                }
+            })
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+            this.toggleDropDown = false
+            this.showPopUp = !this.showPopUp
+            this.groupOfListId = null
+        },
+        ungroupLists() {
+            this.lists[this.groupOfListId].listsArray.forEach((childList, index, arr) => {
+                childList.id = +this.groupOfListId + index
+                this.ungroupListsArray.push(childList)
+
+
+                if (index + 1 === arr.length) {
+                    console.log(arr.length, index);
+                    this.lists.splice(this.groupOfListId, 0, ...this.ungroupListsArray)
+                    this.lists.splice(+this.groupOfListId + arr.length, 1)
+
+                    this.lists.forEach((list, index) => {
+                        console.log(+this.groupOfListId + arr.length);
+
+                        if (index >= +this.groupOfListId + arr.length - 2) {
+                            list.id = index
+                            console.log(list.id);
+                        }
+                    })
+                    localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                    this.ungroupListsArray = []
+                }
+            })
+
         }
     }
 }

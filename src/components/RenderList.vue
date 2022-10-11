@@ -1,7 +1,7 @@
 <template>
     <transition name="render-list">
         <dev class="lists-parent">
-            <ul tabindex="0" @blur.self="closeDropDown" ref="listParent" class="lists-container">
+            <ul tabindex="0" @blur.capture="closeDropDown" ref="listParent" class="lists-container">
                 <transition-group name="render-list">
                     <li @contextmenu.self="openDropDown" @click="showListTasks" v-for="(list,index) in lists"
                         :data-name="list.listName" :data-id="index" :key="list.id"
@@ -274,7 +274,12 @@ export default {
         },
         renameList() {
             this.showRename = !this.showRename
-            console.log('fff');
+            // this.$refs.listParent.addEventListener('blur', () => {
+            //     event.preventDefault()
+            //     console.log('fff');
+            // })
+
+            // this.toggleDropDown = true
         },
         newListName() {
             if (this.newName.length > 0) {
