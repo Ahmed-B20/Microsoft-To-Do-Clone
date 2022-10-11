@@ -1,6 +1,6 @@
 <template>
-    <div ref="groupOfLists" tabindex="0" @blur="closeDropDown" @contextmenu="openDropDown" @click="toggleGroup"
-        class="group-of-lists-controller">
+    <!-- tabindex="0" @blur="closeDropDown" -->
+    <div ref="groupOfLists" @contextmenu="openDropDown" @click="toggleGroup" class="group-of-lists-controller">
         <p>
             <img src="@/assets/design-material/icons/tab.png" alt="single-list">
             {{listName}}
@@ -15,10 +15,10 @@
             <template #RenameGroup>
                 <div class="renameList" @click.self="renameGroup">
                     <template v-if="showRename">
-                        <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                        <img @click="newGroupName" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input @keyup.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
-                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                        <input ref="inputFiled" @keyup.enter="newGroupName" required v-model="newName" placeholder="New Name" type="text"
+                            name="" id="" :class="{error:toggleError}" />
                         <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
 
@@ -113,6 +113,9 @@ export default {
             groupOfListId: null,
             groupOfListName: '',
             ungroupListsArray: [],
+            showRename: false,
+            newName: '',
+            toggleError: false,
         }
     },
     beforeMount() {
@@ -227,7 +230,35 @@ export default {
                     this.ungroupListsArray = []
                 }
             })
+        },
+        renameGroup() {
+            this.showRename = !this.showRename
+            // this.$refs.inputFiled.focus()
+        },
+        newGroupName() {
+            if (this.newName.length > 0) {
+                this.lists[this.groupOfListId].listName = this.newName
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.newName = ''
+                this.showRename = !this.showRename
+                this.toggleDropDown = !this.toggleDropDown
 
+            } else {
+                if (!!this.toggleError) {
+                    this.toggleError = false
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                }
+            }
+        },
+        closeRename() {
+            this.showRename = !this.showRename
+            this.newName = ''
         }
     }
 }

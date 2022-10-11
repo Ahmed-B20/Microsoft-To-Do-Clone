@@ -3,7 +3,7 @@
         <dev class="lists-parent">
             <ul tabindex="0" @blur.capture="closeDropDown" ref="listParent" class="lists-container">
                 <transition-group name="render-list">
-                    <li @contextmenu.self="openDropDown" @click="showListTasks" v-for="(list,index) in lists"
+                    <li @contextmenu.self="openDropDown" @click.self="showListTasks" v-for="(list,index) in lists"
                         :data-name="list.listName" :data-id="index" :key="list.id"
                         :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
 
@@ -241,6 +241,7 @@ export default {
         showListTasks() {
             this.toggleDropDown = false
 
+            console.log('fgfg');
 
             if (event.target.tagName === 'LI' && event.target.classList.contains("single-list")) {
                 this.listName = event.target.getAttribute('data-name')
@@ -297,7 +298,16 @@ export default {
                 this.toggleDropDown = !this.toggleDropDown
 
             } else {
-                this.toggleError = true
+                if (!!this.toggleError) {
+                    this.toggleError = false
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                }
             }
         },
     }
