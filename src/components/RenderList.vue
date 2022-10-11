@@ -201,16 +201,16 @@ export default {
         DuplicateList() {
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
             // this.DuplicatedList.id = this.lists[this.listId].id + 1
-            this.DuplicatedList.id = this.lists.length
+            this.DuplicatedList.id = +this.listId + 1
             this.DuplicatedList.listChildren = this.lists[this.listId].listChildren
             this.DuplicatedList.tasks = this.lists[this.listId].tasks
-            // this.lists.splice(this.listId + 1, 0, this.DuplicatedList)
-            this.lists.push(this.DuplicatedList)
-            // this.lists.forEach(((list, index) => {
-            //     if (this.lists[this.listId].id + 1 === index) {
-            //         list.id += 1
-            //     }
-            // }))
+            this.lists.splice(+this.listId + 1, 0, this.DuplicatedList)
+            // this.lists.push(this.DuplicatedList)
+            this.lists.forEach(((list, index) => {
+                if (+this.listId + 1 <= index) {
+                    list.id = index 
+                }
+            }))
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 

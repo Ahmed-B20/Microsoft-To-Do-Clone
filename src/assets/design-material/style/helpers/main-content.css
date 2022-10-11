@@ -26,10 +26,13 @@
     height: fit-content;
 }
 
-.main-content aside .toggle-aside img {
-    height: 20px;
-    cursor: pointer;
+
+@media (min-width:769px) {
+    .main-content aside .toggle-aside {
+        display: none;
+    }
 }
+
 
 @media (max-width:768px) {
     .main-content aside {
@@ -44,6 +47,11 @@
 
     .main-content aside .toggle-aside {
         display: block;
+    }
+
+    .main-content aside .toggle-aside img {
+        height: 20px;
+        cursor: pointer;
     }
 }
 
