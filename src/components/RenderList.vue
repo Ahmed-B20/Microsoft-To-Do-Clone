@@ -149,7 +149,6 @@ export default {
     },
     methods: {
         openDropDown() {
-            console.log(event.target);
             this.parentElementDomRect = this.$refs.listParent.getBoundingClientRect()
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG') {
                 this.listId = event.target.parentElement.parentElement.getAttribute('data-id')
@@ -171,17 +170,11 @@ export default {
             this.toggleDropDown = !this.toggleDropDown
             if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
-                console.log('6');
-
             } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top - 160
-                console.log('5');
             } else {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
             }
-
-            console.log(this.elementDomRect);
-            console.log(this.parentElementDomRect);
 
             this.left = 38.5
         },
@@ -192,14 +185,10 @@ export default {
             this.showPopUp = !this.showPopUp
         },
         deleteList() {
-            console.log(this.listId);
-            console.log(this.lists);
             this.lists.splice(this.listId, 1)
-
             this.lists.forEach((list, index) => {
                 if (index >= this.listId) {
                     list.id = list.id - 1
-                    console.log(list.id);
                 }
             })
 
@@ -212,21 +201,11 @@ export default {
         DuplicateList() {
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
             // this.DuplicatedList.id = this.lists[this.listId].id + 1
-
             this.DuplicatedList.id = this.lists.length
             this.DuplicatedList.listChildren = this.lists[this.listId].listChildren
-
             this.DuplicatedList.tasks = this.lists[this.listId].tasks
-
-            console.log(this.listId);
-
-            console.log(this.DuplicatedList);
             // this.lists.splice(this.listId + 1, 0, this.DuplicatedList)
-
             this.lists.push(this.DuplicatedList)
-
-            console.log(this.lists);
-
             // this.lists.forEach(((list, index) => {
             //     if (this.lists[this.listId].id + 1 === index) {
             //         list.id += 1
@@ -240,9 +219,6 @@ export default {
         },
         showListTasks() {
             this.toggleDropDown = false
-
-            console.log('fgfg');
-
             if (event.target.tagName === 'LI' && event.target.classList.contains("single-list")) {
                 this.listName = event.target.getAttribute('data-name')
                 this.listIndex = event.target.getAttribute('data-id')
@@ -260,11 +236,7 @@ export default {
 
             if (!!this.listIndex) {
                 // this.allTasks = this.returnLists[this.listIndex].tasks
-
-
                 // this.teleportToggle = true
-                console.log('gkj');
-
                 // this.$router.push({ name: 'list', params: { listId: this.listIndex } })
             } else {
                 // console.log(event.target.parentElement);
@@ -290,13 +262,9 @@ export default {
                     this.lists[this.listId].listName = this.newName
                 }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
-                console.log('ww');
-
                 this.newName = ''
                 this.showRename = !this.showRename
                 this.toggleDropDown = !this.toggleDropDown
-
             } else {
                 if (!!this.toggleError) {
                     this.toggleError = false

@@ -31,6 +31,10 @@
     height: 39px;
 }
 
+.drop-down ul li input {
+    width: calc(200px - 60px);
+}
+
 .drop-down ul li .renameList input {
     width: calc(200px - 60px);
 }

@@ -17,9 +17,9 @@
                     <template v-if="showRename">
                         <img @click="newGroupName" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input ref="inputFiled" @keyup.enter="newGroupName" required v-model="newName" placeholder="New Name" type="text"
-                            name="" id="" :class="{error:toggleError}" />
-                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                        <input ref="inputFiled" @keyup.enter="newGroupName" required v-model="newName"
+                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                        <img @click="closeNewList" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
 
                     <template v-else>
@@ -30,9 +30,19 @@
             </template>
 
             <template #NewList>
-                <div @click="newList">
-                    <img src="@/assets/design-material/icons/plus.png" alt="">
-                    <span>New list</span>
+                <div @click.self="addNewList">
+                    <template v-if="showAddNewList">
+                        <img @click="newChildList" class="renameTask" :class="{ active: itemDetect }"
+                            src="@/assets/design-material/icons/plus.png" alt="add-item" />
+                        <input ref="inputFiled" @keyup.enter="newChildList" required v-model="newListName"
+                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                    </template>
+
+                    <template v-else>
+                        <img @click="addNewList" src="@/assets/design-material/icons/plus.png" alt="rename task" />
+                        <span @click="addNewList">New list</span>
+                    </template>
                 </div>
             </template>
 
@@ -116,6 +126,9 @@ export default {
             showRename: false,
             newName: '',
             toggleError: false,
+            showAddNewList: false,
+            newListName: '',
+            newListObj: {}
         }
     },
     beforeMount() {
@@ -124,7 +137,6 @@ export default {
     computed: {
         ...mapWritableState(allLists, ['lists']),
         showSlotForGroupOfList() {
-            console.log(this.lists[this.groupOfListId].listsArray.length > 0);
             if (this.lists[this.groupOfListId].listsArray.length > 0) {
                 return true
             } else {
@@ -143,10 +155,7 @@ export default {
             this.listNameRoute = event.target.getAttribute('data-name')
             this.listIndex = event.target.getAttribute('data-id')
             this.teleportToggle = true
-            console.log(this.parentId, this.listIndex);
             this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex, closeDescription: false } })
-
-            // console.log(this.listIndex);
         },
         openDropDown() {
             event.preventDefault()
@@ -163,7 +172,6 @@ export default {
 
                 this.elementDomRect = event.target.parentElement.parentElement.parentElement.getBoundingClientRect()
             } else {
-                console.log(event.target.parentElement);
                 this.groupOfListId = event.target.parentElement.getAttribute('data-id')
                 this.groupOfListName = event.target.parentElement.getAttribute('data-name')
 
@@ -172,32 +180,23 @@ export default {
             this.toggleDropDown = !this.toggleDropDown
             if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
-                console.log('6');
-
             } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top - 160
-                console.log('5');
             } else {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
             }
-
-            console.log(this.elementDomRect);
-            console.log(this.parentElementDomRect);
-
             this.left = 38.5
         },
         closeDropDown() {
             this.toggleDropDown = false
+            console.log('fff');
         },
         deleteGroup() {
-            console.log(this.groupOfListId);
-            console.log(this.lists);
             this.lists.splice(this.groupOfListId, 1)
 
             this.lists.forEach((list, index) => {
                 if (index >= this.groupOfListId) {
                     list.id = list.id - 1
-                    console.log(list.id);
                 }
             })
 
@@ -214,16 +213,13 @@ export default {
 
 
                 if (index + 1 === arr.length) {
-                    console.log(arr.length, index);
                     this.lists.splice(this.groupOfListId, 0, ...this.ungroupListsArray)
                     this.lists.splice(+this.groupOfListId + arr.length, 1)
 
                     this.lists.forEach((list, index) => {
-                        console.log(+this.groupOfListId + arr.length);
 
                         if (index >= +this.groupOfListId + arr.length - 2) {
                             list.id = index
-                            console.log(list.id);
                         }
                     })
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
@@ -234,6 +230,9 @@ export default {
         renameGroup() {
             this.showRename = !this.showRename
             // this.$refs.inputFiled.focus()
+        },
+        addNewList() {
+            this.showAddNewList = !this.showAddNewList
         },
         newGroupName() {
             if (this.newName.length > 0) {
@@ -256,8 +255,41 @@ export default {
                 }
             }
         },
+        newChildList() {
+            if (this.newListName.length > 0) {
+                this.newListObj.listName = this.newListName
+                this.newListObj.id = this.lists[this.groupOfListId].listsArray.length
+                this.newListObj.listChildren = false
+                this.newListObj.tasks = []
+
+                this.lists[this.groupOfListId].listsArray.push(this.newListObj)
+
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+
+                this.newListName = ''
+                this.showAddNewList = !this.showAddNewList
+                this.toggleDropDown = !this.toggleDropDown
+                this.newListObj = {}
+            } else {
+                if (!!this.toggleError) {
+                    this.toggleError = false
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                }
+            }
+        },
         closeRename() {
             this.showRename = !this.showRename
+            this.newName = ''
+        },
+        closeNewList() {
+            this.showAddNewList = !this.showAddNewList
             this.newName = ''
         }
     }
