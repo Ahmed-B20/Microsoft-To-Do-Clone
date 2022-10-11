@@ -1,7 +1,7 @@
 <template>
     <transition name="render-list">
         <dev class="lists-parent">
-            <ul tabindex="0" @blur.capture="closeDropDown" ref="listParent" class="lists-container">
+            <ul ref="listParent" class="lists-container">
                 <transition-group name="render-list">
                     <li @contextmenu.self="openDropDown" @click.self="showListTasks" v-for="(list,index) in lists"
                         :data-name="list.listName" :data-id="index" :key="list.id"
@@ -47,7 +47,7 @@
                         </template>
 
                         <template #MoveListTo v-if="ReturnGroupOfLists">
-                            <div @click="MoveListTo">
+                            <div @click="togglePopUp('move')">
                                 <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
                                 <span>Move list to...</span>
                             </div>
@@ -61,7 +61,7 @@
                         </template>
 
                         <template #DeleteList>
-                            <div @click="togglePopUp">
+                            <div @click="togglePopUp('delete')">
                                 <img src="@/assets/design-material/icons/delete.png" alt="">
                                 <span>Delete list</span>
                             </div>
@@ -74,16 +74,28 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            Delete List
+            {{ReturnGroupOfLists? 'Move List': 'Delete List'}}
         </template>
 
-        <template #content>
-            list {{listName}} will be permanently deleted
+        <template v-slot:content>
+            <div v-if="moveGroupListToggle" class="select-parent">
+                <select name="" id="">
+                    <option value="">1</option>
+                    <option value="">1</option>
+                    <option value="">1</option>
+                    <option value="">1</option>
+                    <option value="">1</option>
+                </select>
+            </div>
+            <p v-else>
+                list {{listName}} will be permanently deleted
+            </p>
         </template>
 
         <template #button>
-            <button class="delete" @click="deleteList">Delete</button>
-            <button class="close" @click="togglePopUp">Cancel</button>
+            <button v-if="moveGroupListToggle" class="move" @click="MoveListTo">Move</button>
+            <button v-else class="delete" @click="deleteList">Delete</button>
+            <button class="close" @click="closePopUp">Cancel</button>
         </template>
     </PopUp>
 
@@ -141,7 +153,8 @@ export default {
             showRename: false,
             newName: '',
             toggleError: false,
-            ReturnGroupOfListsArray: []
+            ReturnGroupOfListsArray: [],
+            moveGroupListToggle: false
         }
     },
     beforeMount() {
@@ -197,9 +210,19 @@ export default {
         },
         closeDropDown() {
             this.toggleDropDown = false
+            this.moveGroupListToggle = false
         },
-        togglePopUp() {
+        togglePopUp(target) {
+            if (target === 'move') {
+                this.moveGroupListToggle = !this.moveGroupListToggle
+                this.showPopUp = !this.showPopUp
+            } else {
+                this.showPopUp = !this.showPopUp
+            }
+        },
+        closePopUp() {
             this.showPopUp = !this.showPopUp
+            this.toggleDropDown = !this.toggleDropDown
         },
         deleteList() {
             this.lists.splice(this.listId, 1)
@@ -295,6 +318,9 @@ export default {
                 }
             }
         },
+        MoveListTo() {
+
+        }
     },
     watch: {
         lists() {

@@ -44,6 +44,22 @@
     margin: 10px 0 20px 0;
 }
 
+.pop-up-parent .pop-up-container .pop-up-content .select-parent {
+    border: 1px solid #dfdfdf;
+    padding: 10px;
+    width: 80%;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.pop-up-parent .pop-up-container .pop-up-content .select-parent select {
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+}
+
 .pop-up-parent .pop-up-container .pop-up-content .button-container {
     display: flex;
     align-items: center;
@@ -54,19 +70,24 @@
 .pop-up-parent .pop-up-container .pop-up-content .button-container button {
     padding: 8px 20px;
     border-radius: 4px;
+    box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
 }
 
 .pop-up-parent .pop-up-container .pop-up-content .button-container button.delete {
     background-color: #dc282b;
     color: white;
-    box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
 }
 
 .pop-up-parent .pop-up-container .pop-up-content .button-container button.close {
     background-color: #fbfbfb;
     color: black;
-    box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
 }
+
+.pop-up-parent .pop-up-container .pop-up-content .button-container button.move {
+    color: white;
+    background-color: #007bff;
+}
+
 
 .pop-up-toggle-enter-active,
 .pop-up-toggle-leave-active {
