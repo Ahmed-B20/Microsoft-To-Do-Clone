@@ -86,9 +86,23 @@
     gap: 10px;
 }
 
+.view-content-container .title .toggle-list-nav {
+    background-color: transparent;
+    height: 20px;
+}
+
+.view-content-container .title .toggle-list-nav img {
+    height: 20px;
+    cursor: pointer;
+}
+
 .view-content-container .title .toggle {
     flex-basis: 100%;
     display: none;
+}
+
+.view-content-container .title .toggle button {
+    background-color: transparent;
 }
 
 .view-content-container .title .toggle img {

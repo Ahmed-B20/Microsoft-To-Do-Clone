@@ -41,7 +41,7 @@
                                 <template v-else>
                                     <img @click="renameList" src="@/assets/design-material/icons/rename.png"
                                         alt="rename task" />
-                                    <span @click="renameList">Rename Task</span>
+                                    <span @click="renameList">Rename List</span>
                                 </template>
                             </div>
                         </template>
@@ -74,7 +74,7 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            {{ReturnGroupOfLists? 'Move List': 'Delete List'}}
+            {{target=== 'move'? 'Move List': 'Delete List'}}
         </template>
 
         <template v-slot:content>
@@ -153,7 +153,8 @@ export default {
             newName: '',
             toggleError: false,
             ReturnGroupOfListsArray: [],
-            moveGroupListToggle: false
+            moveGroupListToggle: false,
+            target: ''
         }
     },
     beforeMount() {
@@ -215,15 +216,17 @@ export default {
             if (target === 'move') {
                 this.moveGroupListToggle = !this.moveGroupListToggle
                 this.showPopUp = !this.showPopUp
+                this.target = 'move'
             } else {
                 this.showPopUp = !this.showPopUp
+                this.target = 'delete'
             }
         },
         closePopUp() {
             this.showPopUp = !this.showPopUp
             this.toggleDropDown = !this.toggleDropDown
             this.moveGroupListToggle = false
-
+            this.target = ''
         },
         deleteList() {
             this.lists.splice(this.listId, 1)

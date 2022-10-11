@@ -2,7 +2,9 @@
     <keep-alive>
         <content-view :class="[toggleShrink? 'shrink': 'grow']" :key="listId">
             <template #toggle-sidebar>
-                <button @click="openSideBarDescription">test</button>
+                <button @click="openSideBarDescription">
+                    <img src="@/assets/design-material/icons/menu.png" alt="open-sidebar">
+                </button>
             </template>
 
             <template v-slot:title>
@@ -10,7 +12,9 @@
             </template>
 
             <template #toggle-description>
-                <button @click="openListDescription">test</button>
+                <button ref="openListDropDown" class="toggle-list-nav" @click="openListDropDown">
+                    <img src="@/assets/design-material/icons/ellipsis.png" alt="open list navbar">
+                </button>
             </template>
 
 
@@ -26,6 +30,55 @@
         <TaskDescription :toggleShrink="toggleShrink" @closeDescription="closeDescriptionMethod"
             :descriptionTaskList="descriptionTaskList" :descriptionTaskChildList="descriptionTaskChildList"
             :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink" :element="element" />
+    </transition>
+
+    <transition name="to-bottom">
+        <DropDown :dropDownSlots="dropDownSlots" :top="top" :right="right" v-if="toggleDropDown">
+            <template #RenameList>
+                <div class="renameList" @click.self="renameList">
+                    <template v-if="showRename">
+                        <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                            src="@/assets/design-material/icons/plus.png" alt="add-item" />
+                        <input @keyup.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
+                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                    </template>
+
+                    <template v-else>
+                        <img @click="renameList" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                        <span @click="renameList">Rename List</span>
+                    </template>
+                </div>
+            </template>
+
+            <template #MoveListTo v-if="ReturnGroupOfLists">
+                <div @click="togglePopUp('move')">
+                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
+                    <span>Move list to...</span>
+                </div>
+            </template>
+
+            <template #MoveListTo v-if="ReturnGroupOfLists">
+                <div @click="togglePopUp('move')">
+                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
+                    <span>Move list to...</span>
+                </div>
+            </template>
+
+            <template #DuplicateList>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/copy.png" alt="">
+                    <span>Duplicate list</span>
+                </div>
+            </template>
+
+            <template #DeleteList>
+                <div @click="togglePopUp('delete')">
+                    <img src="@/assets/design-material/icons/delete.png" alt="">
+                    <span>Delete list</span>
+                </div>
+            </template>
+        </DropDown>
     </transition>
 
     <!-- <transition name="to-bottom">
@@ -50,10 +103,10 @@
 </template>
 
 <script>
-import ContentView from '../components/ContentView.vue';
-import SingleTask from '../components/SingleTask.vue';
-import TaskDescription from '../components/TaskDescription.vue'
-import DropDown from '../components/DropDown.vue';
+import ContentView from '@/components/ContentView.vue';
+import SingleTask from '@/components/SingleTask.vue';
+import TaskDescription from '@/components/TaskDescription.vue'
+import DropDown from '@/components/DropDown.vue';
 
 
 import { allLists } from '@/stores/allLists.js'
@@ -62,6 +115,8 @@ import { mapState, mapWritableState } from 'pinia'
 import { toggleAside } from '@/stores/toggleAside.js'
 // import { computed } from "vue";
 
+import PopUp from '@/components/PopUp.vue'
+
 export default {
     name: 'List',
     props: ['listId', 'childId', 'closeDescription'],
@@ -69,7 +124,8 @@ export default {
         ContentView,
         SingleTask,
         TaskDescription,
-        DropDown
+        DropDown,
+        PopUp
     },
     provide() {
         return {
@@ -155,6 +211,12 @@ export default {
             descriptionTaskIndex: null,
             toggleShrink: false,
             element: '',
+            dropDownSlots: ['RenameList', 'MoveListTo', 'SortBy', 'DuplicateList', 'DeleteList'],
+            toggleDropDown: false,
+            top: null,
+            right: null
+
+
             // sendedArray: []
         }
     },
@@ -220,6 +282,19 @@ export default {
         },
         closeDescriptionMethod(value) {
             this.toggleShrink = value
+        },
+        openListDropDown() {
+            this.parentElementDomRect = this.$refs.openListDropDown.getBoundingClientRect()
+
+            this.top = this.parentElementDomRect.top + 20
+
+            // this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
+            this.right = 45
+            this.toggleDropDown = !this.toggleDropDown
+        },
+        closeDropDown() {
+            this.toggleDropDown = false
+            this.moveGroupListToggle = false
         }
     }
 }
