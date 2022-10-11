@@ -569,7 +569,7 @@ export default {
 
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
 
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.promoteTask)
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.promoteTask)
 
                 this.promoteTask = {}
             } else {
@@ -588,7 +588,7 @@ export default {
 
                 this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
 
-                this.lists[this.descriptionTaskList].tasks.push(this.promoteTask)
+                this.lists[this.descriptionTaskList].tasks.unshift(this.promoteTask)
 
                 this.promoteTask = {}
             }

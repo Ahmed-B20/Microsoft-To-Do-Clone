@@ -2,12 +2,12 @@
     <transition name="render-list">
         <ul class="lists-container">
             <transition-group name="render-list">
-                <li @click="showListTasks" v-for="list in returnLists" :data-name="list.listName" :data-id="list.id"
+                <li @click="showListTasks" v-for="(list, index) in returnLists" :data-name="list.listName" :data-id="list.id"
                     :key="list.id" :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
 
 
                     <template v-if="list.listChildren">
-                        <GroupOfLists :childrenListsArray='list.listsArray' :listName="list.listName"
+                        <GroupOfLists :index="index" :childrenListsArray='list.listsArray' :listName="list.listName"
                             :parentId="list.id" />
                     </template>
 
