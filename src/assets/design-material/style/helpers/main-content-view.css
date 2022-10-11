@@ -227,13 +227,19 @@
     gap: 3px;
 }
 
+.view-content-container .tasks li .task-main-info .info-icons .border {
+    /* border-left: 1px solid #dfdfdf; */
+    margin: 0 5px;
+    width: 1px;
+    background-color: #dfdfdf;
+    height: 17px;
+}
+
 .view-content-container .tasks li .task-main-info .info-icons .note {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
-    padding-left: 10px;
-    border-left: 1px solid #dfdfdf;
 }
 
 .view-content-container .tasks li .task-main-info .info-icons .steps img,

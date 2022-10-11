@@ -248,6 +248,7 @@ export default {
         },
         renameTask() {
             this.showRename = !this.showRename
+            this.newName = this.task.name
             console.log('fff');
         },
         closeRename() {
@@ -263,8 +264,18 @@ export default {
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
                 this.newName = ''
+                this.showRename = false
             } else {
-                this.toggleError = true
+                if (!!this.toggleError) {
+                    this.toggleError = false
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                }
             }
         },
         addNote() {
@@ -515,7 +526,16 @@ export default {
                 this.stepObj = {}
                 this.inputValue = ''
             } else {
-                this.errorToggle = true
+                if (!!this.errorToggle) {
+                    this.errorToggle = false
+                    setTimeout(() => {
+                        this.errorToggle = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.errorToggle = true
+                    }, 0)
+                }
             }
         },
         openDropDown() {

@@ -18,6 +18,8 @@
                         <img src="@/assets/design-material/icons/process.png" alt="task steps" title="task steps">
                     </span>
 
+                    <span class="border" v-if="task.steps.length > 0 && task.note"></span>
+
                     <span class="note" v-if="task.note">
                         Note <img src="@/assets/design-material/icons/notes.png" alt="task notes" title="task notes">
                     </span>

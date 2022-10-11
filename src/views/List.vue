@@ -338,7 +338,7 @@ export default {
             // this.toggleOpenDescription = !this.toggleOpenDescription
             this.toggleShrink = shrink
             this.element = element
-
+            this.toggleDropDown = false
         },
         closeDescriptionMethod(value) {
             this.toggleShrink = value
@@ -349,7 +349,12 @@ export default {
             this.top = this.parentElementDomRect.top + 20
 
             // this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
-            this.right = 45
+
+            if (!!this.toggleShrink) {
+                this.right = 45 + 360
+            } else {
+                this.right = 45
+            }
             this.toggleDropDown = !this.toggleDropDown
         },
         closeDropDown() {
@@ -357,6 +362,7 @@ export default {
             this.moveGroupListToggle = false
         },
         togglePopUp(target) {
+            this.toggleDropDown = !this.toggleDropDown
             if (target === 'move') {
                 this.moveGroupListToggle = !this.moveGroupListToggle
                 this.showPopUp = !this.showPopUp
@@ -409,6 +415,7 @@ export default {
         },
         renameList() {
             this.showRename = !this.showRename
+            this.newName = this.listName
             // this.$refs.listParent.addEventListener('blur', () => {
             //     event.preventDefault()
             //     console.log('fff');
@@ -424,6 +431,7 @@ export default {
                     this.lists[this.listId].listName = this.newName
                 }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.listName = this.newName
                 this.newName = ''
                 this.showRename = !this.showRename
                 this.toggleDropDown = !this.toggleDropDown

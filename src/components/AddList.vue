@@ -125,7 +125,16 @@ export default {
                 this.listObj = {};
                 this.childListObj = {}
             } else {
-                this.toggleError = true
+                if (!!this.toggleError) {
+                    this.toggleError = false
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                }
             }
         },
         toggleErrorClass() {
@@ -163,7 +172,16 @@ export default {
             } else {
 
                 if (this.toggleListChildren === false) {
-                    this.toggleError = true
+                    if (!!this.toggleError) {
+                        this.toggleError = false
+                        setTimeout(() => {
+                            this.toggleError = true
+                        }, 0)
+                    } else {
+                        setTimeout(() => {
+                            this.toggleError = true
+                        }, 0)
+                    }
                 } else {
                     if (this.childListsArray.length > 0) {
                         this.$refs.addGroupOfList.setAttribute('src', this.$refs.addGroupOfList.getAttribute('src').replace('close', 'add'))

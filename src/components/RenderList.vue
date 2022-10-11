@@ -291,6 +291,7 @@ export default {
         },
         renameList() {
             this.showRename = !this.showRename
+            this.newName = this.listName
             // this.$refs.listParent.addEventListener('blur', () => {
             //     event.preventDefault()
             //     console.log('fff');

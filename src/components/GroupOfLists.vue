@@ -228,6 +228,7 @@ export default {
         },
         renameGroup() {
             this.showRename = !this.showRename
+            this.newName = this.listName
             // this.$refs.inputFiled.focus()
         },
         addNewList() {
