@@ -12,7 +12,7 @@
     <transition name="to-bottom">
         <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left" v-if="toggleDropDown">
             <template #RenameGroup>
-                <div class="renameList" @click.self="renameList">
+                <div class="renameList" @click.self="renameGroup">
                     <template v-if="showRename">
                         <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
@@ -22,30 +22,30 @@
                     </template>
 
                     <template v-else>
-                        <img @click="renameList" src="@/assets/design-material/icons/rename.png" alt="rename task" />
-                        <span @click="renameList">Rename Task</span>
+                        <img @click="renameGroup" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                        <span @click="renameGroup">Rename group</span>
                     </template>
                 </div>
             </template>
 
             <template #NewList>
-                <div @click="MoveListTo">
-                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
-                    <span>Move list to...</span>
+                <div @click="newList">
+                    <img src="@/assets/design-material/icons/plus.png" alt="">
+                    <span>New list</span>
                 </div>
             </template>
 
             <template #UngroupLists>
-                <div @click="DuplicateList">
-                    <img src="@/assets/design-material/icons/copy.png" alt="">
-                    <span>Duplicate list</span>
+                <div @click="ungroupLists">
+                    <img src="@/assets/design-material/icons/ungroup.png" alt="">
+                    <span>Ungroup lists</span>
                 </div>
             </template>
 
             <template #DeleteGroup>
-                <div @click="togglePopUp">
+                <div @click="deleteGroup">
                     <img src="@/assets/design-material/icons/delete.png" alt="">
-                    <span>Delete list</span>
+                    <span>Delete group</span>
                 </div>
             </template>
         </DropDown>

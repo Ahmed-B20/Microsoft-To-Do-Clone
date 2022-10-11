@@ -1,7 +1,7 @@
 <template>
     <transition name="render-list">
         <dev class="lists-parent">
-            <ul tabindex="0" @blur="closeDropDown" ref="listParent" class="lists-container">
+            <ul tabindex="0" @blur.self="closeDropDown" ref="listParent" class="lists-container">
                 <transition-group name="render-list">
                     <li @contextmenu.self="openDropDown" @click="showListTasks" v-for="(list,index) in lists"
                         :data-name="list.listName" :data-id="index" :key="list.id"
@@ -13,7 +13,7 @@
                                 :parentId="list.id" />
                         </template>
 
-                        <p @contextmenu.self="openDropDown" v-else>
+                        <p @contextmenu="openDropDown" v-else>
                             <img src="@/assets/design-material/icons/menu.png" alt="single-list">
                             <span>{{list.listName}}</span>
 
@@ -149,6 +149,7 @@ export default {
     },
     methods: {
         openDropDown() {
+            console.log(event.target);
             this.parentElementDomRect = this.$refs.listParent.getBoundingClientRect()
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG') {
                 this.listId = event.target.parentElement.parentElement.getAttribute('data-id')
@@ -194,6 +195,13 @@ export default {
             console.log(this.listId);
             console.log(this.lists);
             this.lists.splice(this.listId, 1)
+
+            this.lists.forEach((list, index) => {
+                if (index >= this.listId) {
+                    list.id = list.id - 1
+                    console.log(list.id);
+                }
+            })
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
