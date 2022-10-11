@@ -58,10 +58,10 @@
                 </div>
             </template>
 
-            <template #MoveListTo v-if="ReturnGroupOfLists">
-                <div @click="togglePopUp('move')">
-                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
-                    <span>Move list to...</span>
+            <template #SortBy>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/sort.png" alt="">
+                    <span>Sort By</span>
                 </div>
             </template>
 
@@ -80,6 +80,32 @@
             </template>
         </DropDown>
     </transition>
+
+    <PopUp :showPopUp="showPopUp">
+        <template #title>
+            {{target=== 'move'? 'Move List': 'Delete List'}}
+        </template>
+
+        <template v-slot:content>
+            <div v-if="moveGroupListToggle" class="select-parent">
+                <select ref="selectedGroupOfList" name="" id="">
+                    <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
+                        :value="groupOfList.id">
+                        {{groupOfList.listName}}
+                    </option>
+                </select>
+            </div>
+            <p v-else>
+                list {{listName}} will be permanently deleted
+            </p>
+        </template>
+
+        <template #button>
+            <button v-if="moveGroupListToggle" class="move" @click="MoveListTo">Move</button>
+            <button v-else class="delete" @click="deleteList">Delete</button>
+            <button class="close" @click="closePopUp">Cancel</button>
+        </template>
+    </PopUp>
 
     <!-- <transition name="to-bottom">
         <DropDown>
@@ -135,6 +161,14 @@ export default {
         }
     },
     beforeMount: function () {
+
+        this.lists.forEach((list) => {
+            if (list.listChildren) {
+                if (list.listChildren) {
+                    this.ReturnGroupOfListsArray.push(list)
+                }
+            }
+        })
 
         console.log(this.listId);
         this.toggleShrink = this.closeDescription
@@ -214,7 +248,13 @@ export default {
             dropDownSlots: ['RenameList', 'MoveListTo', 'SortBy', 'DuplicateList', 'DeleteList'],
             toggleDropDown: false,
             top: null,
-            right: null
+            right: null,
+            showPopUp: false,
+            showRename: false,
+            newName: '',
+            toggleError: false,
+            DuplicatedList: {},
+            ReturnGroupOfListsArray: []
 
 
             // sendedArray: []
@@ -230,6 +270,13 @@ export default {
         },
         comChildId() {
             return this.childId
+        },
+        ReturnGroupOfLists() {
+            if (this.ReturnGroupOfListsArray.length > 0) {
+                return true
+            } else {
+                return false
+            }
         }
     },
     watch: {
@@ -257,6 +304,19 @@ export default {
             } else {
                 this.descriptionTaskChildList = null
             }
+        },
+        lists: {
+            handler(newValue, oldValue) {
+                this.ReturnGroupOfListsArray = []
+                this.lists.forEach((list) => {
+                    if (list.listChildren) {
+                        if (list.listChildren) {
+                            this.ReturnGroupOfListsArray.push(list)
+                        }
+                    }
+                })
+            },
+            deep: true
         }
     },
     methods: {
@@ -295,6 +355,108 @@ export default {
         closeDropDown() {
             this.toggleDropDown = false
             this.moveGroupListToggle = false
+        },
+        togglePopUp(target) {
+            if (target === 'move') {
+                this.moveGroupListToggle = !this.moveGroupListToggle
+                this.showPopUp = !this.showPopUp
+                this.target = 'move'
+            } else {
+                this.showPopUp = !this.showPopUp
+                this.target = 'delete'
+            }
+        },
+        closePopUp() {
+            this.showPopUp = !this.showPopUp
+            this.toggleDropDown = !this.toggleDropDown
+            this.moveGroupListToggle = false
+            this.target = ''
+        },
+        deleteList() {
+            this.lists.splice(this.listId, 1)
+            this.lists.forEach((list, index) => {
+                if (index >= this.listId) {
+                    list.id = list.id - 1
+                }
+            })
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+            this.toggleDropDown = false
+            this.showPopUp = !this.showPopUp
+        },
+        DuplicateList() {
+            this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
+            // this.DuplicatedList.id = this.lists[this.listId].id + 1
+            this.DuplicatedList.id = +this.listId + 1
+            this.DuplicatedList.listChildren = this.lists[this.listId].listChildren
+            this.DuplicatedList.tasks = this.lists[this.listId].tasks
+            this.lists.splice(+this.listId + 1, 0, this.DuplicatedList)
+            // this.lists.push(this.DuplicatedList)
+            this.lists.forEach(((list, index) => {
+                if (+this.listId + 1 <= index) {
+                    list.id = index
+                }
+            }))
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+            this.toggleDropDown = false
+            this.DuplicatedList = {}
+        },
+        closeRename() {
+            this.showRename = !this.showRename
+        },
+        renameList() {
+            this.showRename = !this.showRename
+            // this.$refs.listParent.addEventListener('blur', () => {
+            //     event.preventDefault()
+            //     console.log('fff');
+            // })
+
+            // this.toggleDropDown = true
+        },
+        newListName() {
+            if (this.newName.length > 0) {
+                if (!!this.descriptionTaskChildList) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].listName = this.newName
+                } else {
+                    this.lists[this.listId].listName = this.newName
+                }
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.newName = ''
+                this.showRename = !this.showRename
+                this.toggleDropDown = !this.toggleDropDown
+            } else {
+                if (!!this.toggleError) {
+                    this.toggleError = false
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                }
+            }
+        },
+        MoveListTo() {
+            console.log(this.$refs.selectedGroupOfList.value);
+            this.lists[this.listId].id = this.lists[this.$refs.selectedGroupOfList.value].listsArray.length
+            this.lists[this.$refs.selectedGroupOfList.value].listsArray.push(this.lists[this.listId])
+
+            this.lists.splice(this.listId, 1)
+
+            this.lists.forEach((list, index) => {
+                if (index >= this.listId) {
+                    list.id = list.id - 1
+                }
+            })
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.toggleDropDown = false
+            this.showPopUp = !this.showPopUp
+            this.moveGroupListToggle = !this.moveGroupListToggle
         }
     }
 }

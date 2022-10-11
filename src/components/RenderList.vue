@@ -3,7 +3,7 @@
         <dev class="lists-parent">
             <ul ref="listParent" class="lists-container">
                 <transition-group name="render-list">
-                    <li @contextmenu.self="openDropDown" @click.self="showListTasks" v-for="(list,index) in lists"
+                    <li @contextmenu.self="openDropDown" @click="showListTasks" v-for="(list,index) in lists"
                         :data-name="list.listName" :data-id="index" :key="list.id"
                         :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
 
