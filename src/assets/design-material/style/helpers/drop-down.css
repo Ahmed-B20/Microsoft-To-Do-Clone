@@ -8,6 +8,7 @@
     /* right: 0;
     top: 0; */
     border-radius: 5px;
+    z-index: 10;
     overflow: hidden;
     box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
 }
@@ -16,6 +17,41 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+.drop-down ul li {
+    padding: 0 !important;
+}
+
+.drop-down ul li:hover {
+    background-color: white !important;
+}
+
+.drop-down ul li .renameList {
+    height: 39px;
+}
+
+.drop-down ul li .renameList input {
+    width: calc(200px - 60px);
+}
+
+.drop-down ul li .renameList input.error {
+    border-color: red;
+    animation: shake 0.1s linear;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(-10px);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
 }
 
 .drop-down ul li div {

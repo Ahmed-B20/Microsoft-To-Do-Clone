@@ -136,7 +136,7 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            Delete Task
+            {{dropDownStepId? 'Delete Step': 'Delete Task'}}
         </template>
 
         <template #content>
