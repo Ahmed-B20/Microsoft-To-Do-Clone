@@ -1,17 +1,17 @@
 <template>
     <transition-group name="tasks-transition">
-        <li @click.self="openDescription" :class="{complete: task.complete}" v-for="(task,index) in returnAllTasks"
-            :key="task.id" :data-id="index">
+        <li ref="taskElement" @contextmenu.self="openDropDown" @click.self="openDescription"
+            :class="{complete: task.complete}" v-for="(task,index) in returnAllTasks" :key="task.id" :data-id="index">
             <span :data-id="index" @click="completeTask" class="check">
                 <img src="@/assets/design-material/icons/check.png" alt="check" />
             </span>
 
-            <span class="task-main-info">
+            <span @contextmenu="openDropDown" class="task-main-info">
                 <span class="task-name" :class="{complete: task.complete}">
                     {{task.name}}
                 </span>
 
-                <span class="info-icons">
+                <span :data-id="index" class="info-icons">
                     <span v-if="task.steps.length > 0" class="steps">
                         {{(task.steps.filter((step)=>{return step.complete === true}).length)}} Of {{task.steps.length}}
 
@@ -33,15 +33,90 @@
                 src="@/assets/design-material/icons/important-hover.png" alt="">
         </li>
     </transition-group>
+
+    <transition name="to-bottom">
+        <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left" v-if="toggleDropDown">
+            <template #RenameList>
+                <div class="renameList" @click.self="renameList">
+                    <template v-if="showRename">
+                        <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                            src="@/assets/design-material/icons/plus.png" alt="add-item" />
+                        <input @keyup.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
+                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                    </template>
+
+                    <template v-else>
+                        <img @click="renameList" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                        <span @click="renameList">Rename List</span>
+                    </template>
+                </div>
+            </template>
+
+            <template #MoveListTo v-if="ReturnGroupOfLists">
+                <div @click="togglePopUp('move')">
+                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
+                    <span>Move list to...</span>
+                </div>
+            </template>
+
+            <template #DuplicateList>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/copy.png" alt="">
+                    <span>Duplicate list</span>
+                </div>
+            </template>
+
+            <template #DeleteList>
+                <div @click="togglePopUp('delete')">
+                    <img src="@/assets/design-material/icons/delete.png" alt="">
+                    <span>Delete list</span>
+                </div>
+            </template>
+        </DropDown>
+    </transition>
+
+    <PopUp :showPopUp="showPopUp">
+        <template #title>
+            {{target=== 'move'? 'Move List': 'Delete List'}}
+        </template>
+
+        <template v-slot:content>
+            <div v-if="moveGroupListToggle" class="select-parent">
+                <select ref="selectedGroupOfList" name="" id="">
+                    <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
+                        :value="groupOfList.id">
+                        {{groupOfList.listName}}
+                    </option>
+                </select>
+            </div>
+            <p v-else>
+                list {{listName}} will be permanently deleted
+            </p>
+        </template>
+
+        <template #button>
+            <button v-if="moveGroupListToggle" class="move" @click="MoveListTo">Move</button>
+            <button v-else class="delete" @click="deleteList">Delete</button>
+            <button class="close" @click="closePopUp">Cancel</button>
+        </template>
+    </PopUp>
 </template>
 
 <script>
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 
+import PopUp from './PopUp.vue'
+import DropDown from '../components/DropDown.vue';
+
 export default {
     name: 'SingleTask',
     props: ['listId', 'toggleShrink', 'childId'],
+    components: {
+        PopUp,
+        DropDown
+    },
     computed: {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists']),
@@ -64,7 +139,11 @@ export default {
             shrink: this.toggleShrink,
             taskElement: '',
             oldTaskId: 0,
-            stepsCount: 0
+            stepsCount: 0,
+            dropDownSlots: ['RenameList', 'MoveListTo', 'DuplicateList', 'DeleteList'],
+            toggleDropDown: false,
+            showPopUp: false,
+            taskElement: null
         }
     },
     watch: {
@@ -88,6 +167,22 @@ export default {
         }
     },
     methods: {
+        openDropDown() {
+            event.preventDefault()
+            console.log(this.$refs.taskElement);
+            this.taskElement = event.target.getAttribute('data-id')
+            this.parentElementDomRect = this.$refs.taskElement[this.taskElement].getBoundingClientRect()
+
+            this.top = this.parentElementDomRect.top + 60
+
+            // this.left = event.clientX 
+            this.left = (this.parentElementDomRect.width / 2) - 100
+            this.toggleDropDown = !this.toggleDropDown
+        },
+        closeDropDown() {
+            this.toggleDropDown = false
+            this.moveGroupListToggle = false
+        },
         openDescription() {
             this.taskElement = event.target
 
