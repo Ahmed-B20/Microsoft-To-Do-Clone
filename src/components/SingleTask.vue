@@ -105,7 +105,7 @@
                 </div>
             </template>
 
-            <template #MoveTaskTo v-if="ReturnGroupOfLists">
+            <template #MoveTaskTo v-if="ReturnAllLists">
                 <div @click="togglePopUp('move')">
                     <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
                     <span>Move list to...</span>
@@ -128,9 +128,8 @@
 
         <template v-slot:content>
             <div v-if="moveTaskToggle" class="select-parent">
-                <select ref="selectedGroupOfList" name="" id="">
-                    <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
-                        :value="groupOfList.id">
+                <select ref="selectedLists" name="" id="">
+                    <option v-for="(groupOfList, index) in ReturnAllListsArray" :key="index" :value="groupOfList.id">
                         {{groupOfList.listName}}
                     </option>
                 </select>
@@ -141,7 +140,7 @@
         </template>
 
         <template #button>
-            <button v-if="moveTaskToggle" class="move" @click="MoveListTo">Move</button>
+            <button v-if="moveTaskToggle" class="move" @click="MoveTaskTo">Move</button>
             <button v-else class="delete" @click="deleteTask">Delete</button>
             <button class="close" @click="closePopUp">Cancel</button>
         </template>
@@ -159,6 +158,31 @@ export default {
     components: {
         PopUp,
         DropDown
+    },
+    beforeMount() {
+        this.lists.forEach((list) => {
+            if (list.listChildren === false) {
+                // if (list.listChildren) {
+                this.ReturnAllListsArray.push(list)
+                // }
+            }
+        })
+    },
+
+    data() {
+        return {
+            importantTask: {},
+            shrink: this.toggleShrink,
+            taskElement: '',
+            oldTaskId: 0,
+            stepsCount: 0,
+            dropDownSlots: ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'PickADate', 'MoveTaskTo', 'DeleteTask'],
+            toggleDropDown: false,
+            showPopUp: false,
+            taskElementId: null,
+            parentElementDomRect: '',
+            ReturnAllListsArray: [],
+        }
     },
     computed: {
         ...mapState(allLists, ['returnLists']),
@@ -187,20 +211,13 @@ export default {
             } else {
                 return this.lists[this.listId].tasks[this.taskElementId].complete
             }
-        }
-    },
-    data() {
-        return {
-            importantTask: {},
-            shrink: this.toggleShrink,
-            taskElement: '',
-            oldTaskId: 0,
-            stepsCount: 0,
-            dropDownSlots: ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'PickADate', 'MoveTaskTo', 'DeleteTask'],
-            toggleDropDown: false,
-            showPopUp: false,
-            taskElementId: null,
-            parentElementDomRect: ''
+        },
+        ReturnAllLists() {
+            if (this.ReturnAllListsArray.length > 0) {
+                return true
+            } else {
+                return false
+            }
         }
     },
     watch: {
@@ -218,6 +235,19 @@ export default {
                     this.taskElement.classList.add('add-animation')
                 }, 0)
             }
+        },
+        lists: {
+            handler(newValue, oldValue) {
+                this.ReturnAllListsArray = []
+                this.lists.forEach((list) => {
+                    if (list.listChildren === false) {
+                        // if (list.listChildren) {
+                        this.ReturnAllListsArray.push(list)
+                        // }
+                    }
+                })
+            },
+            deep: true
         }
     },
     methods: {
@@ -247,7 +277,9 @@ export default {
                 this.moveTaskToggle = !this.moveTaskToggle
                 this.showPopUp = !this.showPopUp
                 this.target = 'move'
+                this.toggleDropDown = false
             } else {
+                this.toggleDropDown = false
                 this.showPopUp = !this.showPopUp
                 this.target = 'delete'
             }
@@ -369,9 +401,9 @@ export default {
             if (!!this.childId) {
                 if (event.target.tagName === 'SPAN') {
                     if (target === 'dropdown') {
-                        this.$refs.taskElement.forEach((task)=>{
+                        this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
-                                this.taskElement = task 
+                                this.taskElement = task
                             }
                         })
                     } else {
@@ -385,9 +417,9 @@ export default {
                 } else {
                     if (target === 'dropdown') {
                         // this.taskElement = this.$refs.taskElement[this.taskElementId]
-                        this.$refs.taskElement.forEach((task)=>{
+                        this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
-                                this.taskElement = task 
+                                this.taskElement = task
                             }
                         })
                     } else {
@@ -403,9 +435,9 @@ export default {
                 if (event.target.tagName === 'SPAN') {
                     if (target === 'dropdown') {
                         // this.taskElement = this.$refs.taskElement[this.taskElementId]
-                        this.$refs.taskElement.forEach((task)=>{
+                        this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
-                                this.taskElement = task 
+                                this.taskElement = task
                             }
                         })
                     } else {
@@ -419,9 +451,9 @@ export default {
                 } else {
                     if (target === 'dropdown') {
                         // this.taskElement = this.$refs.taskElement[this.taskElementId]
-                        this.$refs.taskElement.forEach((task)=>{
+                        this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
-                                this.taskElement = task 
+                                this.taskElement = task
                             }
                         })
                     } else {
@@ -450,6 +482,61 @@ export default {
                     this.taskElement.classList.add('add-animation-x')
                 }, 0)
             }
+        },
+        MoveTaskTo() {
+            if (!!this.childId) {
+                // this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
+
+                // this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks[+this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length - 1].id = this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length
+
+                // this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
+
+
+                this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
+                if (this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length > 0) {
+                    let index = this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length - 1
+                    this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks[index].id = this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length - 1
+                } else {
+                    this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks[0].id = 0
+                }
+                this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
+            } else {
+                this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].tasks[this.taskElementId])
+                if (+this.lists[this.$refs.selectedLists.value].tasks.length > 0) {
+                    let index = this.lists[this.$refs.selectedLists.value].tasks.length - 1
+                    this.lists[this.$refs.selectedLists.value].tasks[index].id = this.lists[this.$refs.selectedLists.value].tasks.length - 1
+                } else {
+                    this.lists[this.$refs.selectedLists.value].tasks[0].id = 0
+                }
+                this.lists[this.listId].tasks.splice(this.taskElementId, 1)
+            }
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.toggleDropDown = false
+            this.taskElementId = null
+            this.parentElementDomRect = null
+            this.showPopUp = !this.showPopUp
+            this.moveTaskToggle = !this.moveTaskToggle
+
+
+
+
+            // console.log(this.$refs.selectedLists.value);
+            // this.lists[this.listId].id = this.lists[this.$refs.selectedLists.value].listsArray.length
+            // this.lists[this.$refs.selectedLists.value].listsArray.push(this.lists[this.listId])
+
+            // this.lists.splice(this.listId, 1)
+
+            // this.lists.forEach((list, index) => {
+            //     if (index >= this.listId) {
+            //         list.id = list.id - 1
+            //     }
+            // })
+
+            // localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            // this.toggleDropDown = false
+            // this.showPopUp = !this.showPopUp
+            // this.listId = null
+            // this.moveGroupListToggle = !this.moveGroupListToggle
         }
     }
 }
