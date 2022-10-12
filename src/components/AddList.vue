@@ -147,6 +147,7 @@ export default {
                 this.listObj.id = this.taskNumber;
                 this.listObj.listsArray = []
                 this.listObj.listChildren = true;
+                this.listObj.toggleChildList = true;
                 this.toggleListChildren = !this.toggleListChildren
 
                 this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
@@ -167,7 +168,6 @@ export default {
                 this.listObj = {};
                 this.taskNumber++;
             } else {
-
                 if (this.toggleListChildren === false) {
                     if (!!this.toggleError) {
                         this.toggleError = false

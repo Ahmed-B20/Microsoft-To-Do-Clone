@@ -62,24 +62,27 @@
         </DropDown>
     </transition>
 
+    <!-- <transition name="toggle-group-of-list"> -->
+    <!-- <ul :class="{active:groupOfListsToggle}"> -->
     <transition name="toggle-group-of-list">
-        <!-- <ul :class="{active:groupOfListsToggle}"> -->
-        <transition name="toggle-group-of-list">
-            <ul v-if="groupOfListsToggle">
-                <transition-group name="render-list">
-                    <li @click="showListTasks" :data-name="childrenList.name" :data-id="childrenList.id"
-                        v-for="childrenList in childrenListsArray" :key="childrenList.id">
-                        <p :data-name="childrenList.name" :data-id="childrenList.id">
-                            <img :data-name="childrenList.name" :data-id="childrenList.id"
-                                src="@/assets/design-material/icons/menu.png" alt="single-list">
-                            <span :data-name="childrenList.name"
-                                :data-id="childrenList.id">{{childrenList.listName}}</span>
-                        </p>
-                    </li>
-                </transition-group>
-            </ul>
-        </transition>
+        <ul v-if="groupOfListsToggle || lists[parentId].toggleChildList">
+            <transition-group name="render-list">
+                <li @contextmenu.self="openListDropDown" @click="showListTasks" :data-name="childrenList.name"
+                    :data-id="childrenList.id" v-for="childrenList in childrenListsArray" :key="childrenList.id">
+                    <p @contextmenu.self="openListDropDown" :data-name="childrenList.name" :data-id="childrenList.id">
+                        <img :data-name="childrenList.name" :data-id="childrenList.id"
+                            src="@/assets/design-material/icons/menu.png" alt="single-list">
+                        <span :data-name="childrenList.name" :data-id="childrenList.id">{{childrenList.listName}}</span>
+
+                        <span v-if="childrenList.tasks.length > 0" class="tasks-count">
+                            {{childrenList.tasks.length}}
+                        </span>
+                    </p>
+                </li>
+            </transition-group>
+        </ul>
     </transition>
+    <!-- </transition> -->
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
@@ -146,7 +149,14 @@ export default {
             this.showPopUp = !this.showPopUp
         },
         toggleGroup() {
-            this.groupOfListsToggle = !this.groupOfListsToggle
+            
+            if (this.lists[this.parentId].toggleChildList) {
+                this.lists[this.parentId].toggleChildList = false
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.groupOfListsToggle = false
+            } else {
+                this.groupOfListsToggle = !this.groupOfListsToggle
+            }
         },
         showListTasks() {
             this.listNameRoute = event.target.getAttribute('data-name')

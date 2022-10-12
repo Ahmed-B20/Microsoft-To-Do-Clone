@@ -17,7 +17,7 @@
                             <img src="@/assets/design-material/icons/menu.png" alt="single-list">
                             <span>{{list.listName}}</span>
 
-                            <span class="tasks-count" v-if="!list.listChildren">
+                            <span class="tasks-count" v-if="!list.listChildren && list.tasks.length > 0">
                                 {{list.tasks.length}}
                             </span>
                         </p>
