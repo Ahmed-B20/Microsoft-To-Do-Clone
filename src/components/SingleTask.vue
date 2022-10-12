@@ -1,27 +1,29 @@
 <template>
     <transition-group name="tasks-transition">
-        <li ref="taskElement" @contextmenu.self="openDropDown" @click.self="openDescription"
+        <li ref="taskElement" @contextmenu="openDropDown" @click.self="openDescription"
             :class="{complete: task.complete}" v-for="(task,index) in returnAllTasks" :key="task.id" :data-id="index">
-            <span @contextmenu="openDropDown" :data-id="index" @click="completeTask('task')" class="check">
-                <img src="@/assets/design-material/icons/check.png" alt="check" />
+            <span :data-id="index" @click="completeTask('task')" class="check">
+                <img :data-id="index" src="@/assets/design-material/icons/check.png" alt="check" />
             </span>
 
-            <span @contextmenu="openDropDown" class="task-main-info">
-                <span class="task-name" :class="{complete: task.complete}">
+            <span :data-id="index" class="task-main-info">
+                <span :data-id="index" class="task-name" :class="{complete: task.complete}">
                     {{task.name}}
                 </span>
 
                 <span :data-id="index" class="info-icons">
-                    <span v-if="task.steps.length > 0" class="steps">
+                    <span :data-id="index" v-if="task.steps.length > 0" class="steps">
                         {{(task.steps.filter((step)=>{return step.complete === true}).length)}} Of {{task.steps.length}}
 
-                        <img src="@/assets/design-material/icons/process.png" alt="task steps" title="task steps">
+                        <img :data-id="index" src="@/assets/design-material/icons/process.png" alt="task steps"
+                            title="task steps">
                     </span>
 
-                    <span class="border" v-if="task.steps.length > 0 && task.note"></span>
+                    <span :data-id="index" class="border" v-if="task.steps.length > 0 && task.note"></span>
 
-                    <span class="note" v-if="task.note">
-                        Note <img src="@/assets/design-material/icons/notes.png" alt="task notes" title="task notes">
+                    <span :data-id="index" class="note" v-if="task.note">
+                        Note <img :data-id="index" src="@/assets/design-material/icons/notes.png" alt="task notes"
+                            title="task notes">
                     </span>
                 </span>
             </span>
@@ -227,10 +229,21 @@ export default {
     methods: {
         openDropDown() {
             event.preventDefault()
+            console.log(event.target);
             console.log(event.target.getAttribute('data-id'));
             this.taskElementId = event.target.getAttribute('data-id')
             console.log(this.taskElement);
-            this.parentElementDomRect = this.$refs.taskElement[this.taskElementId].getBoundingClientRect()
+
+            console.log(this.$refs.taskElement);
+
+            // this.parentElementDomRect = this.$refs.taskElement[this.taskElementId].getBoundingClientRect()
+            if (event.target.tagName === 'IMG' || (event.target.tagName === 'SPAN' && event.target.classList.contains('task-main-info'))) {
+                this.parentElementDomRect = event.target.parentElement.getBoundingClientRect()
+            } else if (event.target.tagName === 'LI') {
+                this.parentElementDomRect = event.target.getBoundingClientRect()
+            } else {
+                this.parentElementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
+            }
 
             console.log(this.$refs.taskElement[this.taskElementId]);
 
@@ -243,6 +256,7 @@ export default {
         closeDropDown() {
             this.toggleDropDown = false
             this.moveTaskToggle = false
+            this.taskElementId = null
         },
         togglePopUp(target) {
             if (target === 'move') {
