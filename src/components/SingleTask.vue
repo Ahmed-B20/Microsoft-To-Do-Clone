@@ -39,18 +39,18 @@
     <transition name="to-bottom">
         <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left" v-if="toggleDropDown">
             <template #RenameTask>
-                <div class="renameList" @click.self="renameList">
+                <div class="renameList" @click.self="renameTask">
                     <template v-if="showRename">
-                        <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                        <img @click="newTaskName" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input @keyup.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
+                        <input @keyup.enter="newTaskName" required @focus="toggleErrorClass" v-model="newName"
                             placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
                         <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
 
                     <template v-else>
-                        <img @click="renameList" src="@/assets/design-material/icons/rename.png" alt="rename task" />
-                        <span @click="renameList">Rename List</span>
+                        <img @click="renameTask" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                        <span @click="renameTask">Rename Task</span>
                     </template>
                 </div>
             </template>
@@ -108,7 +108,7 @@
             <template #MoveTaskTo v-if="ReturnAllLists">
                 <div @click="togglePopUp('move')">
                     <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
-                    <span>Move list to...</span>
+                    <span>Move task to...</span>
                 </div>
             </template>
 
@@ -135,7 +135,7 @@
                 </select>
             </div>
             <p v-else>
-                Task {{listName}} will be permanently deleted
+                Task {{taskName}} will be permanently deleted
             </p>
         </template>
 
@@ -182,6 +182,10 @@ export default {
             taskElementId: null,
             parentElementDomRect: '',
             ReturnAllListsArray: [],
+            showRename: false,
+            newName: '',
+            taskName: '',
+            toggleError: false
         }
     },
     computed: {
@@ -265,6 +269,13 @@ export default {
             this.top = this.parentElementDomRect.top + 60
             this.left = (x.width / 2) - 100
             this.toggleDropDown = !this.toggleDropDown
+
+
+            if (!!this.childId) {
+                this.taskName = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name
+            } else {
+                this.taskName = this.lists[this.listId].tasks[this.taskElementId].name
+            }
         },
         closeDropDown() {
             this.toggleDropDown = false
@@ -494,7 +505,38 @@ export default {
             this.parentElementDomRect = null
             this.showPopUp = !this.showPopUp
             this.moveTaskToggle = !this.moveTaskToggle
-        }
+        },
+        closeRename() {
+            this.showRename = !this.showRename
+        },
+        renameTask() {
+            this.showRename = !this.showRename
+            this.newName = this.taskName
+        },
+        newTaskName() {
+            if (this.newName.length > 0) {
+                if (!!this.childId) {
+                    this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name = this.newName
+                } else {
+                    this.lists[this.listId].tasks[this.taskElementId].name = this.newName
+                }
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                this.newName = ''
+                this.showRename = !this.showRename
+                this.toggleDropDown = !this.toggleDropDown
+            } else {
+                if (!!this.toggleError) {
+                    this.toggleError = false
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.toggleError = true
+                    }, 0)
+                }
+            }
+        },
     }
 }
 </script>
