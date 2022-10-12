@@ -2,7 +2,7 @@
     <transition-group name="tasks-transition">
         <li ref="taskElement" @contextmenu.self="openDropDown" @click.self="openDescription"
             :class="{complete: task.complete}" v-for="(task,index) in returnAllTasks" :key="task.id" :data-id="index">
-            <span @contextmenu="openDropDown" :data-id="index" @click="completeTask" class="check">
+            <span @contextmenu="openDropDown" :data-id="index" @click="completeTask('task')" class="check">
                 <img src="@/assets/design-material/icons/check.png" alt="check" />
             </span>
 
@@ -26,10 +26,10 @@
                 </span>
             </span>
 
-            <img v-if="task.important" :data-id="index" @click="importantToggle" class="important-toggle"
+            <img v-if="task.important" :data-id="index" @click="importantToggle('task')" class="important-toggle"
                 src="@/assets/design-material/icons/important-task.png" alt="">
 
-            <img v-else :data-id="index" @click="importantToggle" class="important-toggle"
+            <img v-else :data-id="index" @click="importantToggle('task')" class="important-toggle"
                 src="@/assets/design-material/icons/important-hover.png" alt="">
         </li>
     </transition-group>
@@ -54,16 +54,24 @@
             </template>
 
             <template #MarkAsImportant>
-                <div @click="togglePopUp('move')">
-                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
-                    <span>Move list to...</span>
+                <div @click="importantToggle('dropdown')">
+                    <img v-if="returnImportantState" src="@/assets/design-material/icons/important-task.png"
+                        alt="important task">
+
+                    <img v-else src="@/assets/design-material/icons/important-hover.png" alt="not important task">
+
+                    <span>{{returnImportantState? 'Remove Importance':'Mark As Important'}}</span>
                 </div>
             </template>
 
             <template #MarkAsComplete>
-                <div @click="DuplicateList">
-                    <img src="@/assets/design-material/icons/copy.png" alt="">
-                    <span>Duplicate list</span>
+                <div @click="completeTask('dropdown')">
+                    <img v-if="returnCompleteState" src="@/assets/design-material/icons/complete.png"
+                        alt="complete task">
+
+                    <img v-else src="@/assets/design-material/icons/dry-clean.png" alt="not complete task">
+
+                    <span>{{returnCompleteState? 'Mark As Not Complete':'Mark As Complete'}}</span>
                 </div>
             </template>
 
@@ -166,6 +174,20 @@ export default {
                     return this.returnLists[this.listId].tasks
                 }
             }
+        },
+        returnImportantState() {
+            if (!!this.childId) {
+                return this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].important
+            } else {
+                return this.lists[this.listId].tasks[this.taskElementId].important
+            }
+        },
+        returnCompleteState() {
+            if (!!this.childId) {
+                return this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete
+            } else {
+                return this.lists[this.listId].tasks[this.taskElementId].complete
+            }
         }
     },
     data() {
@@ -178,7 +200,8 @@ export default {
             dropDownSlots: ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'PickADate', 'MoveTaskTo', 'DeleteTask'],
             toggleDropDown: false,
             showPopUp: false,
-            taskElement: null,
+            taskElementId: null,
+            parentElementDomRect: ''
         }
     },
     watch: {
@@ -204,9 +227,12 @@ export default {
     methods: {
         openDropDown() {
             event.preventDefault()
-            this.taskElement = event.target.getAttribute('data-id')
+            console.log(event.target.getAttribute('data-id'));
+            this.taskElementId = event.target.getAttribute('data-id')
             console.log(this.taskElement);
-            this.parentElementDomRect = this.$refs.taskElement[this.taskElement].getBoundingClientRect()
+            this.parentElementDomRect = this.$refs.taskElement[this.taskElementId].getBoundingClientRect()
+
+            console.log(this.$refs.taskElement[this.taskElementId]);
 
             this.top = this.parentElementDomRect.top + 60
 
@@ -275,48 +301,58 @@ export default {
             // }
         },
         deleteTask() {
-
             if (!!this.childId) {
-                this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElement, 1)
+                this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
 
                 this.lists[this.listId].listsArray[this.childId].tasks.forEach((list, index) => {
-                    if (index >= this.taskElement) {
+                    if (index >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
             } else {
-                console.log(this.lists[this.listId].tasks[this.taskElement]);
-                this.lists[this.listId].tasks.splice(this.taskElement, 1)
+                console.log(this.lists[this.listId].tasks[this.taskElementId]);
+                this.lists[this.listId].tasks.splice(this.taskElementId, 1)
 
                 this.lists[this.listId].tasks.forEach((list, index) => {
-                    if (index >= this.taskElement) {
+                    if (index >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
             }
 
-
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
             this.toggleDropDown = false
-            this.taskElement = null
+            this.taskElementId = null
+            this.parentElementDomRect = null
             this.showPopUp = !this.showPopUp
         },
-        importantToggle() {
+        importantToggle(target) {
             // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
 
-            this.taskElement = event.target.parentElement
+            if (target === 'dropdown') {
+                this.taskElement = this.$refs.taskElement[this.taskElementId]
+            } else {
+                this.taskElement = event.target.parentElement
+            }
 
 
             this.taskElement.classList.remove('add-animation-x')
             this.taskElement.classList.remove('add-animation')
 
             if (!!this.childId) {
-                if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].important) {
-                    this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].important = false
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')]
-                    this.lists[this.listId].listsArray[this.childId].tasks.splice(event.target.getAttribute('data-id'), 1)
+                if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important) {
+                    this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important = false
+
+                    if (!!event.target.getAttribute('src')) {
+                        event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+                    }
+
+
+                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
+
+                    this.lists[this.listId].listsArray[this.childId].tasks.splice(event.target.getAttribute('data-id') || this.taskElementId, 1)
+
                     this.lists[this.listId].listsArray[this.childId].tasks.push(this.importantTask)
                     this.importantTask = {}
                 } else {
@@ -328,57 +364,97 @@ export default {
                     this.importantTask = {}
                 }
             } else {
-                if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important) {
-                    this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = false
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-                    this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
-                    this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id'), 1)
+                if (this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important) {
+                    this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important = false
+
+                    if (!!event.target.getAttribute('src')) {
+                        event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+                    }
+
+                    this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
+                    this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id') || this.taskElementId, 1)
+
                     this.lists[this.listId].tasks.push(this.importantTask)
                     this.importantTask = {}
                 } else {
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
-                    this.lists[this.listId].tasks[event.target.getAttribute('data-id')].important = true
-                    this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
-                    this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id'), 1)
+                    if (!!event.target.getAttribute('src')) {
+                        event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+                    }
+
+                    this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important = true
+                    this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
+                    this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id') || this.taskElementId, 1)
                     this.lists[this.listId].tasks.unshift(this.importantTask)
                     this.importantTask = {}
                 }
             }
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
+            this.toggleDropDown = false
+            this.taskElementId = null
+            this.parentElementDomRect = null
         },
-        completeTask() {
+        completeTask(target) {
+            console.log(this.$refs.taskElement[this.taskElementId]);
             if (!!this.childId) {
                 if (event.target.tagName === 'SPAN') {
-                    this.taskElement = event.target.parentElement
-                    if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].complete) {
-                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].complete = false
+                    if (target === 'dropdown') {
+                        this.taskElement = this.$refs.taskElement[this.taskElementId]
                     } else {
-                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].complete = true
+                        this.taskElement = event.target.parentElement
+                    }
+
+                    console.log(this.taskElement);
+                    if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete) {
+                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = false
+                    } else {
+                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = true
                     }
                 } else {
-                    this.taskElement = event.target.parentElement.parentElement
-                    if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id')].complete) {
-                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id')].complete = false
+                    if (target === 'dropdown') {
+                        this.taskElement = this.$refs.taskElement[this.taskElementId]
                     } else {
-                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id')].complete = true
+                        this.taskElement = event.target.parentElement
+                    }
+
+                    console.log(this.taskElement);
+
+                    if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete) {
+                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = false
+                    } else {
+                        this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = true
                     }
                 }
             } else {
                 if (event.target.tagName === 'SPAN') {
-                    this.taskElement = event.target.parentElement
-                    if (this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete) {
-                        this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = false
+                    console.log(this.taskElement);
+
+                    if (target === 'dropdown') {
+                        this.taskElement = this.$refs.taskElement[this.taskElementId]
                     } else {
-                        this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
+                        this.taskElement = event.target.parentElement
+                    }
+
+                    console.log(this.taskElement);
+
+                    if (this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete) {
+                        this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = false
+                    } else {
+                        this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = true
                     }
                 } else {
-                    this.taskElement = event.target.parentElement.parentElement
-                    if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete) {
-                        this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = false
+                    if (target === 'dropdown') {
+                        this.taskElement = this.$refs.taskElement[this.taskElementId]
                     } else {
-                        this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id')].complete = true
+                        this.taskElement = event.target.parentElement
+                    }
+
+                    console.log(this.taskElement);
+
+                    if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete) {
+                        this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = false
+                    } else {
+                        this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = true
                     }
                 }
             }
@@ -386,6 +462,12 @@ export default {
             this.completeTaskStatus = !this.completeTaskStatus
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+            this.toggleDropDown = false
+            this.taskElementId = null
+            this.parentElementDomRect = null
+
+            console.log(this.taskElement);
 
             if (this.taskElement.classList.contains('add-animation-x')) {
                 this.taskElement.classList.remove('add-animation-x')
