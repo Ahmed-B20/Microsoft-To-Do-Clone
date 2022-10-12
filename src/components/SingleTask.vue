@@ -369,7 +369,11 @@ export default {
             if (!!this.childId) {
                 if (event.target.tagName === 'SPAN') {
                     if (target === 'dropdown') {
-                        this.taskElement = this.$refs.taskElement[this.taskElementId]
+                        this.$refs.taskElement.forEach((task)=>{
+                            if (+task.getAttribute('data-id') === +this.taskElementId) {
+                                this.taskElement = task 
+                            }
+                        })
                     } else {
                         this.taskElement = event.target.parentElement
                     }
@@ -380,7 +384,12 @@ export default {
                     }
                 } else {
                     if (target === 'dropdown') {
-                        this.taskElement = this.$refs.taskElement[this.taskElementId]
+                        // this.taskElement = this.$refs.taskElement[this.taskElementId]
+                        this.$refs.taskElement.forEach((task)=>{
+                            if (+task.getAttribute('data-id') === +this.taskElementId) {
+                                this.taskElement = task 
+                            }
+                        })
                     } else {
                         this.taskElement = event.target.parentElement
                     }
@@ -393,7 +402,12 @@ export default {
             } else {
                 if (event.target.tagName === 'SPAN') {
                     if (target === 'dropdown') {
-                        this.taskElement = this.$refs.taskElement[this.taskElementId]
+                        // this.taskElement = this.$refs.taskElement[this.taskElementId]
+                        this.$refs.taskElement.forEach((task)=>{
+                            if (+task.getAttribute('data-id') === +this.taskElementId) {
+                                this.taskElement = task 
+                            }
+                        })
                     } else {
                         this.taskElement = event.target.parentElement
                     }
@@ -404,7 +418,12 @@ export default {
                     }
                 } else {
                     if (target === 'dropdown') {
-                        this.taskElement = this.$refs.taskElement[this.taskElementId]
+                        // this.taskElement = this.$refs.taskElement[this.taskElementId]
+                        this.$refs.taskElement.forEach((task)=>{
+                            if (+task.getAttribute('data-id') === +this.taskElementId) {
+                                this.taskElement = task 
+                            }
+                        })
                     } else {
                         this.taskElement = event.target.parentElement
                     }
