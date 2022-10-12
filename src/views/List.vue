@@ -169,69 +169,19 @@ export default {
                 }
             }
         })
-
-        console.log(this.listId);
         this.toggleShrink = this.closeDescription
 
-
-        // this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
         this.allList = this.returnLists || []
 
         if (!!this.$route.params.childId) {
             this.chosenList = this.allList[this.$route.params.listId]
-            console.log(this.allList[this.$route.params.listId].listsArray);
             this.listName = this.chosenList.listsArray[this.$route.params.childId].listName
-
-            console.log(this.chosenList.listsArray[this.$route.params.childId].listName);
-
             this.allTasks = this.chosenList.listsArray[this.$route.params.childId].tasks;
         } else {
             this.chosenList = this.allList[this.listId]
             this.listName = this.chosenList.listName
             this.allTasks = this.chosenList.tasks;
         }
-
-        console.log(this.$route.params.childId);
-
-        // if (!!this.$route.params.childId) {
-
-
-        // this.$watch(
-        //     () => this.$route.params.childId,
-        //     (toParams, previousParams) => {
-        //         console.log(toParams, previousParams);
-        //         if (toParams != previousParams) {
-        //             this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
-
-        //             console.log(this.$route.params.childId);
-
-        //             this.chosenList = this.allList[this.$route.params.listId]
-        //             console.log(this.allList[this.$route.params.listId].listsArray);
-        //             this.listName = this.chosenList.listsArray[this.$route.params.childId].listName
-
-        //             console.log(this.listName);
-
-        //             this.allTasks = this.chosenList.listsArray[this.$route.params.childId].tasks;
-
-        //         }
-        //     }
-        // )
-        // } else {
-        // this.$watch(
-        //     () => this.listId,
-        //     (toParams, previousParams) => {
-        //         console.log(toParams, previousParams);
-        //         if (toParams != previousParams) {
-        //             this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
-        //             console.log(this.$route.params.childId);
-        //             this.chosenList = this.allList[this.listId]
-        //             this.listName = this.chosenList.listName
-        //             console.log(this.listName);
-        //             this.allTasks = this.chosenList.tasks;
-        //         }
-        //     }
-        // )
-        // }
     },
     data() {
         return {
@@ -280,9 +230,6 @@ export default {
         }
     },
     watch: {
-        // allTask() {
-        //     console.log(this.allTask);
-        // }
         listId() {
             if (!this.childId) {
                 this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
@@ -290,7 +237,6 @@ export default {
                 this.listName = this.chosenList.listName
                 this.allTasks = this.chosenList.tasks;
                 this.toggleShrink = this.closeDescription
-                console.log(this.closeDescription);
             }
         },
         childId() {
@@ -325,8 +271,6 @@ export default {
         },
         completeTask() {
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
-
-            console.log('ffff');
         },
         openDescription(listId, index, shrink, element) {
             if (!!this.childId) {
@@ -416,12 +360,6 @@ export default {
         renameList() {
             this.showRename = !this.showRename
             this.newName = this.listName
-            // this.$refs.listParent.addEventListener('blur', () => {
-            //     event.preventDefault()
-            //     console.log('fff');
-            // })
-
-            // this.toggleDropDown = true
         },
         newListName() {
             if (this.newName.length > 0) {
@@ -449,7 +387,6 @@ export default {
             }
         },
         MoveListTo() {
-            console.log(this.$refs.selectedGroupOfList.value);
             this.lists[this.listId].id = this.lists[this.$refs.selectedGroupOfList.value].listsArray.length
             this.lists[this.$refs.selectedGroupOfList.value].listsArray.push(this.lists[this.listId])
 

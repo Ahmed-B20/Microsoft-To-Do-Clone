@@ -41,14 +41,9 @@ export default {
                 this.errorToggle = false
 
                 this.allLists = this.returnLists || []
-
-                console.log(this.chosenListId(), this.chosenChildIdListId());
-
-                // this.allLists = JSON.parse(localStorage.getItem("allListAndTasks")) || []
                 if (!!this.chosenListId() && !this.chosenChildIdListId()) {
                     this.chosenList = this.allLists[this.chosenListId()]
                 } else {
-                    console.log(this.allLists[this.chosenListId()].listsArray[this.chosenChildIdListId()]);
                     this.chosenList = this.allLists[this.chosenListId()].listsArray[this.chosenChildIdListId()]
                 }
 

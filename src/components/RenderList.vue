@@ -276,15 +276,6 @@ export default {
                 this.listIndex = event.target.parentElement.parentElement.getAttribute('data-id')
                 this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
             }
-
-
-            if (!!this.listIndex) {
-                // this.allTasks = this.returnLists[this.listIndex].tasks
-                // this.teleportToggle = true
-                // this.$router.push({ name: 'list', params: { listId: this.listIndex } })
-            } else {
-                // console.log(event.target.parentElement);
-            }
         },
         closeRename() {
             this.showRename = !this.showRename
@@ -292,12 +283,7 @@ export default {
         renameList() {
             this.showRename = !this.showRename
             this.newName = this.listName
-            // this.$refs.listParent.addEventListener('blur', () => {
-            //     event.preventDefault()
-            //     console.log('fff');
-            // })
 
-            // this.toggleDropDown = true
         },
         newListName() {
             if (this.newName.length > 0) {
@@ -324,7 +310,6 @@ export default {
             }
         },
         MoveListTo() {
-            console.log(this.$refs.selectedGroupOfList.value);
             this.lists[this.listId].id = this.lists[this.$refs.selectedGroupOfList.value].listsArray.length
             this.lists[this.$refs.selectedGroupOfList.value].listsArray.push(this.lists[this.listId])
 
@@ -344,17 +329,6 @@ export default {
         }
     },
     watch: {
-        // lists() {
-        //     this.ReturnGroupOfListsArray = []
-        //     console.log('gg');
-        //     this.lists.forEach((list) => {
-        //         if (list.listChildren) {
-        //             if (list.listChildren) {
-        //                 this.ReturnGroupOfListsArray.push(list)
-        //             }
-        //         }
-        //     })
-        // },
         lists: {
             handler(newValue, oldValue) {
                 this.ReturnGroupOfListsArray = []

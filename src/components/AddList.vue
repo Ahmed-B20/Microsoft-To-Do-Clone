@@ -79,8 +79,6 @@ export default {
 
     methods: {
         togglePopup() {
-            console.log(this.groupOfListsName);
-
             this.showPopUp = !this.showPopUp
         },
         addList() {
@@ -144,7 +142,6 @@ export default {
             if (!this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
                 this.groupOfListsName = this.itemValue
             }
-            console.log(this.groupOfListsName);
             if (this.itemValue.length > 0 && !this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
                 this.listObj.listName = this.itemValue;
                 this.listObj.id = this.taskNumber;
@@ -203,9 +200,6 @@ export default {
                     this.showPopUp = true
                 }
             }
-
-
-            console.log('lll');
         }
     },
 };

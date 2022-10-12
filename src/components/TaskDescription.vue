@@ -163,9 +163,6 @@ export default {
     name: 'DescriptionTask',
     props: ['descriptionTaskChildList', 'descriptionTaskList', 'descriptionTaskIndex', 'element'],
     beforeMount() {
-
-        console.log(this.descriptionTaskChildList, this.descriptionTaskList);
-
         if (!!this.descriptionTaskChildList) {
             this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
                 .tasks[this.descriptionTaskIndex]
@@ -249,7 +246,6 @@ export default {
         renameTask() {
             this.showRename = !this.showRename
             this.newName = this.task.name
-            console.log('fff');
         },
         closeRename() {
             this.showRename = !this.showRename
@@ -425,13 +421,11 @@ export default {
                 setTimeout(() => {
                     this.element.classList.add('add-animation-x')
                 }, 0)
-                console.log('one');
             } else {
                 this.element.classList.remove('add-animation-x')
                 setTimeout(() => {
                     this.element.classList.add('add-animation-x')
                 }, 0)
-                console.log('one1');
             }
         },
 
@@ -487,9 +481,6 @@ export default {
             }
             // this.dropDownStepId = null
             this.completeTaskStatus = !this.completeTaskStatus
-
-            console.log(this.stepElement);
-
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             if (this.stepElement.classList.contains('add-animation-x')) {
                 this.stepElement.classList.remove('add-animation-x')
@@ -540,12 +531,10 @@ export default {
         },
         openDropDown() {
             this.toggleDropDown = !this.toggleDropDown
-            console.log(event.target.parentElement.getBoundingClientRect());
             this.dropDownStepId = event.target.parentElement.getAttribute('data-id');
             this.stepElement = event.target.parentElement
             this.top = event.target.parentElement.getBoundingClientRect().top + 35
             this.right = 35
-            console.log(this.stepElement);
 
             if (this.toggleDropDown === false) {
                 this.dropDownStepId = null
@@ -561,10 +550,6 @@ export default {
             this.toggleDropDown = false
         },
         PromoteToTask() {
-            // this.dropDownStepId = event.target.parentElement.getAttribute('data-id');
-
-            console.log(this.dropDownStepId);
-
             let today = new Date();
             let dd = String(today.getDate()).padStart(2, '0');
             let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -573,9 +558,6 @@ export default {
 
             if (!!this.descriptionTaskChildList) {
                 let step = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
-
-                console.log(step);
-
                 this.promoteTask.name = step.name
                 this.promoteTask.id = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.length
                 this.promoteTask.complete = false

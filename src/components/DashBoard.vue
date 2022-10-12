@@ -34,8 +34,6 @@ export default {
   methods: {
     myEventHandler() {
       let width = document.getElementById('main-content').offsetWidth;
-      console.log(width);
-
       if (width <= 768) {
         if (!this.toggleState) {
           this.toggleState = true

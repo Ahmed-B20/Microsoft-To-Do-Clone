@@ -333,7 +333,6 @@ export default {
         importantToggle(target) {
             if (target === 'dropdown') {
                 this.taskElement = this.$refs.taskElement[this.taskElementId]
-                console.log('dd');
             } else {
                 this.taskElement = event.target.parentElement
             }
@@ -470,13 +469,10 @@ export default {
         },
         MoveTaskTo() {
             if (!!this.childId) {
-                console.log(this.lists[this.$refs.selectedLists.value].tasks);
                 this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
-                console.log(this.lists[this.$refs.selectedLists.value].tasks);
 
                 if (this.lists[this.$refs.selectedLists.value].tasks.length > 0) {
                     let index = this.lists[this.$refs.selectedLists.value].tasks.length - 1
-                    console.log(index);
                     this.lists[this.$refs.selectedLists.value].tasks[index].id = this.lists[this.$refs.selectedLists.value].tasks.length - 1
                 } else {
                     this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks[0].id = 0

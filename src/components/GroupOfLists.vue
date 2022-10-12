@@ -131,9 +131,6 @@ export default {
             newListObj: {}
         }
     },
-    beforeMount() {
-        // console.log(this.listName);
-    },
     computed: {
         ...mapWritableState(allLists, ['lists']),
         showSlotForGroupOfList() {
@@ -189,7 +186,6 @@ export default {
         },
         closeDropDown() {
             this.toggleDropDown = false
-            console.log('fff');
         },
         deleteGroup() {
             this.lists.splice(this.groupOfListId, 1)
