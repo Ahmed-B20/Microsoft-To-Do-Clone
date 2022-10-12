@@ -329,17 +329,15 @@ export default {
         },
         importantToggle(target) {
             // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
-
             if (target === 'dropdown') {
                 this.taskElement = this.$refs.taskElement[this.taskElementId]
+                console.log('dd');
             } else {
                 this.taskElement = event.target.parentElement
             }
 
-
             this.taskElement.classList.remove('add-animation-x')
             this.taskElement.classList.remove('add-animation')
-
             if (!!this.childId) {
                 if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important) {
                     this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important = false
@@ -348,11 +346,8 @@ export default {
                         event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
                     }
 
-
                     this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
-
                     this.lists[this.listId].listsArray[this.childId].tasks.splice(event.target.getAttribute('data-id') || this.taskElementId, 1)
-
                     this.lists[this.listId].listsArray[this.childId].tasks.push(this.importantTask)
                     this.importantTask = {}
                 } else {
