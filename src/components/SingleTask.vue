@@ -229,15 +229,9 @@ export default {
     methods: {
         openDropDown() {
             event.preventDefault()
-            console.log(event.target);
-            console.log(event.target.getAttribute('data-id'));
             this.taskElementId = event.target.getAttribute('data-id')
-            console.log(this.taskElement);
-
-            console.log(this.$refs.taskElement);
-
             // this.parentElementDomRect = this.$refs.taskElement[this.taskElementId].getBoundingClientRect()
-            if (event.target.tagName === 'IMG' || (event.target.tagName === 'SPAN' && event.target.classList.contains('task-main-info'))) {
+            if (event.target.tagName === 'IMG' || (event.target.tagName === 'SPAN' && event.target.classList.contains('task-main-info') || event.target.classList.contains('check'))) {
                 this.parentElementDomRect = event.target.parentElement.getBoundingClientRect()
             } else if (event.target.tagName === 'LI') {
                 this.parentElementDomRect = event.target.getBoundingClientRect()
@@ -245,12 +239,9 @@ export default {
                 this.parentElementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
             }
 
-            console.log(this.$refs.taskElement[this.taskElementId]);
-
+            let x = this.$refs.taskElement[this.taskElementId].getBoundingClientRect()
             this.top = this.parentElementDomRect.top + 60
-
-            // this.left = event.clientX 
-            this.left = (this.parentElementDomRect.width / 2) - 100
+            this.left = (x.width / 2) - 100
             this.toggleDropDown = !this.toggleDropDown
         },
         closeDropDown() {
@@ -317,25 +308,20 @@ export default {
         deleteTask() {
             if (!!this.childId) {
                 this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
-
                 this.lists[this.listId].listsArray[this.childId].tasks.forEach((list, index) => {
                     if (index >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
             } else {
-                console.log(this.lists[this.listId].tasks[this.taskElementId]);
                 this.lists[this.listId].tasks.splice(this.taskElementId, 1)
-
                 this.lists[this.listId].tasks.forEach((list, index) => {
                     if (index >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
             }
-
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
             this.toggleDropDown = false
             this.taskElementId = null
             this.parentElementDomRect = null
@@ -409,7 +395,6 @@ export default {
             this.parentElementDomRect = null
         },
         completeTask(target) {
-            console.log(this.$refs.taskElement[this.taskElementId]);
             if (!!this.childId) {
                 if (event.target.tagName === 'SPAN') {
                     if (target === 'dropdown') {
@@ -417,8 +402,6 @@ export default {
                     } else {
                         this.taskElement = event.target.parentElement
                     }
-
-                    console.log(this.taskElement);
                     if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete) {
                         this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = false
                     } else {
@@ -430,9 +413,6 @@ export default {
                     } else {
                         this.taskElement = event.target.parentElement
                     }
-
-                    console.log(this.taskElement);
-
                     if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete) {
                         this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = false
                     } else {
@@ -441,15 +421,11 @@ export default {
                 }
             } else {
                 if (event.target.tagName === 'SPAN') {
-                    console.log(this.taskElement);
-
                     if (target === 'dropdown') {
                         this.taskElement = this.$refs.taskElement[this.taskElementId]
                     } else {
                         this.taskElement = event.target.parentElement
                     }
-
-                    console.log(this.taskElement);
 
                     if (this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete) {
                         this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = false
@@ -463,8 +439,6 @@ export default {
                         this.taskElement = event.target.parentElement
                     }
 
-                    console.log(this.taskElement);
-
                     if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete) {
                         this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = false
                     } else {
@@ -472,29 +446,21 @@ export default {
                     }
                 }
             }
-
             this.completeTaskStatus = !this.completeTaskStatus
-
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
             this.toggleDropDown = false
             this.taskElementId = null
             this.parentElementDomRect = null
-
-            console.log(this.taskElement);
-
             if (this.taskElement.classList.contains('add-animation-x')) {
                 this.taskElement.classList.remove('add-animation-x')
                 setTimeout(() => {
                     this.taskElement.classList.add('add-animation-x')
                 }, 0)
-                console.log('one');
             } else {
                 this.taskElement.classList.remove('add-animation-x')
                 setTimeout(() => {
                     this.taskElement.classList.add('add-animation-x')
                 }, 0)
-                console.log('one1');
             }
         }
     }
