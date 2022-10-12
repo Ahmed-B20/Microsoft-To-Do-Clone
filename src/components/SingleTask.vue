@@ -160,11 +160,11 @@ export default {
         DropDown
     },
     beforeMount() {
-        this.lists.forEach((list) => {
+        this.lists.forEach((list, index) => {
             if (list.listChildren === false) {
-                // if (list.listChildren) {
-                this.ReturnAllListsArray.push(list)
-                // }
+                if (index != this.listId) {
+                    this.ReturnAllListsArray.push(list)
+                }
             }
         })
     },
@@ -239,11 +239,11 @@ export default {
         lists: {
             handler(newValue, oldValue) {
                 this.ReturnAllListsArray = []
-                this.lists.forEach((list) => {
+                this.lists.forEach((list, index) => {
                     if (list.listChildren === false) {
-                        // if (list.listChildren) {
-                        this.ReturnAllListsArray.push(list)
-                        // }
+                        if (index != this.listId) {
+                            this.ReturnAllListsArray.push(list)
+                        }
                     }
                 })
             },
@@ -254,7 +254,6 @@ export default {
         openDropDown() {
             event.preventDefault()
             this.taskElementId = event.target.getAttribute('data-id')
-            // this.parentElementDomRect = this.$refs.taskElement[this.taskElementId].getBoundingClientRect()
             if (event.target.tagName === 'IMG' || (event.target.tagName === 'SPAN' && event.target.classList.contains('task-main-info') || event.target.classList.contains('check'))) {
                 this.parentElementDomRect = event.target.parentElement.getBoundingClientRect()
             } else if (event.target.tagName === 'LI') {
@@ -308,18 +307,6 @@ export default {
                 this.shrink = !this.toggleShrink
                 this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
             }
-            // this.shrink = !this.shrink
-            // this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
-            // this.taskElement = event.target.getAttribute('data-id')
-            // if (+this.taskElement != +this.oldtaskElement) {
-            //     this.oldtaskElement = event.target.getAttribute('data-id')
-            //     this.shrink = true
-            //     this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
-            // } else {
-            //     this.shrink = false
-            //     this.oldtaskElement = 0
-            //     this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
-            // }
         },
         deleteTask() {
             if (!!this.childId) {
@@ -344,7 +331,6 @@ export default {
             this.showPopUp = !this.showPopUp
         },
         importantToggle(target) {
-            // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]
             if (target === 'dropdown') {
                 this.taskElement = this.$refs.taskElement[this.taskElementId]
                 console.log('dd');
@@ -418,7 +404,6 @@ export default {
                     }
                 } else {
                     if (target === 'dropdown') {
-                        // this.taskElement = this.$refs.taskElement[this.taskElementId]
                         this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
                                 this.taskElement = task
@@ -436,7 +421,6 @@ export default {
             } else {
                 if (event.target.tagName === 'SPAN') {
                     if (target === 'dropdown') {
-                        // this.taskElement = this.$refs.taskElement[this.taskElementId]
                         this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
                                 this.taskElement = task
@@ -452,7 +436,6 @@ export default {
                     }
                 } else {
                     if (target === 'dropdown') {
-                        // this.taskElement = this.$refs.taskElement[this.taskElementId]
                         this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
                                 this.taskElement = task
@@ -487,12 +470,6 @@ export default {
         },
         MoveTaskTo() {
             if (!!this.childId) {
-                // this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
-
-                // this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks[+this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length - 1].id = this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length
-
-                // this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
-
                 console.log(this.lists[this.$refs.selectedLists.value].tasks);
                 this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
                 console.log(this.lists[this.$refs.selectedLists.value].tasks);
@@ -521,27 +498,6 @@ export default {
             this.parentElementDomRect = null
             this.showPopUp = !this.showPopUp
             this.moveTaskToggle = !this.moveTaskToggle
-
-
-
-
-            // console.log(this.$refs.selectedLists.value);
-            // this.lists[this.listId].id = this.lists[this.$refs.selectedLists.value].listsArray.length
-            // this.lists[this.$refs.selectedLists.value].listsArray.push(this.lists[this.listId])
-
-            // this.lists.splice(this.listId, 1)
-
-            // this.lists.forEach((list, index) => {
-            //     if (index >= this.listId) {
-            //         list.id = list.id - 1
-            //     }
-            // })
-
-            // localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-            // this.toggleDropDown = false
-            // this.showPopUp = !this.showPopUp
-            // this.listId = null
-            // this.moveGroupListToggle = !this.moveGroupListToggle
         }
     }
 }
