@@ -133,7 +133,7 @@
     }
 }
 
-.view-content-container .tasks li {
+.view-content-container .tasks li:not(.drop-down ul li) {
     background-color: white;
     border-radius: 3px;
     padding: 5px 10px;

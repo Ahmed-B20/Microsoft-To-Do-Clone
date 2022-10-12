@@ -3,7 +3,7 @@
         <div class="pop-up-container">
             <transition name="pop-up-toggle">
                 <div v-if="showPopUp" class="pop-up-content">
-                    <h1 class="title">
+                    <h1 class="popup-title">
                         <slot name="title"></slot>
                     </h1>
 

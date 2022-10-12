@@ -32,7 +32,7 @@
     border-radius: 4px;
 }
 
-.pop-up-parent .pop-up-container .pop-up-content h1.title {
+.pop-up-parent .pop-up-container .pop-up-content h1.popup-title {
     font-size: 25px;
     font-weight: bolder;
     text-align: center;

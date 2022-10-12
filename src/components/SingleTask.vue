@@ -2,7 +2,7 @@
     <transition-group name="tasks-transition">
         <li ref="taskElement" @contextmenu.self="openDropDown" @click.self="openDescription"
             :class="{complete: task.complete}" v-for="(task,index) in returnAllTasks" :key="task.id" :data-id="index">
-            <span :data-id="index" @click="completeTask" class="check">
+            <span @contextmenu="openDropDown" :data-id="index" @click="completeTask" class="check">
                 <img src="@/assets/design-material/icons/check.png" alt="check" />
             </span>
 
@@ -36,7 +36,7 @@
 
     <transition name="to-bottom">
         <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left" v-if="toggleDropDown">
-            <template #RenameList>
+            <template #RenameTask>
                 <div class="renameList" @click.self="renameList">
                     <template v-if="showRename">
                         <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
@@ -53,24 +53,59 @@
                 </div>
             </template>
 
-            <template #MoveListTo v-if="ReturnGroupOfLists">
+            <template #MarkAsImportant>
                 <div @click="togglePopUp('move')">
                     <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
                     <span>Move list to...</span>
                 </div>
             </template>
 
-            <template #DuplicateList>
+            <template #MarkAsComplete>
                 <div @click="DuplicateList">
                     <img src="@/assets/design-material/icons/copy.png" alt="">
                     <span>Duplicate list</span>
                 </div>
             </template>
 
-            <template #DeleteList>
+            <template #AddToMyDay>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/copy.png" alt="">
+                    <span>Duplicate list</span>
+                </div>
+            </template>
+
+            <template #DueToday>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/copy.png" alt="">
+                    <span>Duplicate list</span>
+                </div>
+            </template>
+
+            <template #DueTomorrow>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/copy.png" alt="">
+                    <span>Duplicate list</span>
+                </div>
+            </template>
+
+            <template #PickADate>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/copy.png" alt="">
+                    <span>Duplicate list</span>
+                </div>
+            </template>
+
+            <template #MoveTaskTo v-if="ReturnGroupOfLists">
+                <div @click="togglePopUp('move')">
+                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
+                    <span>Move list to...</span>
+                </div>
+            </template>
+
+            <template #DeleteTask>
                 <div @click="togglePopUp('delete')">
                     <img src="@/assets/design-material/icons/delete.png" alt="">
-                    <span>Delete list</span>
+                    <span>Delete Task</span>
                 </div>
             </template>
         </DropDown>
@@ -78,11 +113,11 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            {{target=== 'move'? 'Move List': 'Delete List'}}
+            {{target=== 'move'? 'Move Task': 'Delete Task'}}
         </template>
 
         <template v-slot:content>
-            <div v-if="moveGroupListToggle" class="select-parent">
+            <div v-if="moveTaskToggle" class="select-parent">
                 <select ref="selectedGroupOfList" name="" id="">
                     <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
                         :value="groupOfList.id">
@@ -91,13 +126,13 @@
                 </select>
             </div>
             <p v-else>
-                list {{listName}} will be permanently deleted
+                Task {{listName}} will be permanently deleted
             </p>
         </template>
 
         <template #button>
-            <button v-if="moveGroupListToggle" class="move" @click="MoveListTo">Move</button>
-            <button v-else class="delete" @click="deleteList">Delete</button>
+            <button v-if="moveTaskToggle" class="move" @click="MoveListTo">Move</button>
+            <button v-else class="delete" @click="deleteTask">Delete</button>
             <button class="close" @click="closePopUp">Cancel</button>
         </template>
     </PopUp>
@@ -140,10 +175,10 @@ export default {
             taskElement: '',
             oldTaskId: 0,
             stepsCount: 0,
-            dropDownSlots: ['RenameList', 'MoveListTo', 'DuplicateList', 'DeleteList'],
+            dropDownSlots: ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'PickADate', 'MoveTaskTo', 'DeleteTask'],
             toggleDropDown: false,
             showPopUp: false,
-            taskElement: null
+            taskElement: null,
         }
     },
     watch: {
@@ -169,8 +204,8 @@ export default {
     methods: {
         openDropDown() {
             event.preventDefault()
-            console.log(this.$refs.taskElement);
             this.taskElement = event.target.getAttribute('data-id')
+            console.log(this.taskElement);
             this.parentElementDomRect = this.$refs.taskElement[this.taskElement].getBoundingClientRect()
 
             this.top = this.parentElementDomRect.top + 60
@@ -181,7 +216,23 @@ export default {
         },
         closeDropDown() {
             this.toggleDropDown = false
-            this.moveGroupListToggle = false
+            this.moveTaskToggle = false
+        },
+        togglePopUp(target) {
+            if (target === 'move') {
+                this.moveTaskToggle = !this.moveTaskToggle
+                this.showPopUp = !this.showPopUp
+                this.target = 'move'
+            } else {
+                this.showPopUp = !this.showPopUp
+                this.target = 'delete'
+            }
+        },
+        closePopUp() {
+            this.showPopUp = !this.showPopUp
+            this.toggleDropDown = !this.toggleDropDown
+            this.moveTaskToggle = false
+            this.target = ''
         },
         openDescription() {
             this.taskElement = event.target
@@ -222,6 +273,34 @@ export default {
             //     this.oldtaskElement = 0
             //     this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink)
             // }
+        },
+        deleteTask() {
+
+            if (!!this.childId) {
+                this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElement, 1)
+
+                this.lists[this.listId].listsArray[this.childId].tasks.forEach((list, index) => {
+                    if (index >= this.taskElement) {
+                        list.id = list.id - 1
+                    }
+                })
+            } else {
+                console.log(this.lists[this.listId].tasks[this.taskElement]);
+                this.lists[this.listId].tasks.splice(this.taskElement, 1)
+
+                this.lists[this.listId].tasks.forEach((list, index) => {
+                    if (index >= this.taskElement) {
+                        list.id = list.id - 1
+                    }
+                })
+            }
+
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+            this.toggleDropDown = false
+            this.taskElement = null
+            this.showPopUp = !this.showPopUp
         },
         importantToggle() {
             // this.lists[this.listId].tasks[event.target.getAttribute('data-id')]

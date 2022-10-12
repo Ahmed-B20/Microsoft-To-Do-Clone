@@ -1,7 +1,6 @@
 <template>
     <div class="view-content-container">
         <div class="title">
-
             <div class="toggle">
                 <slot name="toggle-sidebar">
                     <img @click.self="toggleAside" src="@/assets/design-material/icons/menu.png" alt="open-sidebar">
@@ -11,16 +10,12 @@
             <h1>
                 <slot name="title"></slot>
             </h1>
-
             <slot name="toggle-description"></slot>
         </div>
-
 
         <ul class="tasks">
             <slot name="allTaskSlot"></slot>
         </ul>
-
-
         <AddTask />
     </div>
 </template>
