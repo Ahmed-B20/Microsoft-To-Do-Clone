@@ -364,10 +364,12 @@ export default {
                     this.lists[this.listId].listsArray[this.childId].tasks.push(this.importantTask)
                     this.importantTask = {}
                 } else {
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
-                    this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')].important = true
-                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id')]
-                    this.lists[this.listId].listsArray[this.childId].tasks.splice(event.target.getAttribute('data-id'), 1)
+                    if (!!event.target.getAttribute('src')) {
+                        event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+                    }
+                    this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important = true
+                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
+                    this.lists[this.listId].listsArray[this.childId].tasks.splice(event.target.getAttribute('data-id') || this.taskElementId, 1)
                     this.lists[this.listId].listsArray[this.childId].tasks.unshift(this.importantTask)
                     this.importantTask = {}
                 }
@@ -491,15 +493,18 @@ export default {
 
                 // this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
 
+                console.log(this.lists[this.$refs.selectedLists.value].tasks);
+                this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
+                console.log(this.lists[this.$refs.selectedLists.value].tasks);
 
-                this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
-                if (this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length > 0) {
-                    let index = this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length - 1
-                    this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks[index].id = this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.length - 1
+                if (this.lists[this.$refs.selectedLists.value].tasks.length > 0) {
+                    let index = this.lists[this.$refs.selectedLists.value].tasks.length - 1
+                    console.log(index);
+                    this.lists[this.$refs.selectedLists.value].tasks[index].id = this.lists[this.$refs.selectedLists.value].tasks.length - 1
                 } else {
                     this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks[0].id = 0
                 }
-                this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
+                this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
             } else {
                 this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].tasks[this.taskElementId])
                 if (+this.lists[this.$refs.selectedLists.value].tasks.length > 0) {
