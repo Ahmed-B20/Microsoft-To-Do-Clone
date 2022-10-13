@@ -1,6 +1,6 @@
 <template>
     <keep-alive>
-        <content-view :class="[toggleShrink? 'shrink': 'grow']" :key="listId">
+        <content-view ref="tasksParent" :class="[toggleShrink? 'shrink': 'grow']" :key="listId">
             <template #toggle-sidebar>
                 <button @click="openSideBarDescription">
                     <img src="@/assets/design-material/icons/menu.png" alt="open-sidebar">

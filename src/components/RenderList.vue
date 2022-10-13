@@ -61,7 +61,7 @@
                         </template>
 
                         <template #DeleteList>
-                            <div @click="togglePopUp('delete')">
+                            <div class="delete" @click="togglePopUp('delete')">
                                 <img src="@/assets/design-material/icons/delete.png" alt="">
                                 <span>Delete list</span>
                             </div>

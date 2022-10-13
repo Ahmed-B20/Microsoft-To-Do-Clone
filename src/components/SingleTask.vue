@@ -113,7 +113,7 @@
             </template>
 
             <template #DeleteTask>
-                <div @click="togglePopUp('delete')">
+                <div class="delete" @click="togglePopUp('delete')">
                     <img src="@/assets/design-material/icons/delete.png" alt="">
                     <span>Delete Task</span>
                 </div>
@@ -266,10 +266,15 @@ export default {
                 this.parentElementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
             }
             let x = this.$refs.taskElement[this.taskElementId].getBoundingClientRect()
-            this.top = this.parentElementDomRect.top + 60
+            if (this.parentElementDomRect.top > 350) {
+                this.top = this.parentElementDomRect.top - 357
+            } else {
+                this.top = this.parentElementDomRect.top + 60
+            }
             this.left = (x.width / 2) - 100
             this.toggleDropDown = !this.toggleDropDown
 
+            console.log(this.parentElementDomRect);
 
             if (!!this.childId) {
                 this.taskName = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name

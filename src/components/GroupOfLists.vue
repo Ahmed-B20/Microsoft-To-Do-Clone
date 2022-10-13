@@ -54,7 +54,7 @@
             </template>
 
             <template v-if="!showSlotForGroupOfList" #DeleteGroup>
-                <div @click="togglePopUp">
+                <div class="delete" @click="togglePopUp">
                     <img src="@/assets/design-material/icons/delete.png" alt="">
                     <span>Delete group</span>
                 </div>
@@ -138,8 +138,10 @@ export default {
         ...mapWritableState(allLists, ['lists']),
         showSlotForGroupOfList() {
             if (this.lists[this.groupOfListId].listsArray.length > 0) {
+                this.dropDownSlots.splice(3, 1)
                 return true
             } else {
+                this.dropDownSlots.splice(2, 1)
                 return false
             }
         }
@@ -149,7 +151,7 @@ export default {
             this.showPopUp = !this.showPopUp
         },
         toggleGroup() {
-            
+
             if (this.lists[this.parentId].toggleChildList) {
                 this.lists[this.parentId].toggleChildList = false
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
@@ -188,7 +190,7 @@ export default {
             if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
             } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
-                this.top = this.elementDomRect.top - this.parentElementDomRect.top - 120
+                this.top = this.elementDomRect.top - this.parentElementDomRect.top - 127
             } else {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
             }

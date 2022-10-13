@@ -237,11 +237,14 @@
     z-index: 1;
 }
 
-.toggle-group-of-list-enter-active,
-.toggle-group-of-list-leave-active {
+.toggle-group-of-list-enter-active {
     transition: all 0.2s linear;
     /* transform: translateY(0); */
-    margin-top: 0;
+    /* margin-top: 0; */
+}
+
+.toggle-group-of-list-leave-active {
+    transition: all 0.2s linear;
 }
 
 .toggle-group-of-list-enter-from,
