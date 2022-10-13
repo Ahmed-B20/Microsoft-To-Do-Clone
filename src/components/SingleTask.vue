@@ -185,7 +185,8 @@ export default {
             showRename: false,
             newName: '',
             taskName: '',
-            toggleError: false
+            toggleError: false,
+            thisTask: null
         }
     },
     computed: {
@@ -274,7 +275,6 @@ export default {
             this.left = (x.width / 2) - 100
             this.toggleDropDown = !this.toggleDropDown
 
-            console.log(this.parentElementDomRect);
 
             if (!!this.childId) {
                 this.taskName = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name
@@ -403,6 +403,8 @@ export default {
         completeTask(target) {
             if (!!this.childId) {
                 if (event.target.tagName === 'SPAN') {
+                    this.thisTask = event.target.getAttribute('data-id') || this.taskElementId
+
                     if (target === 'dropdown') {
                         this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
@@ -418,6 +420,8 @@ export default {
                         this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = true
                     }
                 } else {
+                    this.thisTask = event.target.parentElement.getAttribute('data-id') || this.taskElementId
+
                     if (target === 'dropdown') {
                         this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
@@ -433,6 +437,14 @@ export default {
                         this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = true
                     }
                 }
+
+                this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex].steps.forEach((step) => {
+                    if (this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].complete) {
+                        step.complete = true
+                    } else {
+                        step.complete = false
+                    }
+                })
             } else {
                 if (event.target.tagName === 'SPAN') {
                     if (target === 'dropdown') {
@@ -449,6 +461,8 @@ export default {
                     } else {
                         this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = true
                     }
+                    this.thisTask = event.target.getAttribute('data-id') || this.taskElementId
+
                 } else {
                     if (target === 'dropdown') {
                         this.$refs.taskElement.forEach((task) => {
@@ -464,7 +478,18 @@ export default {
                     } else {
                         this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = true
                     }
+                    this.thisTask = event.target.parentElement.getAttribute('data-id') || this.taskElementId
+
                 }
+
+                this.lists[this.listId].tasks[this.thisTask].steps.forEach((step) => {
+                    if (this.lists[this.listId].tasks[this.thisTask].complete) {
+                        step.complete = true
+                    } else {
+                        step.complete = false
+                    }
+                })
+
             }
             this.completeTaskStatus = !this.completeTaskStatus
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
