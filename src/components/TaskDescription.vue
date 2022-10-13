@@ -207,7 +207,8 @@ export default {
             dropDownSlots: ['MarkAsComplete', 'PromoteToTask', 'DeleteStep'],
             dropDownStepId: null,
             promoteTask: {},
-            step: {}
+            step: {},
+            completeStepsArray: []
         }
     },
     computed: {
@@ -393,6 +394,14 @@ export default {
                         this.taskIndex = index
                     }
                 })
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps.forEach((step) => {
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete) {
+                        step.complete = true
+                    } else {
+                        step.complete = false
+                    }
+                })
             } else {
                 if (event.target.tagName === 'SPAN') {
                     if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
@@ -412,6 +421,14 @@ export default {
                 this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
                     if (singleTask.id == this.task.id) {
                         this.taskIndex = index
+                    }
+                })
+
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps.forEach((step) => {
+                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
+                        step.complete = true
+                    } else {
+                        step.complete = false
                     }
                 })
             }
@@ -454,6 +471,41 @@ export default {
                         }
                     }
                 }
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps.forEach((step, _, arr) => {
+                    if (step.complete) {
+                        this.completeStepsArray.push(step)
+
+                        if (this.completeStepsArray.length === arr.length) {
+                            this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete = true
+
+                            if (this.element.classList.contains('add-animation-x')) {
+                                this.element.classList.remove('add-animation-x')
+                                setTimeout(() => {
+                                    this.element.classList.add('add-animation-x')
+                                }, 0)
+                            } else {
+                                this.element.classList.remove('add-animation-x')
+                                setTimeout(() => {
+                                    this.element.classList.add('add-animation-x')
+                                }, 0)
+                            }
+
+                            this.completeStepsArray = []
+                        } else {
+                            if (this.completeStepsArray.length !== arr.length) {
+                                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete = false
+                                if (this.element.classList.contains('add-animation-x')) {
+                                    this.element.classList.remove('add-animation-x')
+                                    setTimeout(() => {
+                                        this.element.classList.add('add-animation-x')
+                                    }, 0)
+                                }
+                                this.completeStepsArray = []
+                            }
+                        }
+                    }
+                })
             } else {
                 if (!!this.dropDownStepId) {
                     if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps[this.dropDownStepId].complete) {
@@ -478,6 +530,38 @@ export default {
                         }
                     }
                 }
+
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps.forEach((step, index, arr) => {
+                    if (step.complete) {
+                        this.completeStepsArray.push(step)
+                        if (this.completeStepsArray.length === arr.length) {
+                            this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = true
+                            if (this.element.classList.contains('add-animation-x')) {
+                                this.element.classList.remove('add-animation-x')
+                                setTimeout(() => {
+                                    this.element.classList.add('add-animation-x')
+                                }, 0)
+                            } else {
+                                this.element.classList.remove('add-animation-x')
+                                setTimeout(() => {
+                                    this.element.classList.add('add-animation-x')
+                                }, 0)
+                            }
+                            this.completeStepsArray = []
+                        }
+                    } else {
+                        if (this.completeStepsArray.length !== arr.length) {
+                            this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
+                            if (this.element.classList.contains('add-animation-x')) {
+                                this.element.classList.remove('add-animation-x')
+                                setTimeout(() => {
+                                    this.element.classList.add('add-animation-x')
+                                }, 0)
+                            }
+                            this.completeStepsArray = []
+                        }
+                    }
+                })
             }
             // this.dropDownStepId = null
             this.completeTaskStatus = !this.completeTaskStatus
