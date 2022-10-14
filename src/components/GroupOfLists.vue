@@ -70,15 +70,17 @@
             <template #RenameList>
                 <div class="renameList" @click.self="renameChildList">
                     <template v-if="showChildRename">
-                        <img @click="newChildListName" class="renameTask" :class="{ active: itemDetect }"
+                        <img @click="newChildListNameFun" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input @keyup.enter="newChildListName" required @focus="toggleErrorClass" v-model="newName"
+                        <input @keyup.enter="newChildListNameFun" required @focus="toggleErrorClass" v-model="newName"
                             placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
-                        <img @click="closeChildRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                        <img @click="closeChildRename" src="@/assets/design-material/icons/close.png"
+                            alt="close rename" />
                     </template>
 
                     <template v-else>
-                        <img @click="renameChildList" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                        <img @click="renameChildList" src="@/assets/design-material/icons/rename.png"
+                            alt="rename task" />
                         <span @click="renameChildList">Rename List</span>
                     </template>
                 </div>
@@ -112,13 +114,15 @@
     <transition name="toggle-group-of-list">
         <ul v-if="groupOfListsToggle || lists[parentId].toggleChildList">
             <transition-group name="render-list">
-                <li @contextmenu.self="openDropDown('childList')" @click="showListTasks" :data-name="childrenList.listName"
-                    :data-id="childrenList.id" v-for="childrenList in childrenListsArray" :key="childrenList.id">
+                <li @contextmenu.self="openDropDown('childList')" @click="showListTasks"
+                    :data-name="childrenList.listName" :data-id="childrenList.id"
+                    v-for="childrenList in childrenListsArray" :key="childrenList.id">
                     <p @contextmenu="openDropDown('childList')" :data-name="childrenList.listName"
                         :data-id="childrenList.id">
                         <img :data-name="childrenList.listName" :data-id="childrenList.id"
                             src="@/assets/design-material/icons/menu.png" alt="single-list">
-                        <span :data-name="childrenList.listName" :data-id="childrenList.id">{{childrenList.listName}}</span>
+                        <span :data-name="childrenList.listName"
+                            :data-id="childrenList.id">{{childrenList.listName}}</span>
 
                         <span v-if="childrenList.tasks.length > 0" class="tasks-count">
                             {{childrenList.tasks.length}}
@@ -136,7 +140,8 @@
         </template>
 
         <template #content>
-            {{deleteTarget === 'deleteList'?`Child list: ${selectedChildListName} will be permanently deleted`:`Group of list:
+            {{deleteTarget === 'deleteList'?`Child list: ${selectedChildListName} will be permanently deleted`:`Group of
+            list:
             ${listName} will
             be permanently deleted`}}
 
@@ -202,7 +207,7 @@ export default {
             selectedChildListName: '',
             DuplicatedList: {},
             deleteTarget: '',
-            newChildListName:''
+            newChildListName: ''
         }
     },
     computed: {
@@ -257,7 +262,7 @@ export default {
                     this.groupOfListId = event.target.parentElement.parentElement.getAttribute('data-id')
                     this.groupOfListName = event.target.parentElement.parentElement.getAttribute('data-name')
                     this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
-                } else {
+                } else if (target === 'childList') {
                     if (event.target.tagName === 'P') {
                         this.selectedChildListId = event.target.parentElement.getAttribute('data-id')
                         this.selectedChildListName = event.target.parentElement.getAttribute('data-name')
@@ -274,7 +279,7 @@ export default {
                     this.groupOfListId = event.target.parentElement.parentElement.parentElement.getAttribute('data-id')
                     this.groupOfListName = event.target.parentElement.parentElement.parentElement.getAttribute('data-name')
                     this.elementDomRect = event.target.parentElement.parentElement.parentElement.getBoundingClientRect()
-                } else {
+                } else if (target === 'childList') {
                     this.selectedChildListId = event.target.parentElement.parentElement.getAttribute('data-id')
                     this.selectedChildListName = event.target.parentElement.parentElement.getAttribute('data-name')
                     this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
@@ -284,7 +289,7 @@ export default {
                     this.groupOfListId = event.target.parentElement.getAttribute('data-id')
                     this.groupOfListName = event.target.parentElement.getAttribute('data-name')
                     this.elementDomRect = event.target.parentElement.getBoundingClientRect()
-                } else {
+                } else if (target === 'childList') {
                     this.selectedChildListId = event.target.getAttribute('data-id')
                     this.selectedChildListName = event.target.getAttribute('data-name')
                     this.elementDomRect = event.target.getBoundingClientRect()
@@ -305,7 +310,7 @@ export default {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
                 }
                 this.left = 38.5
-            } else {
+            } else if (target === 'childList') {
                 this.parentElementDomRect = this.$refs.groupOfLists.getBoundingClientRect()
                 this.theColor = target
                 this.toggleDropDown = !this.toggleDropDown
@@ -462,10 +467,11 @@ export default {
         },
         renameChildList() {
             this.showChildRename = !this.showChildRename
+            console.log(this.selectedChildListName);
             this.newChildListName = this.selectedChildListName
             console.log(this.showChildRename);
         },
-        newChildListName() {
+        newChildListNameFun() {
             if (this.newChildListName.length > 0) {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.parentId].listsArray[this.selectedChildListId] = this.newChildListName
