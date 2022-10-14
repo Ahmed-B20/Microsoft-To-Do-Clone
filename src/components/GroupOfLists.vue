@@ -151,7 +151,6 @@ export default {
             this.showPopUp = !this.showPopUp
         },
         toggleGroup() {
-
             if (this.lists[this.parentId].toggleChildList) {
                 this.lists[this.parentId].toggleChildList = false
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
