@@ -283,7 +283,6 @@ export default {
         renameList() {
             this.showRename = !this.showRename
             this.newName = this.listName
-
         },
         newListName() {
             if (this.newName.length > 0) {
