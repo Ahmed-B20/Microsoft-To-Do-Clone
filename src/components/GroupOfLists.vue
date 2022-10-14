@@ -1,6 +1,7 @@
 <template>
     <!-- tabindex="0" @blur="closeDropDown" -->
-    <div ref="groupOfLists" @contextmenu="openDropDown" @click="toggleGroup" class="group-of-lists-controller">
+    <div ref="groupOfLists" @contextmenu="openDropDown('parentList')" @click="toggleGroup"
+        class="group-of-lists-controller">
         <p>
             <img src="@/assets/design-material/icons/tab.png" alt="single-list">
             {{listName}}
@@ -11,7 +12,8 @@
     </div>
 
     <transition name="to-bottom">
-        <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left" v-if="toggleDropDown">
+        <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left"
+            v-if="toggleDropDown && theColor === 'parentList'">
             <template #RenameGroup>
                 <div class="renameList" @click.self="renameGroup">
                     <template v-if="showRename">
@@ -62,14 +64,58 @@
         </DropDown>
     </transition>
 
+    <transition name="to-bottom">
+        <DropDown :dropDownSlots="dropDownSlotsChildList" :bottom="bottom" :top="top" :left="left"
+            v-if="toggleDropDown && theColor === 'childList'">
+            <template #RenameList>
+                <div class="renameList" @click.self="renameList">
+                    <template v-if="showRename">
+                        <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                            src="@/assets/design-material/icons/plus.png" alt="add-item" />
+                        <input @keyup.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
+                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                    </template>
+
+                    <template v-else>
+                        <img @click="renameList" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                        <span @click="renameList">Rename List</span>
+                    </template>
+                </div>
+            </template>
+
+            <template #MoveListTo v-if="ReturnGroupOfLists">
+                <div @click="togglePopUp('move')">
+                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
+                    <span>Move list to...</span>
+                </div>
+            </template>
+
+            <template #DuplicateList>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/copy.png" alt="">
+                    <span>Duplicate list</span>
+                </div>
+            </template>
+
+            <template #DeleteList>
+                <div class="delete" @click="togglePopUp('delete')">
+                    <img src="@/assets/design-material/icons/delete.png" alt="">
+                    <span>Delete list</span>
+                </div>
+            </template>
+        </DropDown>
+    </transition>
+
     <!-- <transition name="toggle-group-of-list"> -->
     <!-- <ul :class="{active:groupOfListsToggle}"> -->
     <transition name="toggle-group-of-list">
         <ul v-if="groupOfListsToggle || lists[parentId].toggleChildList">
             <transition-group name="render-list">
-                <li @contextmenu.self="openListDropDown" @click="showListTasks" :data-name="childrenList.name"
+                <li @contextmenu.self="openDropDown('childList')" @click="showListTasks" :data-name="childrenList.name"
                     :data-id="childrenList.id" v-for="childrenList in childrenListsArray" :key="childrenList.id">
-                    <p @contextmenu.self="openListDropDown" :data-name="childrenList.name" :data-id="childrenList.id">
+                    <p @contextmenu="openDropDown('childList')" :data-name="childrenList.name"
+                        :data-id="childrenList.id">
                         <img :data-name="childrenList.name" :data-id="childrenList.id"
                             src="@/assets/design-material/icons/menu.png" alt="single-list">
                         <span :data-name="childrenList.name" :data-id="childrenList.id">{{childrenList.listName}}</span>
@@ -113,12 +159,22 @@ export default {
         PopUp,
         DropDown
     },
+    beforeMount() {
+        this.lists.forEach((list) => {
+            if (list.listChildren) {
+                if (list.listChildren) {
+                    this.ReturnGroupOfListsArray.push(list)
+                }
+            }
+        })
+    },
     data() {
         return {
             groupOfListsToggle: false,
             listNameRoute: '',
             listIndex: 0,
             dropDownSlots: ['RenameGroup', 'NewList', 'UngroupLists', 'DeleteGroup'],
+            dropDownSlotsChildList: ['RenameList', 'MoveListTo', 'DuplicateList', 'DeleteList'],
             toggleDropDown: false,
             showPopUp: false,
             elementDomRect: null,
@@ -131,7 +187,12 @@ export default {
             toggleError: false,
             showAddNewList: false,
             newListName: '',
-            newListObj: {}
+            newListObj: {},
+            theColor: '',
+            ReturnGroupOfListsArray: [],
+            top: null,
+            bottom: null,
+            left: null
         }
     },
     computed: {
@@ -142,6 +203,13 @@ export default {
                 return true
             } else {
                 this.dropDownSlots.splice(2, 1)
+                return false
+            }
+        },
+        ReturnGroupOfLists() {
+            if (this.ReturnGroupOfListsArray.length > 0) {
+                return true
+            } else {
                 return false
             }
         }
@@ -165,35 +233,77 @@ export default {
             this.teleportToggle = true
             this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex, closeDescription: false } })
         },
-        openDropDown() {
+        openDropDown(target) {
             event.preventDefault()
 
-            this.parentElementDomRect = this.$refs.groupOfLists.parentElement.parentElement.getBoundingClientRect()
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'P') {
-                this.groupOfListId = event.target.parentElement.parentElement.getAttribute('data-id')
-                this.groupOfListName = event.target.parentElement.parentElement.getAttribute('data-name')
+                if (target === 'parentList') {
+                    this.groupOfListId = event.target.parentElement.parentElement.getAttribute('data-id')
+                    this.groupOfListName = event.target.parentElement.parentElement.getAttribute('data-name')
+                    this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
+                } else {
+                    if (event.target.tagName === 'P') {
+                        this.groupOfListId = event.target.parentElement.getAttribute('data-id')
+                        this.groupOfListName = event.target.parentElement.getAttribute('data-name')
+                        this.elementDomRect = event.target.parentElement.getBoundingClientRect()
+                    } else {
+                        this.groupOfListId = event.target.parentElement.parentElement.getAttribute('data-id')
+                        this.groupOfListName = event.target.parentElement.parentElement.getAttribute('data-name')
+                        this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
+                    }
+                }
 
-                this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
             } else if (event.target.tagName === 'IMG') {
-                this.groupOfListId = event.target.parentElement.parentElement.parentElement.getAttribute('data-id')
-                this.groupOfListName = event.target.parentElement.parentElement.parentElement.getAttribute('data-name')
-
-                this.elementDomRect = event.target.parentElement.parentElement.parentElement.getBoundingClientRect()
+                if (target === 'parentList') {
+                    this.groupOfListId = event.target.parentElement.parentElement.parentElement.getAttribute('data-id')
+                    this.groupOfListName = event.target.parentElement.parentElement.parentElement.getAttribute('data-name')
+                    this.elementDomRect = event.target.parentElement.parentElement.parentElement.getBoundingClientRect()
+                } else {
+                    this.groupOfListId = event.target.parentElement.parentElement.getAttribute('data-id')
+                    this.groupOfListName = event.target.parentElement.parentElement.getAttribute('data-name')
+                    this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
+                }
             } else {
-                this.groupOfListId = event.target.parentElement.getAttribute('data-id')
-                this.groupOfListName = event.target.parentElement.getAttribute('data-name')
+                if (target === 'parentList') {
+                    this.groupOfListId = event.target.parentElement.getAttribute('data-id')
+                    this.groupOfListName = event.target.parentElement.getAttribute('data-name')
+                    this.elementDomRect = event.target.parentElement.getBoundingClientRect()
+                } else {
+                    this.groupOfListId = event.target.getAttribute('data-id')
+                    this.groupOfListName = event.target.getAttribute('data-name')
+                    this.elementDomRect = event.target.getBoundingClientRect()
+                }
+            }
 
-                this.elementDomRect = event.target.parentElement.getBoundingClientRect()
-            }
-            this.toggleDropDown = !this.toggleDropDown
-            if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
-                this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
-            } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
-                this.top = this.elementDomRect.top - this.parentElementDomRect.top - 127
+            if (target === 'parentList') {
+                this.theColor = target
+                this.parentElementDomRect = this.$refs.groupOfLists.parentElement.parentElement.getBoundingClientRect()
+
+
+                this.toggleDropDown = !this.toggleDropDown
+                if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
+                } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 127
+                } else {
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
+                }
+                this.left = 38.5
             } else {
-                this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
+                this.parentElementDomRect = this.$refs.groupOfLists.getBoundingClientRect()
+                this.theColor = target
+                this.toggleDropDown = !this.toggleDropDown
+                this.left = 38.5
+                this.top = 200
+                if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
+                } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 170
+                } else {
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top + 45
+                }
             }
-            this.left = 38.5
+
         },
         closeDropDown() {
             this.toggleDropDown = false
@@ -298,6 +408,21 @@ export default {
         closeNewList() {
             this.showAddNewList = !this.showAddNewList
             this.newName = ''
+        }
+    },
+    watch: {
+        lists: {
+            handler(newValue, oldValue) {
+                this.ReturnGroupOfListsArray = []
+                this.lists.forEach((list) => {
+                    if (list.listChildren) {
+                        if (list.listChildren) {
+                            this.ReturnGroupOfListsArray.push(list)
+                        }
+                    }
+                })
+            },
+            deep: true
         }
     }
 }
