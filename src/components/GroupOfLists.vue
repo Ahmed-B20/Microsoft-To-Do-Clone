@@ -72,8 +72,9 @@
                     <template v-if="showChildRename">
                         <img @click="newChildListNameFun" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input @keyup.enter="newChildListNameFun" required @focus="toggleErrorClass" v-model="newName"
-                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                        <input @keyup.enter="newChildListNameFun" required @focus="toggleErrorClass"
+                            v-model="newChildListName" placeholder="New Name" type="text" name="" id=""
+                            :class="{error:toggleError}" />
                         <img @click="closeChildRename" src="@/assets/design-material/icons/close.png"
                             alt="close rename" />
                     </template>
@@ -81,7 +82,7 @@
                     <template v-else>
                         <img @click="renameChildList" src="@/assets/design-material/icons/rename.png"
                             alt="rename task" />
-                        <span @click="renameChildList">Rename List</span>
+                        <span @click="renameChildList">Rename Child List</span>
                     </template>
                 </div>
             </template>
@@ -89,21 +90,21 @@
             <template #MoveListTo v-if="ReturnGroupOfLists">
                 <div @click="togglePopUp('move')">
                     <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
-                    <span>Move list to...</span>
+                    <span>Move Child list to...</span>
                 </div>
             </template>
 
             <template #DuplicateList>
                 <div @click="DuplicateList">
                     <img src="@/assets/design-material/icons/copy.png" alt="">
-                    <span>Duplicate list</span>
+                    <span>Duplicate Child list</span>
                 </div>
             </template>
 
             <template #DeleteList>
                 <div class="delete" @click="togglePopUp('deleteList')">
                     <img src="@/assets/design-material/icons/delete.png" alt="">
-                    <span>Delete list</span>
+                    <span>Delete Child list</span>
                 </div>
             </template>
         </DropDown>
@@ -114,7 +115,7 @@
     <transition name="toggle-group-of-list">
         <ul v-if="groupOfListsToggle || lists[parentId].toggleChildList">
             <transition-group name="render-list">
-                <li @contextmenu.self="openDropDown('childList')" @click="showListTasks"
+                <li @contextmenu.self="openDropDown('childList')" @click="showChildListTasks"
                     :data-name="childrenList.listName" :data-id="childrenList.id"
                     v-for="childrenList in childrenListsArray" :key="childrenList.id">
                     <p @contextmenu="openDropDown('childList')" :data-name="childrenList.listName"
@@ -136,20 +137,30 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            {{deleteTarget === 'deleteList'?'Delete Child Lists':'Delete Group Of Lists'}}
+            {{togglePopupTarget === 'deleteList'?`Delete Child Lists`:togglePopupTarget === 'deleteGroup'?`Delete Group
+            Of Lists`:`Move Child List To`}}
         </template>
 
         <template #content>
-            {{deleteTarget === 'deleteList'?`Child list: ${selectedChildListName} will be permanently deleted`:`Group of
-            list:
-            ${listName} will
-            be permanently deleted`}}
+            <div v-if="togglePopupTarget === 'move'" class="select-parent">
+                <select ref="selectedLists" name="" id="">
+                    <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
+                        :value="groupOfList.id">
+                        {{groupOfList.listName}}
+                    </option>
+                </select>
+            </div>
 
+            <p v-else>
+                {{togglePopupTarget === 'deleteList'?`Child list: ${selectedChildListName} will be permanently
+                deleted`:`Group of list: ${listName} will be permanently deleted`}}
+            </p>
         </template>
 
         <template #button>
-            <button v-if="deleteTarget === 'deleteGroup'" class="delete" @click="deleteGroup">Delete</button>
-            <button v-if="deleteTarget === 'deleteList'" class="delete" @click="deleteList">Delete</button>
+            <button v-if="togglePopupTarget === 'deleteGroup'" class="delete" @click="deleteGroup">Delete</button>
+            <button v-if="togglePopupTarget === 'deleteList'" class="delete" @click="deleteList">Delete</button>
+            <button v-if="togglePopupTarget === 'move'" class="move" @click="MoveChildListTo">Move</button>
             <button class="close" @click="togglePopUp">Cancel</button>
         </template>
     </PopUp>
@@ -169,9 +180,9 @@ export default {
         DropDown
     },
     beforeMount() {
-        this.lists.forEach((list) => {
+        this.lists.forEach((list, index) => {
             if (list.listChildren) {
-                if (list.listChildren) {
+                if (index != this.parentId) {
                     this.ReturnGroupOfListsArray.push(list)
                 }
             }
@@ -206,8 +217,8 @@ export default {
             selectedChildListId: null,
             selectedChildListName: '',
             DuplicatedList: {},
-            deleteTarget: '',
-            newChildListName: ''
+            togglePopupTarget: '',
+            newChildListName: '',
         }
     },
     computed: {
@@ -234,9 +245,11 @@ export default {
             this.showPopUp = !this.showPopUp
             this.toggleDropDown = !this.toggleDropDown
             if (target === 'deleteList') {
-                this.deleteTarget = 'deleteList'
+                this.togglePopupTarget = 'deleteList'
+            } else if (target === 'deleteGroup') {
+                this.togglePopupTarget = 'deleteGroup'
             } else {
-                this.deleteTarget = 'deleteGroup'
+                this.togglePopupTarget = 'move'
             }
         },
         toggleGroup() {
@@ -248,7 +261,7 @@ export default {
                 this.groupOfListsToggle = !this.groupOfListsToggle
             }
         },
-        showListTasks() {
+        showChildListTasks() {
             this.listNameRoute = event.target.getAttribute('data-name')
             this.listIndex = event.target.getAttribute('data-id')
             this.teleportToggle = true
@@ -300,7 +313,6 @@ export default {
                 this.theColor = target
                 this.parentElementDomRect = this.$refs.groupOfLists.parentElement.parentElement.getBoundingClientRect()
 
-
                 this.toggleDropDown = !this.toggleDropDown
                 if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
@@ -311,7 +323,8 @@ export default {
                 }
                 this.left = 38.5
             } else if (target === 'childList') {
-                this.parentElementDomRect = this.$refs.groupOfLists.getBoundingClientRect()
+                this.parentElementDomRect = this.$refs.groupOfLists.parentElement.parentElement.getBoundingClientRect()
+
                 this.theColor = target
                 this.toggleDropDown = !this.toggleDropDown
                 this.left = 38.5
@@ -467,9 +480,7 @@ export default {
         },
         renameChildList() {
             this.showChildRename = !this.showChildRename
-            console.log(this.selectedChildListName);
             this.newChildListName = this.selectedChildListName
-            console.log(this.showChildRename);
         },
         newChildListNameFun() {
             if (this.newChildListName.length > 0) {
@@ -495,14 +506,31 @@ export default {
                 }
             }
         },
+        MoveChildListTo() {
+            this.lists[this.$refs.selectedLists.value].listsArray.push(this.lists[this.parentId].listsArray[this.selectedChildListId])
+
+            if (this.lists[this.$refs.selectedLists.value].listsArray.length > 0) {
+                let index = this.lists[this.$refs.selectedLists.value].listsArray.length - 1
+                this.lists[this.$refs.selectedLists.value].listsArray[index].id = this.lists[this.$refs.selectedLists.value].listsArray.length - 1
+            } else {
+                this.lists[this.$refs.selectedLists.value].listsArray[0].id = 0
+            }
+            this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.toggleDropDown = false
+            this.taskElementId = null
+            this.parentElementDomRect = null
+            this.showPopUp = !this.showPopUp
+            this.moveTaskToggle = !this.moveTaskToggle
+        }
     },
     watch: {
         lists: {
             handler(newValue, oldValue) {
                 this.ReturnGroupOfListsArray = []
-                this.lists.forEach((list) => {
+                this.lists.forEach((list, index) => {
                     if (list.listChildren) {
-                        if (list.listChildren) {
+                        if (index != this.parentId) {
                             this.ReturnGroupOfListsArray.push(list)
                         }
                     }

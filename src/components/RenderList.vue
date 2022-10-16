@@ -3,7 +3,7 @@
         <dev class="lists-parent">
             <ul ref="listParent" class="lists-container">
                 <transition-group name="render-list">
-                    <li @contextmenu.self="openDropDown" @click="showListTasks" v-for="(list,index) in lists"
+                    <li @contextmenu.self="openDropDown" @click.self="showListTasks" v-for="(list,index) in lists"
                         :data-name="list.listName" :data-id="index" :key="list.id"
                         :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
 
@@ -13,7 +13,7 @@
                                 :parentId="list.id" />
                         </template>
 
-                        <p @contextmenu="openDropDown" v-else>
+                        <p @click="showListTasks" @contextmenu="openDropDown" v-else>
                             <img src="@/assets/design-material/icons/menu.png" alt="single-list">
                             <span>{{list.listName}}</span>
 
@@ -262,6 +262,7 @@ export default {
             this.DuplicatedList = {}
         },
         showListTasks() {
+            console.log('ddd');
             this.toggleDropDown = false
             if (event.target.tagName === 'LI' && event.target.classList.contains("single-list")) {
                 this.listName = event.target.getAttribute('data-name')
@@ -271,7 +272,7 @@ export default {
                 this.listName = event.target.parentElement.getAttribute('data-name')
                 this.listIndex = event.target.parentElement.getAttribute('data-id')
                 this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
-            } else if (event.target.parentElement.parentElement.classList.contains("single-list")) {
+            } else if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG' || event.target.parentElement.parentElement.classList.contains("single-list")) {
                 this.listName = event.target.parentElement.parentElement.getAttribute('data-name')
                 this.listIndex = event.target.parentElement.parentElement.getAttribute('data-id')
                 this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
