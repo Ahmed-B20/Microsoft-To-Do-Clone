@@ -187,7 +187,8 @@ export default {
             taskName: '',
             toggleError: false,
             thisTask: null,
-            oldTaskId: null
+            oldTaskId: null,
+            oldTaskIdDrop: null
         }
     },
     computed: {
@@ -281,6 +282,20 @@ export default {
                 this.taskName = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name
             } else {
                 this.taskName = this.lists[this.listId].tasks[this.taskElementId].name
+            }
+
+            if (this.toggleDropDown) {
+                this.oldTaskIdDrop = event.target.getAttribute('data-id')
+            } else {
+                if (+this.oldTaskIdDrop != +this.taskElementId) {
+                    this.toggleDropDown = false
+
+                    this.oldTaskIdDrop = event.target.getAttribute('data-id')
+
+                    setTimeout(() => {
+                        this.toggleDropDown = true
+                    }, 0)
+                }
             }
         },
         closeDropDown() {
