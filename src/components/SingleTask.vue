@@ -260,6 +260,8 @@ export default {
     methods: {
         openDropDown() {
             event.preventDefault()
+            this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), false, this.taskElement)
+
             this.taskElementId = event.target.getAttribute('data-id')
             if (event.target.tagName === 'IMG' || (event.target.tagName === 'SPAN' && event.target.classList.contains('task-main-info') || event.target.classList.contains('check'))) {
                 this.parentElementDomRect = event.target.parentElement.getBoundingClientRect()
@@ -322,6 +324,7 @@ export default {
             this.target = ''
         },
         openDescription() {
+            this.toggleDropDown = false
             this.taskElement = event.target
             this.taskElement.classList.remove('add-animation-x')
             if (this.taskElement.classList.contains('add-animation')) {
@@ -426,7 +429,6 @@ export default {
             if (!!this.childId) {
                 if (event.target.tagName === 'SPAN') {
                     this.thisTask = event.target.getAttribute('data-id') || this.taskElementId
-
                     if (target === 'dropdown') {
                         this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
@@ -443,7 +445,6 @@ export default {
                     }
                 } else {
                     this.thisTask = event.target.parentElement.getAttribute('data-id') || this.taskElementId
-
                     if (target === 'dropdown') {
                         this.$refs.taskElement.forEach((task) => {
                             if (+task.getAttribute('data-id') === +this.taskElementId) {
@@ -460,13 +461,15 @@ export default {
                     }
                 }
 
-                this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex].steps.forEach((step) => {
-                    if (this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].complete) {
-                        step.complete = true
-                    } else {
-                        step.complete = false
-                    }
-                })
+                if (this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].steps.length > 0) {
+                    this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].steps.forEach((step) => {
+                        if (this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].complete) {
+                            step.complete = true
+                        } else {
+                            step.complete = false
+                        }
+                    })
+                }
             } else {
                 if (event.target.tagName === 'SPAN') {
                     if (target === 'dropdown') {
