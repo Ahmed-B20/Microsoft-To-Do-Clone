@@ -186,7 +186,8 @@ export default {
             newName: '',
             taskName: '',
             toggleError: false,
-            thisTask: null
+            thisTask: null,
+            oldTaskId: null
         }
     },
     computed: {
@@ -318,10 +319,16 @@ export default {
             }
             if (!this.toggleShrink) {
                 this.shrink = !this.toggleShrink
+                this.oldTaskId = event.target.getAttribute('data-id')
                 this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
             } else {
-                this.shrink = !this.toggleShrink
-                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
+                if (this.oldTaskId != +event.target.getAttribute('data-id')) {
+                    this.oldTaskId = event.target.getAttribute('data-id')
+                    this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
+                } else {
+                    this.shrink = !this.toggleShrink
+                    this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
+                }
             }
         },
         deleteTask() {

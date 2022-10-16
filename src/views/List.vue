@@ -27,7 +27,7 @@
     </keep-alive>
 
     <transition name="to-left">
-        <TaskDescription :toggleShrink="toggleShrink" @closeDescription="closeDescriptionMethod"
+        <TaskDescription :key="descriptionTaskIndex" :toggleShrink="toggleShrink" @closeDescription="closeDescriptionMethod"
             :descriptionTaskList="descriptionTaskList" :descriptionTaskChildList="descriptionTaskChildList"
             :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink" :element="element" />
     </transition>
