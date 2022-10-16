@@ -87,6 +87,13 @@
                 </div>
             </template>
 
+            <template #PromoteToList>
+                <div @click="PromoteToList">
+                    <img src="@/assets/design-material/icons/plus.png" alt="">
+                    <span>Promote to list</span>
+                </div>
+            </template>
+
             <template #MoveListTo v-if="ReturnGroupOfLists">
                 <div @click="togglePopUp('move')">
                     <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
@@ -194,7 +201,7 @@ export default {
             listNameRoute: '',
             listIndex: 0,
             dropDownSlots: ['RenameGroup', 'NewList', 'UngroupLists', 'DeleteGroup'],
-            dropDownSlotsChildList: ['RenameList', 'MoveListTo', 'DuplicateList', 'DeleteList'],
+            dropDownSlotsChildList: ['RenameList', 'PromoteToList', 'MoveListTo', 'DuplicateList', 'DeleteList'],
             toggleDropDown: false,
             showPopUp: false,
             elementDomRect: null,
@@ -219,6 +226,7 @@ export default {
             DuplicatedList: {},
             togglePopupTarget: '',
             newChildListName: '',
+            promoteList: {}
         }
     },
     computed: {
@@ -510,11 +518,20 @@ export default {
             this.lists[this.$refs.selectedLists.value].listsArray.push(this.lists[this.parentId].listsArray[this.selectedChildListId])
 
             if (this.lists[this.$refs.selectedLists.value].listsArray.length > 0) {
+                console.log(this.lists[this.$refs.selectedLists.value].listsArray);
+
                 let index = this.lists[this.$refs.selectedLists.value].listsArray.length - 1
-                this.lists[this.$refs.selectedLists.value].listsArray[index].id = this.lists[this.$refs.selectedLists.value].listsArray.length - 1
+                this.lists[this.$refs.selectedLists.value].listsArray[index].id = this.lists[this.$refs.selectedLists.value].listsArray.length
+
+                this.lists[this.parentId].listsArray.forEach((list, index) => {
+                    if (index >= +this.selectedChildListId) {
+                        list.id -= 1
+                    }
+                })
             } else {
                 this.lists[this.$refs.selectedLists.value].listsArray[0].id = 0
             }
+
             this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.toggleDropDown = false
@@ -522,6 +539,35 @@ export default {
             this.parentElementDomRect = null
             this.showPopUp = !this.showPopUp
             this.moveTaskToggle = !this.moveTaskToggle
+        },
+        PromoteToList() {
+            let list = this.lists[this.parentId].listsArray[this.selectedChildListId]
+            this.promoteList.id = this.lists.length
+            this.promoteList.listName = list.listName
+            this.promoteList.listChildren = false
+            this.promoteList.tasks = []
+
+
+            this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
+
+            this.lists[this.parentId].listsArray.forEach((list, index) => {
+                if (index >= +this.selectedChildListId) {
+                    list.id -= 1
+                }
+            })
+
+            this.lists.push(this.promoteList)
+
+            this.promoteList = {}
+            // this.completeTaskStatus = !this.completeTaskStatus
+
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+
+            this.toggleDropDown = false
+
+            // if (this.toggleDropDown === false) {
+            //     this.dropDownStepId = null
+            // }
         }
     },
     watch: {

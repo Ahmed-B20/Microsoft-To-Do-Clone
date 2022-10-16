@@ -62,7 +62,8 @@ export default {
             allSavedList: [],
             toggleError: false,
             showPopUp: false,
-            groupOfListsName: ''
+            groupOfListsName: '',
+            // childListId: 0
         };
     },
 
@@ -88,7 +89,7 @@ export default {
                     this.listObj.tasks = [];
 
                     this.childListObj.listName = this.itemValue
-                    this.childListObj.id = `${this.childListId}`
+                    this.childListObj.id = this.childListId
                     this.childListObj.listChildren = false
                     this.childListObj.tasks = [];
 
@@ -139,6 +140,7 @@ export default {
             this.toggleError = false
         },
         addGroupOfList() {
+            this.childListId = 0
             if (!this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
                 this.groupOfListsName = this.itemValue
             }
