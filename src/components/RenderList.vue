@@ -221,6 +221,7 @@ export default {
                 this.showPopUp = !this.showPopUp
                 this.target = 'delete'
             }
+            this.toggleDropDown = !this.toggleDropDown
         },
         closePopUp() {
             this.showPopUp = !this.showPopUp
@@ -310,6 +311,7 @@ export default {
             }
         },
         MoveListTo() {
+            this.toggleDropDown = !this.toggleDropDown
             this.lists[this.listId].id = this.lists[this.$refs.selectedGroupOfList.value].listsArray.length
             this.lists[this.$refs.selectedGroupOfList.value].listsArray.push(this.lists[this.listId])
 

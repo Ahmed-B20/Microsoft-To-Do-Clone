@@ -242,8 +242,10 @@ export default {
         },
         ReturnGroupOfLists() {
             if (this.ReturnGroupOfListsArray.length > 0) {
+                this.dropDownSlotsChildList = ['RenameList', 'PromoteToList','MoveListTo', 'DuplicateList', 'DeleteList']
                 return true
             } else {
+                this.dropDownSlotsChildList = ['RenameList', 'PromoteToList', 'DuplicateList', 'DeleteList']
                 return false
             }
         }
@@ -547,7 +549,6 @@ export default {
             this.promoteList.listChildren = false
             this.promoteList.tasks = []
 
-
             this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
 
             this.lists[this.parentId].listsArray.forEach((list, index) => {
@@ -557,17 +558,9 @@ export default {
             })
 
             this.lists.push(this.promoteList)
-
             this.promoteList = {}
-            // this.completeTaskStatus = !this.completeTaskStatus
-
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
             this.toggleDropDown = false
-
-            // if (this.toggleDropDown === false) {
-            //     this.dropDownStepId = null
-            // }
         }
     },
     watch: {
