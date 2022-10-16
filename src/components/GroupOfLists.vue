@@ -226,7 +226,8 @@ export default {
             DuplicatedList: {},
             togglePopupTarget: '',
             newChildListName: '',
-            promoteList: {}
+            promoteList: {},
+            oldChildListId: null
         }
     },
     computed: {
@@ -348,9 +349,25 @@ export default {
                 }
             }
 
+            if (this.toggleDropDown) {
+                this.oldChildListId = event.target.getAttribute('data-id')
+            } else {
+                if (+this.oldChildListId != +this.groupOfListId) {
+                    this.toggleDropDown = false
+
+                    this.oldChildListId = event.target.getAttribute('data-id')
+                    this.showRename = false
+
+                    setTimeout(() => {
+                        this.toggleDropDown = true
+                    }, 0)
+                }
+            }
+
         },
         closeDropDown() {
             this.toggleDropDown = false
+            this.showRename = false
         },
         deleteGroup() {
             this.lists.splice(this.groupOfListId, 1)

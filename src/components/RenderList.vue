@@ -154,7 +154,8 @@ export default {
             toggleError: false,
             ReturnGroupOfListsArray: [],
             moveGroupListToggle: false,
-            target: ''
+            target: '',
+            oldListId: null
         }
     },
     beforeMount() {
@@ -207,6 +208,21 @@ export default {
             }
 
             this.left = 38.5
+
+            if (this.toggleDropDown) {
+                this.oldListId = event.target.getAttribute('data-id')
+            } else {
+                if (+this.oldListId != +this.listId) {
+                    this.toggleDropDown = false
+
+                    this.oldListId = event.target.getAttribute('data-id')
+                    this.showRename = false
+
+                    setTimeout(() => {
+                        this.toggleDropDown = true
+                    }, 0)
+                }
+            }
         },
         closeDropDown() {
             this.toggleDropDown = false
@@ -224,6 +240,7 @@ export default {
             this.toggleDropDown = !this.toggleDropDown
         },
         closePopUp() {
+            this.showRename = false
             this.showPopUp = !this.showPopUp
             this.toggleDropDown = !this.toggleDropDown
             this.moveGroupListToggle = false
