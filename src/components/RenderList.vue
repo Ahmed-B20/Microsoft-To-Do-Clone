@@ -242,6 +242,8 @@ export default {
             this.toggleDropDown = false
             this.showPopUp = !this.showPopUp
             this.listId = null
+
+            this.$router.push({ name: 'list', params: { listId: 0, closeDescription: false } })
         },
         DuplicateList() {
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
