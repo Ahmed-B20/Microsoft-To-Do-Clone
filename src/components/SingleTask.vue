@@ -13,17 +13,25 @@
 
                 <span :data-id="index" class="info-icons">
                     <span :data-id="index" v-if="task.steps.length > 0" class="steps">
-                        {{(task.steps.filter((step)=>{return step.complete === true}).length)}} Of {{task.steps.length}}
-
                         <img :data-id="index" src="@/assets/design-material/icons/process.png" alt="task steps"
                             title="task steps">
+                        {{(task.steps.filter((step)=>{return step.complete === true}).length)}} Of {{task.steps.length}}
                     </span>
 
                     <span :data-id="index" class="border" v-if="task.steps.length > 0 && task.note"></span>
 
                     <span :data-id="index" class="note" v-if="task.note">
-                        Note <img :data-id="index" src="@/assets/design-material/icons/notes.png" alt="task notes"
+                        <img :data-id="index" src="@/assets/design-material/icons/notes.png" alt="task notes"
+                            title="task notes">Note
+                    </span>
+
+                    <span :data-id="index" class="border"
+                        v-if="task.steps.length > 0 && task.dueDateName || task.note && task.dueDateName"></span>
+
+                    <span :data-id="index" class="note" v-if="task.dueDateName">
+                        <img :data-id="index" src="@/assets/design-material/icons/due-date.png" :alt="task.dueDateName"
                             title="task notes">
+                        {{task.dueDateName}}
                     </span>
                 </span>
             </span>

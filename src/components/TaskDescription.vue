@@ -96,20 +96,57 @@
 
             <div class="task-box add-to-my-day">
                 <img src="@/assets/design-material/icons/sun.png" alt="my day tab" />
-                <span>MyDay</span>
+                <span>Add To My Day</span>
             </div>
 
-            <div class="task-box time-and-date">
-                <div><img src="@/assets/design-material/icons/alarm-clock.png" alt="remind me" />
+            <div ref="timeAndDate" class="task-box time-and-date">
+                <div>
+                    <img src="@/assets/design-material/icons/alarm-clock.png" alt="remind me" />
                     <span>Remind Me</span>
                 </div>
-                <div><img src="@/assets/design-material/icons/calendar.png" alt="add due date" />
-                    <span>Add Due Date</span>
+                <div @click.self="toggleAddDueDate">
+                    <img @click="toggleAddDueDate" src="@/assets/design-material/icons/calendar.png" alt="add due date" />
+                    <span @click="toggleAddDueDate">{{dueDateState}}</span>
+                    <img class="delete-due-date" @click="deleteDueDate" v-if="dueDateState != 'Add Due Date'"
+                        src="@/assets/design-material/icons/close.png" alt="delete due date">
                 </div>
-                <div><img src="@/assets/design-material/icons/event.png" alt="repeat" />
+                <div>
+                    <img src="@/assets/design-material/icons/event.png" alt="repeat" />
                     <span>Repeat</span>
                 </div>
             </div>
+
+            <transition name="to-bottom">
+                <DropDown :dropDownSlots="dropDownDueDateSlots" :top="top" :right="right" v-if="toggleDropDown">
+                    <template #ToDay>
+                        <div @click="addDueDate('today')">
+                            <img src="@/assets/design-material/icons/date.png" alt="due date">
+                            <span>ToDay</span>
+                        </div>
+                    </template>
+
+                    <template #Tomorrow>
+                        <div @click="addDueDate('tomorrow')">
+                            <img src="@/assets/design-material/icons/tomorrow.png" alt="due tomorrow">
+                            <span>Tomorrow</span>
+                        </div>
+                    </template>
+
+                    <template #NextWeek>
+                        <div @click="addDueDate('nextWeek')">
+                            <img src="@/assets/design-material/icons/next-week.png" alt="next week">
+                            <span>Next week</span>
+                        </div>
+                    </template>
+
+                    <template #PickADate>
+                        <div @click="addDueDate">
+                            <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
+                            <span>Pick a Date</span>
+                        </div>
+                    </template>
+                </DropDown>
+            </transition>
 
             <div class="task-box task-notes">
                 <h3>Task Description</h3>
@@ -208,7 +245,8 @@ export default {
             dropDownStepId: null,
             promoteTask: {},
             step: {},
-            completeStepsArray: []
+            completeStepsArray: [],
+            dropDownDueDateSlots: ['ToDay', 'Tomorrow', 'NextWeek', 'PickADate']
         }
     },
     computed: {
@@ -229,6 +267,21 @@ export default {
                 return false;
             }
         },
+        dueDateState() {
+            if (!!this.descriptionTaskChildList) {
+                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName) {
+                    return 'Due ' + this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName
+                } else {
+                    return 'Add Due Date'
+                }
+            } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName) {
+                    return 'Due ' + this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName
+                } else {
+                    return 'Add Due Date'
+                }
+            }
+        }
     },
     watch: {
         inputValue() {
@@ -686,6 +739,57 @@ export default {
 
             if (this.toggleDropDown === false) {
                 this.dropDownStepId = null
+            }
+        },
+        toggleAddDueDate() {
+            this.toggleDropDown = !this.toggleDropDown
+            this.top = this.$refs.timeAndDate.getBoundingClientRect().top + 95
+            this.right = 70
+        },
+        addDueDate(date) {
+            if (!!this.descriptionTaskChildList) {
+                if (date === 'today') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'ToDay'
+                } else if (date === 'tomorrow') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
+
+                } else if (date === 'nextWeek') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
+                } else {
+
+                }
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            } else {
+                if (date === 'today') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'ToDay'
+                } else if (date === 'tomorrow') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
+                } else if (date === 'nextWeek') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
+
+                } else {
+
+                }
+
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            }
+            this.toggleDropDown = false
+        },
+        deleteDueDate() {
+            if (!!this.descriptionTaskChildList) {
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = ''
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = ''
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            } else {
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = ''
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = ''
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             }
         }
     }

@@ -17,21 +17,20 @@
                 </button>
             </template>
 
-            <transition name="sort-by-animation">
-                <template v-if="showSortBy" #sort-by>
-                    <div class="sort-by-container">
-                        <button @click="reverseResults" class="button-sort sorted-by">
-                            <img v-if="reverseState" src="@/assets/design-material/icons/up-arrow.png"
-                                alt="close sort" />
-                            <img v-else src="@/assets/design-material/icons/down-arrow.png" alt="close sort" />
-                            sorted by {{sortMethodTarget}}
-                        </button>
-                        <button @click="closeSort" class="button-sort close">
-                            <img src="@/assets/design-material/icons/close.png" alt="close sort" />
-                        </button>
-                    </div>
-                </template>
-            </transition>
+            <!-- <transition name="sort-by-animation"> -->
+            <template v-if="showSortBy" #sort-by>
+                <div class="sort-by-container">
+                    <button @click="reverseResults" class="button-sort sorted-by">
+                        <img v-if="reverseState" src="@/assets/design-material/icons/up-arrow.png" alt="close sort" />
+                        <img v-else src="@/assets/design-material/icons/down-arrow.png" alt="close sort" />
+                        sorted by {{sortMethodTarget}}
+                    </button>
+                    <button @click="closeSort" class="button-sort close">
+                        <img src="@/assets/design-material/icons/close.png" alt="close sort" />
+                    </button>
+                </div>
+            </template>
+            <!-- </transition> -->
 
             <template #allTaskSlot>
                 <!-- <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId" /> -->
@@ -447,11 +446,19 @@ export default {
                     break;
 
                 case 'Dua Date':
-
+                    this.lists[this.listId].tasks.sort((a, b) => {
+                        if (new Date(a.dueTime).getTime() < new Date(b.dueTime).getTime()) { return -1; }
+                        if (new Date(a.dueTime).getTime() > new Date(b.dueTime).getTime()) { return 1; }
+                        return 0;
+                    })
                     break;
 
                 case 'Added To My Day':
-
+                    this.lists[this.listId].tasks.sort((a, b) => {
+                        if (a.addToMyDay < b.addToMyDay) { return 1; }
+                        if (a.addToMyDay > b.addToMyDay) { return -1; }
+                        return 0;
+                    })
                     break;
 
                 case 'Alphabetically':

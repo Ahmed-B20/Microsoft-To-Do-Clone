@@ -66,7 +66,9 @@ export default {
 
                 this.taskObj.sortTime = new Date()
                 this.taskObj.addTime = today
-                this.taskObj.endTime = ''
+                this.taskObj.dueDate = ''
+                this.taskObj.dueDateName = ''
+                this.taskObj.addToMyDay = false
                 this.taskObj.note = ''
                 this.taskObj.steps = []
                 this.chosenListTasks.push(this.taskObj)

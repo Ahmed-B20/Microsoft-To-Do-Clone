@@ -328,7 +328,7 @@
 .dashboard-content-container .task-description .time-and-date {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    /* gap: 5px; */
 }
 
 .dashboard-content-container .task-description .time-and-date>div {
@@ -337,6 +337,11 @@
     gap: 8px;
     border-bottom: 1px solid #dfdfdf;
     padding: 8px 0;
+    cursor: pointer;
+}
+
+.dashboard-content-container .task-description .time-and-date>div .delete-due-date {
+    margin-left: auto;
     cursor: pointer;
 }
 
