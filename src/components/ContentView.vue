@@ -11,6 +11,7 @@
                 <slot name="title"></slot>
             </h1>
             <slot name="toggle-description"></slot>
+            <slot name="sort-by"></slot>
         </div>
 
         <ul class="tasks">

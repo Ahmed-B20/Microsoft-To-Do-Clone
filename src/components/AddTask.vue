@@ -64,7 +64,7 @@ export default {
                 today = mm + '/' + dd + '/' + yyyy;
                 // for now
 
-
+                this.taskObj.sortTime = new Date()
                 this.taskObj.addTime = today
                 this.taskObj.endTime = ''
                 this.taskObj.note = ''

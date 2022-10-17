@@ -17,6 +17,21 @@
                 </button>
             </template>
 
+            <transition name="sort-by-animation">
+                <template v-if="showSortBy" #sort-by>
+                    <div class="sort-by-container">
+                        <button @click="reverseResults" class="button-sort sorted-by">
+                            <img v-if="reverseState" src="@/assets/design-material/icons/up-arrow.png"
+                                alt="close sort" />
+                            <img v-else src="@/assets/design-material/icons/down-arrow.png" alt="close sort" />
+                            sorted by {{sortMethodTarget}}
+                        </button>
+                        <button @click="closeSort" class="button-sort close">
+                            <img src="@/assets/design-material/icons/close.png" alt="close sort" />
+                        </button>
+                    </div>
+                </template>
+            </transition>
 
             <template #allTaskSlot>
                 <!-- <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId" /> -->
@@ -27,9 +42,10 @@
     </keep-alive>
 
     <transition name="to-left">
-        <TaskDescription :key="descriptionTaskIndex" :toggleShrink="toggleShrink" @closeDescription="closeDescriptionMethod"
-            :descriptionTaskList="descriptionTaskList" :descriptionTaskChildList="descriptionTaskChildList"
-            :descriptionTaskIndex="descriptionTaskIndex" v-if="toggleShrink" :element="element" />
+        <TaskDescription :key="descriptionTaskIndex" :toggleShrink="toggleShrink"
+            @closeDescription="closeDescriptionMethod" :descriptionTaskList="descriptionTaskList"
+            :descriptionTaskChildList="descriptionTaskChildList" :descriptionTaskIndex="descriptionTaskIndex"
+            v-if="toggleShrink" :element="element" />
     </transition>
 
     <transition name="to-bottom">
@@ -59,7 +75,7 @@
             </template>
 
             <template #SortBy>
-                <div @click="DuplicateList">
+                <div @click="togglePopUp('sort')">
                     <img src="@/assets/design-material/icons/sort.png" alt="">
                     <span>Sort By</span>
                 </div>
@@ -83,15 +99,23 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            {{target=== 'move'? 'Move List': 'Delete List'}}
+            {{target=== 'move'? 'Move List': target==='delete'?'Delete List':'Sort By'}}
         </template>
 
         <template v-slot:content>
-            <div v-if="moveGroupListToggle" class="select-parent">
+            <div v-if="target=== 'move'" class="select-parent">
                 <select ref="selectedGroupOfList" name="" id="">
                     <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
                         :value="groupOfList.id">
                         {{groupOfList.listName}}
+                    </option>
+                </select>
+            </div>
+
+            <div v-else-if="target=== 'sort'" class="select-parent">
+                <select ref="selectedSortValue" name="" id="">
+                    <option v-for="(sortMethod, index) in sortingMethods" :key="index" :value="index">
+                        {{sortMethod}}
                     </option>
                 </select>
             </div>
@@ -101,7 +125,8 @@
         </template>
 
         <template #button>
-            <button v-if="moveGroupListToggle" class="move" @click="MoveListTo">Move</button>
+            <button v-if="target === 'move'" class="move" @click="MoveListTo">Move</button>
+            <button v-else-if="target === 'sort'" class="sort" @click="sortBy">Sort</button>
             <button v-else class="delete" @click="deleteList">Delete</button>
             <button class="close" @click="closePopUp">Cancel</button>
         </template>
@@ -196,6 +221,7 @@ export default {
             toggleShrink: false,
             element: '',
             dropDownSlots: ['RenameList', 'MoveListTo', 'SortBy', 'DuplicateList', 'DeleteList'],
+            sortingMethods: ['Importance', 'Dua Date', 'Added To My Day', 'Alphabetically', 'Creation Date'],
             toggleDropDown: false,
             top: null,
             right: null,
@@ -204,9 +230,11 @@ export default {
             newName: '',
             toggleError: false,
             DuplicatedList: {},
-            ReturnGroupOfListsArray: []
-
-
+            ReturnGroupOfListsArray: [],
+            target: '',
+            sortMethodTarget: '',
+            showSortBy: false,
+            reverseState: false
             // sendedArray: []
         }
     },
@@ -311,14 +339,17 @@ export default {
                 this.moveGroupListToggle = !this.moveGroupListToggle
                 this.showPopUp = !this.showPopUp
                 this.target = 'move'
-            } else {
+            } else if (target === 'delete') {
                 this.showPopUp = !this.showPopUp
                 this.target = 'delete'
+            } else {
+                this.showPopUp = !this.showPopUp
+                this.target = 'sort'
             }
         },
         closePopUp() {
             this.showPopUp = !this.showPopUp
-            this.toggleDropDown = !this.toggleDropDown
+            this.toggleDropDown = false
             this.moveGroupListToggle = false
             this.target = ''
         },
@@ -402,6 +433,65 @@ export default {
             this.toggleDropDown = false
             this.showPopUp = !this.showPopUp
             this.moveGroupListToggle = !this.moveGroupListToggle
+        },
+        sortBy() {
+            this.showSortBy = true
+            this.sortMethodTarget = this.sortingMethods[this.$refs.selectedSortValue.value]
+            switch (this.sortingMethods[this.$refs.selectedSortValue.value]) {
+                case 'Importance':
+                    this.lists[this.listId].tasks.sort((a, b) => {
+                        if (a.important < b.important) { return 1; }
+                        if (a.important > b.important) { return -1; }
+                        return 0;
+                    })
+                    break;
+
+                case 'Dua Date':
+
+                    break;
+
+                case 'Added To My Day':
+
+                    break;
+
+                case 'Alphabetically':
+                    this.lists[this.listId].tasks.sort((a, b) => {
+                        if (a.name < b.name) { return -1; }
+                        if (a.name > b.name) { return 1; }
+                        return 0;
+                    })
+                    break;
+
+                case 'Creation Date':
+                    this.lists[this.listId].tasks.sort((a, b) => {
+                        if (new Date(a.sortTime).getTime() < new Date(b.sortTime).getTime()) { return -1; }
+                        if (new Date(a.sortTime).getTime() > new Date(b.sortTime).getTime()) { return 1; }
+                        return 0;
+                    })
+                    break;
+
+                default:
+
+                    break;
+            }
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.toggleDropDown = false
+            this.showPopUp = !this.showPopUp
+            console.log(this.showSortBy);
+        },
+        closeSort() {
+            this.lists[this.listId].tasks.sort((a, b) => {
+                if (a.name < b.name) { return -1; }
+                if (a.name > b.name) { return 1; }
+                return 0;
+            })
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.showSortBy = false
+        },
+        reverseResults() {
+            this.reverseState = !this.reverseState
+            this.lists[this.listId].tasks.reverse()
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
         }
     }
 }

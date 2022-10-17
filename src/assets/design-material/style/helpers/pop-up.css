@@ -88,6 +88,11 @@
     background-color: #007bff;
 }
 
+.pop-up-parent .pop-up-container .pop-up-content .button-container button.sort {
+    background-color: #198754;
+    color: white;
+}
+
 
 .pop-up-toggle-enter-active,
 .pop-up-toggle-leave-active {
