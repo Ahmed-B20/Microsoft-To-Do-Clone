@@ -68,6 +68,7 @@ export default {
                 this.taskObj.addTime = today
                 this.taskObj.dueDate = ''
                 this.taskObj.dueDateName = ''
+                this.taskObj.realDueDateName= ''
                 this.taskObj.addToMyDay = false
                 this.taskObj.note = ''
                 this.taskObj.steps = []

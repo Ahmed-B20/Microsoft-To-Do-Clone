@@ -153,8 +153,6 @@
                                 <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
                                 <span>Pick a Date</span>
                             </template>
-
-
                         </div>
                     </template>
                 </DropDown>
@@ -766,14 +764,17 @@ export default {
                 if (date === 'today') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'ToDay'
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'ToDay'
                     this.toggleDropDown = false
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
                     this.toggleDropDown = false
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
                     this.toggleDropDown = false
                 } else if (date === 'customDate') {
                     this.pickCustomDate = true
@@ -783,14 +784,17 @@ export default {
                 if (date === 'today') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'ToDay'
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'ToDay'
                     this.toggleDropDown = false
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
                     this.toggleDropDown = false
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
                     this.toggleDropDown = false
                 } else if (date === 'customDate') {
                     this.pickCustomDate = true
@@ -804,11 +808,13 @@ export default {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
 
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 } else {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
 
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 }
