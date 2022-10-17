@@ -39,7 +39,13 @@
     width: calc(200px - 60px);
 }
 
-.drop-down ul li .renameList input.error {
+.drop-down ul li input.custom-date {
+    flex-grow: 1 !important;
+    width: unset !important;
+}
+
+.drop-down ul li .renameList input.error,
+.drop-down ul li input.custom-date.error {
     border-color: red;
     animation: shake 0.1s linear;
 }

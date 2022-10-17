@@ -105,7 +105,8 @@
                     <span>Remind Me</span>
                 </div>
                 <div @click.self="toggleAddDueDate">
-                    <img @click="toggleAddDueDate" src="@/assets/design-material/icons/calendar.png" alt="add due date" />
+                    <img @click="toggleAddDueDate" src="@/assets/design-material/icons/calendar.png"
+                        alt="add due date" />
                     <span @click="toggleAddDueDate">{{dueDateState}}</span>
                     <img class="delete-due-date" @click="deleteDueDate" v-if="dueDateState != 'Add Due Date'"
                         src="@/assets/design-material/icons/close.png" alt="delete due date">
@@ -140,9 +141,20 @@
                     </template>
 
                     <template #PickADate>
-                        <div @click="addDueDate">
-                            <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
-                            <span>Pick a Date</span>
+                        <div @click="addDueDate('customDate')">
+                            <template v-if="pickCustomDate">
+                                <img @click="addCustomDate" src="@/assets/design-material/icons/plus.png"
+                                    alt="add custom date">
+                                <input :class="{error:errorCustomDateToggle}" class="custom-date" v-model="pickedCustomDate"
+                                    type="date" name="" id="">
+                            </template>
+
+                            <template v-else>
+                                <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
+                                <span>Pick a Date</span>
+                            </template>
+
+
                         </div>
                     </template>
                 </DropDown>
@@ -246,7 +258,10 @@ export default {
             promoteTask: {},
             step: {},
             completeStepsArray: [],
-            dropDownDueDateSlots: ['ToDay', 'Tomorrow', 'NextWeek', 'PickADate']
+            dropDownDueDateSlots: ['ToDay', 'Tomorrow', 'NextWeek', 'PickADate'],
+            pickCustomDate: false,
+            pickedCustomDate: null,
+            errorCustomDateToggle: false
         }
     },
     computed: {
@@ -751,35 +766,69 @@ export default {
                 if (date === 'today') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'ToDay'
+                    this.toggleDropDown = false
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
-
+                    this.toggleDropDown = false
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
-                } else {
-
+                    this.toggleDropDown = false
+                } else if (date === 'customDate') {
+                    this.pickCustomDate = true
                 }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             } else {
                 if (date === 'today') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'ToDay'
+                    this.toggleDropDown = false
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
+                    this.toggleDropDown = false
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
-
-                } else {
-
+                    this.toggleDropDown = false
+                } else if (date === 'customDate') {
+                    this.pickCustomDate = true
                 }
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             }
-            this.toggleDropDown = false
+        },
+        addCustomDate() {
+            if (!!this.pickedCustomDate) {
+                if (!!this.descriptionTaskChildList) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
+
+                    localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                } else {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
+
+                    localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                }
+                this.pickCustomDate = false
+                this.toggleDropDown = false
+                this.pickedCustomDate = null
+            } else {
+                if (!!this.errorCustomDateToggle) {
+                    this.errorCustomDateToggle = false
+                    setTimeout(() => {
+                        this.errorCustomDateToggle = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.errorCustomDateToggle = true
+                    }, 0)
+                }
+            }
+
+
         },
         deleteDueDate() {
             if (!!this.descriptionTaskChildList) {
