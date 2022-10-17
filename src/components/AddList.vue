@@ -208,5 +208,15 @@ export default {
         //     }
         // }
     },
+    watch: {
+        lists: {
+            handler(newValue, oldValue) {
+                console.log('ffff');
+                this.childListId = this.lists.length
+                this.taskNumber = this.lists.length
+            },
+            deep: true
+        }
+    }
 };
 </script>

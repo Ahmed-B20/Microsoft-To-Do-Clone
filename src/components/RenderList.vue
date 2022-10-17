@@ -331,6 +331,8 @@ export default {
         },
         MoveListTo() {
             this.toggleDropDown = !this.toggleDropDown
+            console.log(this.lists[this.$refs.selectedGroupOfList.value].listsArray);
+            console.log(this.$refs.selectedGroupOfList.value);
             this.lists[this.listId].id = this.lists[this.$refs.selectedGroupOfList.value].listsArray.length
             this.lists[this.$refs.selectedGroupOfList.value].listsArray.push(this.lists[this.listId])
 
