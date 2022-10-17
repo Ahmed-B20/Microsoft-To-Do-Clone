@@ -537,8 +537,6 @@ export default {
             this.lists[this.$refs.selectedLists.value].listsArray.push(this.lists[this.parentId].listsArray[this.selectedChildListId])
 
             if (this.lists[this.$refs.selectedLists.value].listsArray.length > 0) {
-                console.log(this.lists[this.$refs.selectedLists.value].listsArray);
-
                 let index = this.lists[this.$refs.selectedLists.value].listsArray.length - 1
                 this.lists[this.$refs.selectedLists.value].listsArray[index].id = this.lists[this.$refs.selectedLists.value].listsArray.length
 

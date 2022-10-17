@@ -184,7 +184,6 @@ export default {
                         this.$refs.addGroupOfList.setAttribute('src', this.$refs.addGroupOfList.getAttribute('src').replace('close', 'add'))
                         this.toggleListChildren = false
                         this.childListsArray = []
-                        console.log(this.lists[this.lists.length - 1]);
                         this.lists[this.lists.length - 1].toggleChildList = false;
                     } else {
                         this.showPopUp = !this.showPopUp
@@ -211,7 +210,6 @@ export default {
     watch: {
         lists: {
             handler(newValue, oldValue) {
-                console.log('ffff');
                 this.childListId = this.lists.length
                 this.taskNumber = this.lists.length
             },
