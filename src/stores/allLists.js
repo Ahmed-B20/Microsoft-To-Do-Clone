@@ -3,7 +3,13 @@ import { defineStore } from 'pinia'
 export const allLists = defineStore('allLists', {
   state: () => {
     return { 
-        lists: JSON.parse(localStorage.getItem('allListAndTasks')) || []
+        lists: JSON.parse(localStorage.getItem('allListAndTasks')) || [],
+        smartList: {
+          myDay: [],
+          important: [],
+          planned: [],
+          tasks: []
+        }
     }
   },
   // could also be defined as

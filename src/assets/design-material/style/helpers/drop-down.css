@@ -79,6 +79,10 @@
     height: 15px;
 }
 
+/* .drop-down ul li div img.custom-image {
+    margin-left: auto;
+} */
+
 .drop-down ul li:last-of-type {
     border-top: 1px solid #dfdfdf;
 }

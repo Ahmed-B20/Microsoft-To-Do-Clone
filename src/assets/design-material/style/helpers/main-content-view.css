@@ -157,7 +157,6 @@
 .sort-by-animation-enter-from,
 .sort-by-animation-leave-to {
     opacity: 0;
-    transform: translateX(30px);
 }
 
 .view-content-container .tasks {

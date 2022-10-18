@@ -33,6 +33,15 @@
                             title="task notes">
                         {{task.dueDateName}}
                     </span>
+
+                    <span :data-id="index" class="border"
+                        v-if="task.steps.length > 0 && task.addToMyDay || task.note && task.addToMyDay || task.dueDateName && task.addToMyDay"></span>
+
+                    <span :data-id="index" class="note" v-if="task.addToMyDay">
+                        <img :data-id="index" src="@/assets/design-material/icons/my-day.png" :alt="task.addToMyDay"
+                            title="task notes">
+                        My Day
+                    </span>
                 </span>
             </span>
 
@@ -86,9 +95,14 @@
             </template>
 
             <template v-if="dueDateState" #AddToMyDay>
-                <div @click="DuplicateList">
-                    <img src="@/assets/design-material/icons/sun.png" alt="">
+                <div @click="addToMyDay" v-if="!addToMyDayState">
+                    <img src="@/assets/design-material/icons/sun.png" alt="added to my day">
                     <span>Add to my day</span>
+                </div>
+
+                <div @click="closeToMyDay" v-else>
+                    <img src="@/assets/design-material/icons/sun.png" alt="">
+                    <span>Remove from my day</span>
                 </div>
             </template>
 
@@ -214,12 +228,13 @@ export default {
             oldTaskIdDrop: null,
             pickCustomDate: false,
             pickedCustomDate: null,
-            errorCustomDateToggle: false
+            errorCustomDateToggle: false,
+            addToMyDayState: false
         }
     },
     computed: {
         ...mapState(allLists, ['returnLists']),
-        ...mapWritableState(allLists, ['lists']),
+        ...mapWritableState(allLists, ['lists', 'smartList']),
         returnAllTasks() {
             if (!!this.childId) {
                 if (this.returnLists[this.listId].listsArray[this.childId].tasks.length > 0) {
@@ -282,7 +297,6 @@ export default {
                     return true
                 }
             }
-            console.log(this.dropDownSlots);
         }
     },
     watch: {
@@ -340,8 +354,10 @@ export default {
 
             if (!!this.childId) {
                 this.taskName = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name
+                this.addToMyDayState = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].addToMyDay
             } else {
                 this.taskName = this.lists[this.listId].tasks[this.taskElementId].name
+                this.addToMyDayState = this.lists[this.listId].tasks[this.taskElementId].addToMyDay
             }
 
             if (this.toggleDropDown) {
@@ -724,6 +740,32 @@ export default {
                     }, 0)
                 }
             }
+        },
+        addToMyDay() {
+            if (!!this.childId) {
+                this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex].addToMyDay = true
+                this.smartList.myDay.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex])
+            } else {
+                this.lists[this.listId].tasks[this.taskElementId].addToMyDay = true
+                this.smartList.myDay.push(this.lists[this.listId].tasks[this.taskElementId])
+            }
+            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.toggleDropDown = false
+            this.addToMyDayState = true
+        },
+        closeToMyDay() {
+            if (!!this.childId) {
+                this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex].addToMyDay = false
+                this.smartList.myDay.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex])
+            } else {
+                this.lists[this.listId].tasks[this.taskElementId].addToMyDay = false
+                this.smartList.myDay.push(this.lists[this.listId].tasks[this.taskElementId])
+            }
+            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.toggleDropDown = false
+            this.addToMyDayState = false
         }
     }
 }
