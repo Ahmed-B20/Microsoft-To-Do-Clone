@@ -212,6 +212,7 @@ export default {
             if (this.toggleDropDown) {
                 this.oldListId = event.target.getAttribute('data-id')
             } else {
+                console.log(+this.oldListId ,+this.listId);
                 if (+this.oldListId != +this.listId) {
                     this.toggleDropDown = false
 
@@ -221,6 +222,8 @@ export default {
                     setTimeout(() => {
                         this.toggleDropDown = true
                     }, 0)
+                } else {
+                    this.toggleDropDown = false
                 }
             }
         },

@@ -105,28 +105,34 @@
             </div>
 
             <div ref="timeAndDate" class="task-box time-and-date">
-                <div>
-                    <img src="@/assets/design-material/icons/alarm-clock.png" alt="remind me" />
-                    <span>Remind Me</span>
+                <div @click.self="toggleRemind(53)">
+                    <img @click="toggleRemind(53)" src="@/assets/design-material/icons/alarm-clock.png"
+                        alt="remind me" />
+                    <span @click="toggleRemind(53)">{{remindState}}</span>
+
+                    <img class="delete-due-date" @click="closeRemind" v-if="remindState != 'Remind me'"
+                        src="@/assets/design-material/icons/close.png" alt="delete repeat">
                 </div>
-                <div @click.self="toggleAddDueDate(95)">
-                    <img @click="toggleAddDueDate(95)" src="@/assets/design-material/icons/calendar.png"
-                        alt="add due date" />
-                    <span @click="toggleAddDueDate(95)">{{dueDateState}}</span>
-                    <img class="delete-due-date" @click="deleteDueDate" v-if="dueDateState != 'Add Due Date'"
-                        src="@/assets/design-material/icons/close.png" alt="delete due date">
-                </div>
-                <div @click.self="toggleRepeat(145)">
-                    <img @click="toggleRepeat(145)" src="@/assets/design-material/icons/event.png" alt="repeat" />
-                    <span @click="toggleRepeat(145)">{{repeatState}}</span>
+
+                <div @click.self="toggleRepeat(95)">
+                    <img @click="toggleRepeat(95)" src="@/assets/design-material/icons/event.png" alt="repeat" />
+                    <span @click="toggleRepeat(95)">{{repeatState}}</span>
 
                     <img class="delete-due-date" @click="closeRepeat" v-if="repeatState != 'Repeat'"
                         src="@/assets/design-material/icons/close.png" alt="delete repeat">
                 </div>
+
+                <div @click.self="toggleAddDueDate(145)">
+                    <img @click="toggleAddDueDate(145)" src="@/assets/design-material/icons/calendar.png"
+                        alt="add due date" />
+                    <span @click="toggleAddDueDate(145)">{{dueDateState}}</span>
+                    <img class="delete-due-date" @click="deleteDueDate" v-if="dueDateState != 'Add Due Date'"
+                        src="@/assets/design-material/icons/close.png" alt="delete due date">
+                </div>
             </div>
 
             <transition name="to-bottom">
-                <DropDown :dropDownSlots="dropDownDueDateSlots" :top="top" :right="right" v-if="toggleDropDown">
+                <DropDown :dropDownSlots="dropDownDueDateSlots" :top="top" :right="right" v-if="toggleDueDateDropDown">
                     <template #ToDay>
                         <div @click="addDueDate('today')">
                             <img src="@/assets/design-material/icons/date.png" alt="due date">
@@ -216,6 +222,48 @@
                             <template v-else>
                                 <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
                                 <span>Custom</span>
+                            </template>
+                        </div>
+                    </template>
+                </DropDown>
+            </transition>
+
+            <transition name="to-bottom">
+                <DropDown :dropDownSlots="dropDownRemindDueDateSlots" :top="top" :right="right"
+                    v-if="toggleRemindDropDown">
+                    <template #LaterToDay>
+                        <div @click="remindDueDate('toDay')">
+                            <img src="@/assets/design-material/icons/remind-today.png" alt="due date">
+                            <span>Later today</span>
+                        </div>
+                    </template>
+
+                    <template #Tomorrow>
+                        <div @click="remindDueDate('tomorrow')">
+                            <img src="@/assets/design-material/icons/remind-tomorrow.png" alt="due tomorrow">
+                            <span>Tomorrow</span>
+                        </div>
+                    </template>
+
+                    <template #NextWeek>
+                        <div @click="remindDueDate('nextWeek')">
+                            <img src="@/assets/design-material/icons/remind-next-week.png" alt="next week">
+                            <span>Next Week</span>
+                        </div>
+                    </template>
+
+                    <template #PickADateAndTime>
+                        <div @click="remindDueDate('customDate')">
+                            <template v-if="pickCustomRemindDate">
+                                <img @click="addCustomRemindDate" src="@/assets/design-material/icons/plus.png"
+                                    alt="add custom date">
+                                <input :class="{error:errorCustomRemindDateToggle}" class="custom-date"
+                                    v-model="pickedCustomRemindDate" type="datetime-local" name="" id="">
+                            </template>
+
+                            <template v-else>
+                                <img src="@/assets/design-material/icons/custom-remind-date.png" alt="pick a date">
+                                <span>Pick a date and time</span>
                             </template>
                         </div>
                     </template>
@@ -333,7 +381,13 @@ export default {
             dropDownRepeatDueDateSlots: ['Daily', 'WeekDays', 'Weekly', 'Monthly', 'Yearly', 'Custom'],
             pickCustomRepeatDate: false,
             pickedCustomRepeatDate: null,
-            errorCustomRepeatDateToggle: false
+            errorCustomRepeatDateToggle: false,
+            toggleRemindDropDown: false,
+            dropDownRemindDueDateSlots: ['LaterToDay', 'Tomorrow', 'NextWeek', 'PickADateAndTime'],
+            pickedCustomRemindDate: null,
+            errorCustomRemindDateToggle: false,
+            pickCustomRemindDate: false,
+            toggleDueDateDropDown: false
         }
     },
     computed: {
@@ -381,6 +435,21 @@ export default {
                     return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName
                 } else {
                     return 'Repeat'
+                }
+            }
+        },
+        remindState() {
+            if (!!this.descriptionTaskChildList) {
+                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName) {
+                    return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName
+                } else {
+                    return 'Remind me'
+                }
+            } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName) {
+                    return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName
+                } else {
+                    return 'Remind me'
                 }
             }
         }
@@ -448,8 +517,20 @@ export default {
             if (!!this.dropDownStepId) {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
+
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.forEach((step, index) => {
+                        if (index >= this.dropDownStepId) {
+                            step.id -= 1
+                        }
+                    });
                 } else {
                     this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
+
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.forEach((step, index) => {
+                        if (index >= this.dropDownStepId) {
+                            step.id -= 1
+                        }
+                    });
                 }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.showPopUp = !this.showPopUp
@@ -798,38 +879,88 @@ export default {
             if (!!this.descriptionTaskChildList) {
                 let step = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
                 this.promoteTask.name = step.name
-                this.promoteTask.id = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.length
+                // this.promoteTask.id = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.length
+                this.promoteTask.id = 0
                 this.promoteTask.complete = false
                 this.promoteTask.important = false
 
-
+                this.promoteTask.sortTime = new Date()
                 this.promoteTask.addTime = today
-                this.promoteTask.endTime = ''
+                this.promoteTask.dueDate = ''
+                this.promoteTask.dueDateName = ''
+                this.promoteTask.realDueDateName = ''
+
+                this.promoteTask.repeatDueDate = ''
+                this.promoteTask.repeatDueDateName = ''
+                this.promoteTask.realRepeatDueDateName = ''
+
+                this.promoteTask.remindMe = ''
+                this.promoteTask.remindMeDate = ''
+                this.promoteTask.remindMeName = ''
+
+                this.promoteTask.addToMyDay = false
                 this.promoteTask.note = ''
                 this.promoteTask.steps = []
 
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
 
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.forEach((step, index) => {
+                    if (index >= this.dropDownStepId) {
+                        step.id -= 1
+                    }
+                });
+
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.promoteTask)
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((task, index) => {
+                    if (index > 0) {
+                        task.id += 1
+                    }
+                })
 
                 this.promoteTask = {}
             } else {
                 let step = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
 
                 this.promoteTask.name = step.name
-                this.promoteTask.id = this.lists[this.descriptionTaskList].tasks.length
+                // this.promoteTask.id = this.lists[this.descriptionTaskList].tasks.length
+                this.promoteTask.id = 0
                 this.promoteTask.complete = false
                 this.promoteTask.important = false
 
-
+                this.promoteTask.sortTime = new Date()
                 this.promoteTask.addTime = today
-                this.promoteTask.endTime = ''
+                this.promoteTask.dueDate = ''
+                this.promoteTask.dueDateName = ''
+                this.promoteTask.realDueDateName = ''
+
+                this.promoteTask.repeatDueDate = ''
+                this.promoteTask.repeatDueDateName = ''
+                this.promoteTask.realRepeatDueDateName = ''
+
+                this.promoteTask.remindMe = ''
+                this.promoteTask.remindMeDate = ''
+                this.promoteTask.remindMeName = ''
+
+                this.promoteTask.addToMyDay = false
                 this.promoteTask.note = ''
                 this.promoteTask.steps = []
 
                 this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
 
+                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.forEach((step, index) => {
+                    if (index >= this.dropDownStepId) {
+                        step.id -= 1
+                    }
+                });
+
                 this.lists[this.descriptionTaskList].tasks.unshift(this.promoteTask)
+
+                this.lists[this.descriptionTaskList].tasks.forEach((task, index) => {
+                    if (index > 0) {
+                        task.id += 1
+                    }
+                })
 
                 this.promoteTask = {}
             }
@@ -844,14 +975,23 @@ export default {
             }
         },
         toggleAddDueDate(height) {
-            this.toggleDropDown = !this.toggleDropDown
             this.toggleRepeatDropDown = false
+            this.toggleRemindDropDown = false
+            this.toggleDueDateDropDown = !this.toggleDueDateDropDown
             this.top = this.$refs.timeAndDate.getBoundingClientRect().top + height
             this.right = 70
         },
         toggleRepeat(height) {
-            this.toggleDropDown = false
+            this.toggleDueDateDropDown = false
+            this.toggleRemindDropDown = false
             this.toggleRepeatDropDown = !this.toggleRepeatDropDown
+            this.top = this.$refs.timeAndDate.getBoundingClientRect().top + height
+            this.right = 70
+        },
+        toggleRemind(height) {
+            this.toggleDueDateDropDown = false
+            this.toggleRepeatDropDown = false
+            this.toggleRemindDropDown = !this.toggleRemindDropDown
             this.top = this.$refs.timeAndDate.getBoundingClientRect().top + height
             this.right = 70
         },
@@ -861,17 +1001,17 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'ToDay'
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'ToDay'
-                    this.toggleDropDown = false
+                    this.toggleDueDateDropDown = false
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
-                    this.toggleDropDown = false
+                    this.toggleDueDateDropDown = false
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
-                    this.toggleDropDown = false
+                    this.toggleDueDateDropDown = false
                 } else if (date === 'customDate') {
                     this.pickCustomDate = true
                 }
@@ -881,17 +1021,17 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'ToDay'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'ToDay'
-                    this.toggleDropDown = false
+                    this.toggleDueDateDropDown = false
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
-                    this.toggleDropDown = false
+                    this.toggleDueDateDropDown = false
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
-                    this.toggleDropDown = false
+                    this.toggleDueDateDropDown = false
                 } else if (date === 'customDate') {
                     this.pickCustomDate = true
                 }
@@ -915,7 +1055,7 @@ export default {
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 }
                 this.pickCustomDate = false
-                this.toggleDropDown = false
+                this.toggleDueDateDropDown = false
                 this.pickedCustomDate = null
             } else {
                 if (!!this.errorCustomDateToggle) {
@@ -968,7 +1108,6 @@ export default {
             this.addToMyDayState = false
         },
         repeatDueDate(date) {
-            console.log(date);
             if (!!this.descriptionTaskChildList) {
                 if (date === 'daily') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date()
@@ -1075,6 +1214,165 @@ export default {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = ''
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = ''
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = ''
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            }
+        },
+        remindDueDate(date) {
+            if (!!this.descriptionTaskChildList) {
+                if (date === 'toDay') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = 'toDay'
+                    let time = new Date(new Date().setDate(new Date().getDate()) + 2 * 60 * 60 * 1000)
+                    let hours = time.getHours()
+                    let minutes = time.getMinutes()
+                    let ampm = hours >= 12 ? 'pm' : 'am';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
+                    this.toggleRemindDropDown = false
+                } else if (date === 'tomorrow') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = 'tomorrow'
+                    let time = new Date(new Date().setDate(new Date().getDate() + 1) + 2 * 60 * 60 * 1000)
+                    let hours = time.getHours()
+                    let minutes = time.getMinutes()
+                    let ampm = hours >= 12 ? 'pm' : 'am';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `tomorrow at ${strTime}`
+                    this.toggleRemindDropDown = false
+                } else if (date === 'nextWeek') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = 'nextWeek'
+                    let time = new Date(new Date().setDate(new Date().getDate() + 7) + 2 * 60 * 60 * 1000)
+                    let hours = time.getHours()
+                    let minutes = time.getMinutes()
+                    let ampm = hours >= 12 ? 'pm' : 'am';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
+                    this.toggleRemindDropDown = false
+                } else if (date === 'customDate') {
+                    this.pickCustomRemindDate = true
+                }
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            } else {
+                if (date === 'toDay') {
+                    let time = new Date(new Date().setDate(new Date().getDate()) + 2 * 60 * 60 * 1000)
+                    let hours = time.getHours()
+                    let minutes = time.getMinutes()
+                    let ampm = hours >= 12 ? 'pm' : 'am';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'toDay'
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
+                    this.toggleRemindDropDown = false
+                } else if (date === 'tomorrow') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'tomorrow'
+                    let time = new Date(new Date().setDate(new Date().getDate() + 1) + 2 * 60 * 60 * 1000)
+                    let hours = time.getHours()
+                    let minutes = time.getMinutes()
+                    let ampm = hours >= 12 ? 'pm' : 'am';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    let strTime = hours + ':' + minutes + ' ' + ampm;
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `tomorrow at ${strTime}`
+                    this.toggleRemindDropDown = false
+                } else if (date === 'nextWeek') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'nextWeek'
+                    let time = new Date(new Date().setDate(new Date().getDate() + 7) + 2 * 60 * 60 * 1000)
+                    let hours = time.getHours()
+                    let minutes = time.getMinutes()
+                    let ampm = hours >= 12 ? 'pm' : 'am';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
+                    this.toggleRemindDropDown = false
+                } else if (date === 'customDate') {
+                    this.pickCustomRemindDate = true
+                }
+
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            }
+        },
+        addCustomRemindDate() {
+            if (!!this.pickedCustomRemindDate) {
+                if (!!this.descriptionTaskChildList) {
+                    let time = new Date(this.pickedCustomRemindDate)
+                    let hours = time.getHours()
+                    let minutes = time.getMinutes()
+                    let ampm = hours >= 12 ? 'pm' : 'am';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = 'CustomDate'
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
+
+                    localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                } else {
+                    let time = new Date(this.pickedCustomRemindDate)
+                    let hours = time.getHours()
+                    let minutes = time.getMinutes()
+                    let ampm = hours >= 12 ? 'pm' : 'am';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'CustomDate'
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
+
+                    localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                }
+                this.pickCustomRemindDate = false
+                this.toggleRemindDropDown = false
+                this.pickedCustomRemindDate = null
+            } else {
+                if (!!this.errorCustomRemindDateToggle) {
+                    this.errorCustomRemindDateToggle = false
+                    setTimeout(() => {
+                        this.errorCustomRemindDateToggle = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.errorCustomRemindDateToggle = true
+                    }, 0)
+                }
+            }
+        },
+        closeRemind() {
+            if (!!this.descriptionTaskChildList) {
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = ''
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = ''
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = ''
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            } else {
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = ''
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = ''
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = ''
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             }
         }

@@ -484,7 +484,6 @@ export default {
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.toggleDropDown = false
             this.showPopUp = !this.showPopUp
-            console.log(this.showSortBy);
         },
         closeSort() {
             this.lists[this.listId].tasks.sort((a, b) => {
