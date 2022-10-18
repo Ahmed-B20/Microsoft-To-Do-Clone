@@ -243,7 +243,7 @@ export default {
         },
         ReturnGroupOfLists() {
             if (this.ReturnGroupOfListsArray.length > 0) {
-                this.dropDownSlotsChildList = ['RenameList', 'PromoteToList','MoveListTo', 'DuplicateList', 'DeleteList']
+                this.dropDownSlotsChildList = ['RenameList', 'PromoteToList', 'MoveListTo', 'DuplicateList', 'DeleteList']
                 return true
             } else {
                 this.dropDownSlotsChildList = ['RenameList', 'PromoteToList', 'DuplicateList', 'DeleteList']
@@ -333,6 +333,21 @@ export default {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
                 }
                 this.left = 38.5
+
+                if (this.toggleDropDown) {
+                this.oldChildListId = this.groupOfListId
+            } else {
+                if (+this.oldChildListId != +this.groupOfListId) {
+                    this.toggleDropDown = false
+
+                    this.oldChildListId = this.groupOfListId
+                    this.showRename = false
+
+                    setTimeout(() => {
+                        this.toggleDropDown = true
+                    }, 0)
+                }
+            }
             } else if (target === 'childList') {
                 this.parentElementDomRect = this.$refs.groupOfLists.parentElement.parentElement.getBoundingClientRect()
 
@@ -347,23 +362,22 @@ export default {
                 } else {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 45
                 }
-            }
 
-            if (this.toggleDropDown) {
-                this.oldChildListId = event.target.getAttribute('data-id')
-            } else {
-                if (+this.oldChildListId != +this.groupOfListId) {
-                    this.toggleDropDown = false
+                if (this.toggleDropDown) {
+                    this.oldChildListId = this.selectedChildListId
+                } else {
+                    if (+this.oldChildListId != +this.selectedChildListId) {
+                        this.toggleDropDown = false
 
-                    this.oldChildListId = event.target.getAttribute('data-id')
-                    this.showRename = false
+                        this.oldChildListId = this.selectedChildListId
+                        this.showRename = false
 
-                    setTimeout(() => {
-                        this.toggleDropDown = true
-                    }, 0)
+                        setTimeout(() => {
+                            this.toggleDropDown = true
+                        }, 0)
+                    }
                 }
             }
-
         },
         closeDropDown() {
             this.toggleDropDown = false

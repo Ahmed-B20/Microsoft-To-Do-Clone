@@ -210,20 +210,19 @@ export default {
             this.left = 38.5
 
             if (this.toggleDropDown) {
-                this.oldListId = event.target.getAttribute('data-id')
+                this.oldListId = this.listId
+                console.log(this.oldListId);
             } else {
-                console.log(+this.oldListId ,+this.listId);
                 if (+this.oldListId != +this.listId) {
                     this.toggleDropDown = false
 
-                    this.oldListId = event.target.getAttribute('data-id')
+                    this.oldListId = this.listId
                     this.showRename = false
 
                     setTimeout(() => {
                         this.toggleDropDown = true
                     }, 0)
-                } else {
-                    this.toggleDropDown = false
+                    console.log(+this.oldListId, +this.listId);
                 }
             }
         },

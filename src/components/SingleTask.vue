@@ -386,11 +386,11 @@ export default {
 
                     this.oldTaskIdDrop = event.target.getAttribute('data-id')
 
+                    console.log(this.oldTaskIdDrop, this.taskElementId);
+
                     setTimeout(() => {
                         this.toggleDropDown = true
                     }, 0)
-
-                    console.log(this.toggleDropDown);
                 }
             }
         },
