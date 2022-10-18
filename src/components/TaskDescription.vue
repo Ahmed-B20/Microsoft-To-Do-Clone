@@ -94,9 +94,14 @@
                 </template>
             </div>
 
-            <div class="task-box add-to-my-day">
-                <img src="@/assets/design-material/icons/sun.png" alt="my day tab" />
-                <span>Add To My Day</span>
+            <div class="task-box add-to-my-day" @click="addToMyDay" v-if="!addToMyDayState">
+                <img src="@/assets/design-material/icons/sun.png" alt="added to my day">
+                <span>Add to my day</span>
+            </div>
+
+            <div class="task-box add-to-my-day" @click="closeToMyDay" v-else>
+                <img src="@/assets/design-material/icons/sun.png" alt="remove from my day">
+                <span>Remove from my day</span>
             </div>
 
             <div ref="timeAndDate" class="task-box time-and-date">
@@ -145,8 +150,8 @@
                             <template v-if="pickCustomDate">
                                 <img @click="addCustomDate" src="@/assets/design-material/icons/plus.png"
                                     alt="add custom date">
-                                <input :class="{error:errorCustomDateToggle}" class="custom-date" v-model="pickedCustomDate"
-                                    type="date" name="" id="">
+                                <input :class="{error:errorCustomDateToggle}" class="custom-date"
+                                    v-model="pickedCustomDate" type="date" name="" id="">
                             </template>
 
                             <template v-else>
@@ -219,6 +224,8 @@ export default {
                         this.taskIndex = index
                     }
                 })
+
+            this.addToMyDayState = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].addToMyDay
         } else {
             this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
             this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
@@ -226,6 +233,8 @@ export default {
                     this.taskIndex = index
                 }
             })
+
+            this.addToMyDayState = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].addToMyDay
         }
     },
     components: {
@@ -259,12 +268,13 @@ export default {
             dropDownDueDateSlots: ['ToDay', 'Tomorrow', 'NextWeek', 'PickADate'],
             pickCustomDate: false,
             pickedCustomDate: null,
-            errorCustomDateToggle: false
+            errorCustomDateToggle: false,
+            addToMyDayState: false
         }
     },
     computed: {
         ...mapState(allLists, ['returnLists']),
-        ...mapWritableState(allLists, ['lists']),
+        ...mapWritableState(allLists, ['lists', 'smartList']),
 
         taskNoteText() {
             if (this.task.note.length > 0) {
@@ -846,6 +856,30 @@ export default {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = ''
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             }
+        },
+        addToMyDay() {
+            if (!!this.descriptionTaskChildList) {
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = true
+                this.smartList.myDay.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+            } else {
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = true
+                this.smartList.myDay.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+            }
+            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.addToMyDayState = true
+        },
+        closeToMyDay() {
+            if (!!this.childId) {
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = false
+                this.smartList.myDay.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+            } else {
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = false
+                this.smartList.myDay.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+            }
+            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
+            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            this.addToMyDayState = false
         }
     }
 }
