@@ -205,9 +205,18 @@
                     </template>
 
                     <template #Custom>
-                        <div @click="repeatDueDate('custom')">
-                            <img src="@/assets/design-material/icons/custom-date.png" alt="next week">
-                            <span>Custom</span>
+                        <div @click="repeatDueDate('customDate')">
+                            <template v-if="pickCustomRepeatDate">
+                                <img @click="addCustomRepeatDate" src="@/assets/design-material/icons/plus.png"
+                                    alt="add custom date">
+                                <input :class="{error:errorCustomRepeatDateToggle}" class="custom-date"
+                                    v-model="pickedCustomRepeatDate" type="date" name="" id="">
+                            </template>
+
+                            <template v-else>
+                                <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
+                                <span>Custom</span>
+                            </template>
                         </div>
                     </template>
                 </DropDown>
@@ -323,6 +332,8 @@ export default {
             toggleRepeatDropDown: false,
             dropDownRepeatDueDateSlots: ['Daily', 'WeekDays', 'Weekly', 'Monthly', 'Yearly', 'Custom'],
             pickCustomRepeatDate: false,
+            pickedCustomRepeatDate: null,
+            errorCustomRepeatDateToggle: false
         }
     },
     computed: {
@@ -1021,6 +1032,37 @@ export default {
                 }
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            }
+        },
+        addCustomRepeatDate() {
+            if (!!this.pickedCustomRepeatDate) {
+                if (!!this.descriptionTaskChildList) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = this.pickedCustomRepeatDate
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = new Date(this.pickedCustomRepeatDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomRepeatDate).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'CustomDate'
+
+                    localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                } else {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = this.pickedCustomRepeatDate
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = new Date(this.pickedCustomRepeatDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomRepeatDate).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'CustomDate'
+
+                    localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+                }
+                this.pickCustomRepeatDate = false
+                this.toggleRepeatDropDown = false
+                this.pickedCustomRepeatDate = null
+            } else {
+                if (!!this.errorCustomRepeatDateToggle) {
+                    this.errorCustomRepeatDateToggle = false
+                    setTimeout(() => {
+                        this.errorCustomRepeatDateToggle = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.errorCustomRepeatDateToggle = true
+                    }, 0)
+                }
             }
         },
         closeRepeat() {
