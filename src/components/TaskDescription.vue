@@ -109,16 +109,19 @@
                     <img src="@/assets/design-material/icons/alarm-clock.png" alt="remind me" />
                     <span>Remind Me</span>
                 </div>
-                <div @click.self="toggleAddDueDate">
-                    <img @click="toggleAddDueDate" src="@/assets/design-material/icons/calendar.png"
+                <div @click.self="toggleAddDueDate(95)">
+                    <img @click="toggleAddDueDate(95)" src="@/assets/design-material/icons/calendar.png"
                         alt="add due date" />
-                    <span @click="toggleAddDueDate">{{dueDateState}}</span>
+                    <span @click="toggleAddDueDate(95)">{{dueDateState}}</span>
                     <img class="delete-due-date" @click="deleteDueDate" v-if="dueDateState != 'Add Due Date'"
                         src="@/assets/design-material/icons/close.png" alt="delete due date">
                 </div>
-                <div>
-                    <img src="@/assets/design-material/icons/event.png" alt="repeat" />
-                    <span>Repeat</span>
+                <div @click.self="toggleRepeat(145)">
+                    <img @click="toggleRepeat(145)" src="@/assets/design-material/icons/event.png" alt="repeat" />
+                    <span @click="toggleRepeat(145)">{{repeatState}}</span>
+
+                    <img class="delete-due-date" @click="closeRepeat" v-if="repeatState != 'Repeat'"
+                        src="@/assets/design-material/icons/close.png" alt="delete repeat">
                 </div>
             </div>
 
@@ -158,6 +161,53 @@
                                 <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
                                 <span>Pick a Date</span>
                             </template>
+                        </div>
+                    </template>
+                </DropDown>
+            </transition>
+
+            <transition name="to-bottom">
+                <DropDown :dropDownSlots="dropDownRepeatDueDateSlots" :top="top" :right="right"
+                    v-if="toggleRepeatDropDown">
+                    <template #Daily>
+                        <div @click="repeatDueDate('daily')">
+                            <img src="@/assets/design-material/icons/tomorrow-repeat.png" alt="due date">
+                            <span>Daily</span>
+                        </div>
+                    </template>
+
+                    <template #WeekDays>
+                        <div @click="repeatDueDate('weekDays')">
+                            <img src="@/assets/design-material/icons/due-date.png" alt="due tomorrow">
+                            <span>WeekDays</span>
+                        </div>
+                    </template>
+
+                    <template #Weekly>
+                        <div @click="repeatDueDate('weekly')">
+                            <img src="@/assets/design-material/icons/next-week.png" alt="next week">
+                            <span>Weekly</span>
+                        </div>
+                    </template>
+
+                    <template #Monthly>
+                        <div @click="repeatDueDate('monthly')">
+                            <img src="@/assets/design-material/icons/30-days.png" alt="next week">
+                            <span>Monthly</span>
+                        </div>
+                    </template>
+
+                    <template #Yearly>
+                        <div @click="repeatDueDate('yearly')">
+                            <img src="@/assets/design-material/icons/365.png" alt="next week">
+                            <span>Yearly</span>
+                        </div>
+                    </template>
+
+                    <template #Custom>
+                        <div @click="repeatDueDate('custom')">
+                            <img src="@/assets/design-material/icons/custom-date.png" alt="next week">
+                            <span>Custom</span>
                         </div>
                     </template>
                 </DropDown>
@@ -269,7 +319,10 @@ export default {
             pickCustomDate: false,
             pickedCustomDate: null,
             errorCustomDateToggle: false,
-            addToMyDayState: false
+            addToMyDayState: false,
+            toggleRepeatDropDown: false,
+            dropDownRepeatDueDateSlots: ['Daily', 'WeekDays', 'Weekly', 'Monthly', 'Yearly', 'Custom'],
+            pickCustomRepeatDate: false,
         }
     },
     computed: {
@@ -302,6 +355,21 @@ export default {
                     return 'Due ' + this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName
                 } else {
                     return 'Add Due Date'
+                }
+            }
+        },
+        repeatState() {
+            if (!!this.descriptionTaskChildList) {
+                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
+                    return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName
+                } else {
+                    return 'Repeat'
+                }
+            } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
+                    return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName
+                } else {
+                    return 'Repeat'
                 }
             }
         }
@@ -764,9 +832,16 @@ export default {
                 this.dropDownStepId = null
             }
         },
-        toggleAddDueDate() {
+        toggleAddDueDate(height) {
             this.toggleDropDown = !this.toggleDropDown
-            this.top = this.$refs.timeAndDate.getBoundingClientRect().top + 95
+            this.toggleRepeatDropDown = false
+            this.top = this.$refs.timeAndDate.getBoundingClientRect().top + height
+            this.right = 70
+        },
+        toggleRepeat(height) {
+            this.toggleDropDown = false
+            this.toggleRepeatDropDown = !this.toggleRepeatDropDown
+            this.top = this.$refs.timeAndDate.getBoundingClientRect().top + height
             this.right = 70
         },
         addDueDate(date) {
@@ -843,17 +918,17 @@ export default {
                     }, 0)
                 }
             }
-
-
         },
         deleteDueDate() {
             if (!!this.descriptionTaskChildList) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = ''
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = ''
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = ''
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = ''
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = ''
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = ''
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             }
         },
@@ -880,6 +955,86 @@ export default {
             localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.addToMyDayState = false
+        },
+        repeatDueDate(date) {
+            console.log(date);
+            if (!!this.descriptionTaskChildList) {
+                if (date === 'daily') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date()
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = 'Daily'
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Daily'
+                    this.toggleRepeatDropDown = false
+                } else if (date === 'weekDays') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date(new Date().setDate(new Date().getDate() + 1))
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = 'WeekDays'
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'WeekDays'
+                    this.toggleRepeatDropDown = false
+                } else if (date === 'weekly') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date(new Date().setDate(new Date().getDate() + 7))
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Weekly'
+                    this.toggleRepeatDropDown = false
+                } else if (date === 'monthly') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date(new Date().setDate(new Date().getDate() + 30))
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = new Date(new Date().setDate(new Date().getDate() + 30)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 30)).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Monthly'
+                    this.toggleRepeatDropDown = false
+                } else if (date === 'yearly') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date(new Date().setDate(new Date().getDate() + 365))
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = new Date(new Date().setDate(new Date().getDate() + 365)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 365)).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Yearly'
+                    this.toggleRepeatDropDown = false
+                } else if (date === 'customDate') {
+                    this.pickCustomRepeatDate = true
+                }
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            } else {
+                if (date === 'daily') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = new Date()
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = 'Daily'
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Daily'
+                    this.toggleRepeatDropDown = false
+                } else if (date === 'weekDays') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = new Date(new Date().setDate(new Date().getDate() + 1))
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = 'WeekDays'
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'WeekDays'
+                    this.toggleRepeatDropDown = false
+                } else if (date === 'weekly') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = new Date(new Date().setDate(new Date().getDate() + 7))
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Weekly'
+                    this.toggleRepeatDropDown = false
+                }
+                else if (date === 'monthly') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = new Date(new Date().setDate(new Date().getDate() + 30))
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = new Date(new Date().setDate(new Date().getDate() + 30)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 30)).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Monthly'
+                    this.toggleRepeatDropDown = false
+                }
+                else if (date === 'yearly') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = new Date(new Date().setDate(new Date().getDate() + 365))
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = new Date(new Date().setDate(new Date().getDate() + 365)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 365)).toString().split(' ')[2]
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Yearly'
+                    this.toggleRepeatDropDown = false
+                } else if (date === 'customDate') {
+                    this.pickCustomRepeatDate = true
+                }
+
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            }
+        },
+        closeRepeat() {
+            if (!!this.descriptionTaskChildList) {
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = ''
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = ''
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = ''
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            } else {
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = ''
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = ''
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = ''
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            }
         }
     }
 }

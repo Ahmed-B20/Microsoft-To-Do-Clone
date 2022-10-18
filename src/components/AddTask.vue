@@ -69,6 +69,10 @@ export default {
                 this.taskObj.dueDate = ''
                 this.taskObj.dueDateName = ''
                 this.taskObj.realDueDateName= ''
+
+                this.taskObj.repeatDueDate = ''
+                this.taskObj.repeatDueDateName = ''
+                this.taskObj.realRepeatDueDateName= ''
                 this.taskObj.addToMyDay = false
                 this.taskObj.note = ''
                 this.taskObj.steps = []

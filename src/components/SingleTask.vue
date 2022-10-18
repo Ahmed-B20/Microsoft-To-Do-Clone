@@ -42,6 +42,15 @@
                             title="task notes">
                         My Day
                     </span>
+
+                    <span :data-id="index" class="border"
+                        v-if="task.steps.length > 0 && task.addToMyDay || task.note && task.addToMyDay || task.dueDateName && task.addToMyDay|| task.addToMyDay && !!task.repeatDueDateName"></span>
+
+                    <span :data-id="index" class="note" v-if="!!task.repeatDueDateName">
+                        <img :data-id="index" src="@/assets/design-material/icons/repeat.png" :alt="task.repeatDueDateName"
+                            title="task notes">
+                        {{task.repeatDueDateName}}
+                    </span>
                 </span>
             </span>
 
