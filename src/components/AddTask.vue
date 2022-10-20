@@ -73,6 +73,8 @@ export default {
                 this.taskObj.repeatDueDate = ''
                 this.taskObj.repeatDueDateName = ''
                 this.taskObj.realRepeatDueDateName= ''
+                this.taskObj.repeatedTask = false
+                this.taskObj.repeatedCustomTaskDuration = ''
 
                 this.taskObj.remindMe= ''
                 this.taskObj.remindMeDate= ''
