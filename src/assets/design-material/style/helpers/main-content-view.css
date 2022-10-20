@@ -187,6 +187,18 @@
     gap: 10px;
     cursor: pointer;
     transform-origin: center center;
+    position: relative;
+    overflow: hidden;
+}
+
+.view-content-container .tasks li.delete:not(.drop-down ul li)::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-color: #ffe586;
 }
 
 .view-content-container .tasks li.add-animation {
@@ -282,6 +294,10 @@
     align-items: center;
     justify-content: center;
     gap: 5px;
+}
+
+.view-content-container .tasks li .task-main-info .info-icons .note.delete {
+    color: red;
 }
 
 .view-content-container .tasks li .task-main-info .info-icons .info-icon:not(:first-child) {

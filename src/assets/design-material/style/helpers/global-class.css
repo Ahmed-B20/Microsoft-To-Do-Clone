@@ -350,6 +350,10 @@
     border-bottom: none;
 }
 
+.dashboard-content-container .task-description .time-and-date>div.delete {
+    color: red;
+}
+
 .dashboard-content-container .task-description .time-and-date>div img {
     height: 25px;
 }

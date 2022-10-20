@@ -122,7 +122,7 @@
                         src="@/assets/design-material/icons/close.png" alt="delete repeat">
                 </div>
 
-                <div @click.self="toggleAddDueDate(145)">
+                <div @click.self="toggleAddDueDate(145)" :class="{delete: dueDateStateClass}">
                     <img @click="toggleAddDueDate(145)" src="@/assets/design-material/icons/calendar.png"
                         alt="add due date" />
                     <span @click="toggleAddDueDate(145)">{{dueDateState}}</span>
@@ -420,6 +420,21 @@ export default {
                     return 'Due ' + this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName
                 } else {
                     return 'Add Due Date'
+                }
+            }
+        },
+        dueDateStateClass() {
+            if (!!this.descriptionTaskChildList) {
+                if (new Date() > new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
+                    return true
+                } else {
+                    return false
+                }
+            } else {
+                if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                    return true
+                } else {
+                    return false
                 }
             }
         },
