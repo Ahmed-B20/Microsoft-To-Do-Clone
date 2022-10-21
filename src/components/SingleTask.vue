@@ -1,7 +1,7 @@
 <template>
     <transition-group name="tasks-transition">
         <li ref="taskElement" @contextmenu="openDropDown" @click.self="openDescription"
-            :class="{complete: task.complete, delete: new Date() > new Date(task.dueTime) && !task.complete}"
+            :class="{complete: task.complete, delete: new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete}"
             v-for="(task,index) in returnAllTasks" :key="task.id" :data-id="index">
             <span :data-id="index" @click="completeTask('task')" class="check">
                 <img :data-id="index" src="@/assets/design-material/icons/check.png" alt="check" />
@@ -29,8 +29,9 @@
                     <!-- <span :data-id="index" class="border"
                         v-if="task.steps.length > 0 && task.dueDateName || task.note && task.dueDateName"></span> -->
 
-                    <span :class="{delete: new Date() > new Date(task.dueTime) && !task.complete}" :data-id="index"
-                        class="info-icon note" v-if="task.dueDateName">
+                    <span
+                        :class="{delete: new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete}"
+                        :data-id="index" class="info-icon note" v-if="task.dueDateName">
                         <img :data-id="index" src="@/assets/design-material/icons/due-date.png" :alt="task.dueDateName"
                             title="task notes">
                         {{task.dueDateName}}

@@ -5,8 +5,13 @@
             <!-- <img v-if="new Date() > new Date(task.dueTime) && !task.complete" @click="openAlertMessage" src="@/assets/design-material/icons/bell.png" alt=""
                 class="alert-message"> -->
 
-            <img v-if="new Date() > new Date(task.dueTime) && !task.complete" @click="toggleAlertPopup"
+            <!-- <img v-if="new Date() > new Date(task.dueTime) && !task.complete" @click="toggleAlertPopup"
+                src="@/assets/design-material/icons/notification.gif" alt="" class="alert-message"> -->
+
+                <img v-if="new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete" @click="toggleAlertPopup"
                 src="@/assets/design-material/icons/notification.gif" alt="" class="alert-message">
+
+                
 
             <img @click="closeDescription" src="@/assets/design-material/icons/close.png" alt=""
                 class="close-description">
@@ -448,13 +453,16 @@ export default {
         },
         dueDateStateClass() {
             if (!!this.descriptionTaskChildList) {
-                if (new Date() > new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
+                // if (new Date() > new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
+                if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
                     return true
                 } else {
                     return false
                 }
             } else {
-                if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
                     return true
                 } else {
                     return false
@@ -1155,14 +1163,22 @@ export default {
                 let name = new Date().toString().split(' ')
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
 
+                if (!this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = name.slice(0, 4).join(' ')
+                }
+
                 if (date === 'daily') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Daily'
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'ToDay'
                     this.toggleRepeatDropDown = false
                 } else if (date === 'weekDays') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'WeekDays'
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
                     this.toggleRepeatDropDown = false
                 } else if (date === 'weekly') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Weekly'
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
                     this.toggleRepeatDropDown = false
                 } else if (date === 'monthly') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Monthly'
@@ -1171,6 +1187,7 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Yearly'
                     this.toggleRepeatDropDown = false
                 } else if (date === 'customDate') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
                     this.pickCustomRepeatDate = true
                 }
 
@@ -1181,14 +1198,22 @@ export default {
                 let name = new Date().toString().split(' ')
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
 
+                if (!this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime) {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = name.slice(0, 4).join(' ')
+                }
+
                 if (date === 'daily') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Daily'
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'ToDay'
                     this.toggleRepeatDropDown = false
                 } else if (date === 'weekDays') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'WeekDays'
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
                     this.toggleRepeatDropDown = false
                 } else if (date === 'weekly') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Weekly'
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
                     this.toggleRepeatDropDown = false
                 }
                 else if (date === 'monthly') {
@@ -1199,6 +1224,7 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Yearly'
                     this.toggleRepeatDropDown = false
                 } else if (date === 'customDate') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
                     this.pickCustomRepeatDate = true
                 }
 
