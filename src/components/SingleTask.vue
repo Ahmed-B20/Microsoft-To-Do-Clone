@@ -595,7 +595,6 @@ export default {
                         else {
                             this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = true
                         }
-
                     }
                 } else {
                     this.thisTask = event.target.parentElement.getAttribute('data-id') || this.taskElementId
