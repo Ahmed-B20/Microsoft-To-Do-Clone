@@ -288,9 +288,10 @@
                     <h3>Task Description</h3>
                     <!-- <textarea placeholder="Add Task Description" @blur="emptyTextValue" :data-id="index" v-model="textValue"
             @keyup="addNote"> -->
-                    <textarea placeholder="Add Task Description" :data-id="index" v-model="textValue" @keyup="addNote">
-            {{ taskNoteText }}
-        </textarea>
+                    <!-- <textarea placeholder="Add Task Description" :data-id="index" v-model="textValue" @keyup="addNote"> -->
+                    <textarea placeholder="Add Task Description" v-model="textValue" @keyup="addNote">
+                        {{ taskNoteText }}
+                    </textarea>
 
                     <div class="date">
                         12/6/520
