@@ -1,342 +1,346 @@
 <template>
-    <div class="task-description">
+    <div>
+        <div class="task-description">
 
-        <div class="close-container">
-            <!-- <img v-if="new Date() > new Date(task.dueTime) && !task.complete" @click="openAlertMessage" src="@/assets/design-material/icons/bell.png" alt=""
-                class="alert-message"> -->
+            <div class="close-container">
+                <!-- <img v-if="new Date() > new Date(task.dueTime) && !task.complete" @click="openAlertMessage" src="@/assets/design-material/icons/bell.png" alt=""
+        class="alert-message"> -->
 
-            <!-- <img v-if="new Date() > new Date(task.dueTime) && !task.complete" @click="toggleAlertPopup"
-                src="@/assets/design-material/icons/notification.gif" alt="" class="alert-message"> -->
+                <!-- <img v-if="new Date() > new Date(task.dueTime) && !task.complete" @click="toggleAlertPopup"
+        src="@/assets/design-material/icons/notification.gif" alt="" class="alert-message"> -->
 
-            <img v-if="new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete"
-                @click="toggleAlertPopup" src="@/assets/design-material/icons/notification.gif" alt=""
-                class="alert-message">
+                <img v-if="new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete"
+                    @click="toggleAlertPopup" src="@/assets/design-material/icons/notification.gif" alt=""
+                    class="alert-message">
 
 
 
-            <img @click="closeDescription" src="@/assets/design-material/icons/close.png" alt=""
-                class="close-description">
-        </div>
+                <img @click="closeDescription" src="@/assets/design-material/icons/close.png" alt=""
+                    class="close-description">
+            </div>
 
-        <div class="task-main-content">
-            <div class="task-box task-info-and-steps">
-                <h2 :class="{complete: task.complete}">
-                    <span :data-id="taskIndex" @click="completeAsideTask" class="check">
-                        <img src="@/assets/design-material/icons/check.png" alt="check" />
-                    </span>
-                    <span class="task-name" :class="{complete: task.complete}">
-                        {{task.name}}
-                    </span>
+            <div class="task-main-content">
+                <div class="task-box task-info-and-steps">
+                    <h2 :class="{ complete: task.complete }">
+                        <span :data-id="taskIndex" @click="completeAsideTask" class="check">
+                            <img src="@/assets/design-material/icons/check.png" alt="check" />
+                        </span>
+                        <span class="task-name" :class="{ complete: task.complete }">
+                            {{ task.name }}
+                        </span>
 
-                    <img v-if="task.important" :data-id="taskIndex" @click="importantAsideToggle"
-                        class="important-toggle" src="@/assets/design-material/icons/important-task.png" alt="">
+                        <img v-if="task.important" :data-id="taskIndex" @click="importantAsideToggle"
+                            class="important-toggle" src="@/assets/design-material/icons/important-task.png" alt="">
 
-                    <img v-else :data-id="taskIndex" @click="importantAsideToggle" class="important-toggle"
-                        src="@/assets/design-material/icons/important-hover.png" alt="">
-                </h2>
+                        <img v-else :data-id="taskIndex" @click="importantAsideToggle" class="important-toggle"
+                            src="@/assets/design-material/icons/important-hover.png" alt="">
+                    </h2>
 
-                <div class="task-steps-container">
-                    <div class="steps-container">
-                        <ul class="task-steps">
-                            <transition-group name="show-steps">
-                                <li @blur="closeDropDown" tabindex="0" :data-id="index"
-                                    v-for="(step,index) in task.steps" :key="step.id"
-                                    :class="{complete: step.complete}">
-                                    <span :data-id="index" @click="completeStep" class="check">
-                                        <img src="@/assets/design-material/icons/check.png" alt="check" />
-                                    </span>
-                                    <span class="task-name" :class="{complete: step.complete}">
-                                        {{step.name}}
-                                    </span>
+                    <div class="task-steps-container">
+                        <div class="steps-container">
+                            <ul class="task-steps">
+                                <transition-group name="show-steps">
+                                    <li @blur="closeDropDown" tabindex="0" :data-id="index"
+                                        v-for="(step, index) in task.steps" :key="step.id"
+                                        :class="{ complete: step.complete }">
+                                        <span :data-id="index" @click="completeStep" class="check">
+                                            <img src="@/assets/design-material/icons/check.png" alt="check" />
+                                        </span>
+                                        <span class="task-name" :class="{ complete: step.complete }">
+                                            {{ step.name }}
+                                        </span>
 
-                                    <img @click="openDropDown" :data-id="index" class="important-toggle"
-                                        src="@/assets/design-material/icons/more.png" alt="">
-                                </li>
-                            </transition-group>
-                        </ul>
+                                        <img @click="openDropDown" :data-id="index" class="important-toggle"
+                                            src="@/assets/design-material/icons/more.png" alt="">
+                                    </li>
+                                </transition-group>
+                            </ul>
+                        </div>
+
+                        <transition name="to-bottom">
+                            <DropDown :dropDownSlots="dropDownSlots" :top="top" :right="right" v-if="toggleDropDown">
+                                <template #MarkAsComplete>
+                                    <div @click="completeStep">
+                                        <img src="@/assets/design-material/icons/check.png" alt="">
+                                        <span>Mark as complete</span>
+                                    </div>
+                                </template>
+
+                                <template #PromoteToTask>
+                                    <div @click="PromoteToTask">
+                                        <img src="@/assets/design-material/icons/plus.png" alt="">
+                                        <span>Promote to task</span>
+                                    </div>
+                                </template>
+
+                                <template #DeleteStep>
+                                    <div @click="togglePopup">
+                                        <img src="@/assets/design-material/icons/delete.png" alt="">
+                                        <span>Delete step</span>
+                                    </div>
+                                </template>
+                            </DropDown>
+                        </transition>
+
+                        <div class="add-steps" :class="{ error: errorToggle }">
+                            <img :class="{ active: activeToggle }" @click="addStep"
+                                src="@/assets/design-material/icons/plus.png" alt="add-steps" />
+
+                            <input v-model="inputValue" @keyup.enter="addStep" required placeholder="Add New step"
+                                type="text" />
+                        </div>
+                    </div>
+                </div>
+
+                <div @click.self="renameTask" class="task-box rename-task">
+                    <template v-if="showRename">
+                        <img @click="newTaskName" class="renameTask" :class="{ active: itemDetect }"
+                            src="@/assets/design-material/icons/plus.png" alt="add-item" />
+                        <input @keyup.enter="newTaskName" required @focus="toggleErrorClass" v-model="newName"
+                            placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
+                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                    </template>
+
+                    <template v-else>
+                        <img @click="renameTask" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                        <span @click="renameTask">Rename Task</span>
+                    </template>
+                </div>
+
+                <div class="task-box add-to-my-day" @click="addToMyDay" v-if="!addToMyDayState">
+                    <img src="@/assets/design-material/icons/sun.png" alt="added to my day">
+                    <span>Add to my day</span>
+                </div>
+
+                <div class="task-box add-to-my-day" @click="closeToMyDay" v-else>
+                    <img src="@/assets/design-material/icons/sun.png" alt="remove from my day">
+                    <span>Remove from my day</span>
+                </div>
+
+                <div ref="timeAndDate" class="task-box time-and-date">
+                    <div @click.self="toggleRemind(53)">
+                        <img @click="toggleRemind(53)" src="@/assets/design-material/icons/alarm-clock.png"
+                            alt="remind me" />
+                        <span @click="toggleRemind(53)">{{ remindState }}</span>
+
+                        <img class="delete-due-date" @click="closeRemind" v-if="remindState != 'Remind me'"
+                            src="@/assets/design-material/icons/close.png" alt="delete repeat">
                     </div>
 
-                    <transition name="to-bottom">
-                        <DropDown :dropDownSlots="dropDownSlots" :top="top" :right="right" v-if="toggleDropDown">
-                            <template #MarkAsComplete>
-                                <div @click="completeStep">
-                                    <img src="@/assets/design-material/icons/check.png" alt="">
-                                    <span>Mark as complete</span>
-                                </div>
-                            </template>
+                    <div @click.self="toggleRepeat(95)">
+                        <img @click="toggleRepeat(95)" src="@/assets/design-material/icons/event.png" alt="repeat" />
+                        <span @click="toggleRepeat(95)">{{ repeatState }}</span>
 
-                            <template #PromoteToTask>
-                                <div @click="PromoteToTask">
-                                    <img src="@/assets/design-material/icons/plus.png" alt="">
-                                    <span>Promote to task</span>
-                                </div>
-                            </template>
+                        <img class="delete-due-date" @click="closeRepeat" v-if="repeatState != 'Repeat'"
+                            src="@/assets/design-material/icons/close.png" alt="delete repeat">
+                    </div>
 
-                            <template #DeleteStep>
-                                <div @click="togglePopup">
-                                    <img src="@/assets/design-material/icons/delete.png" alt="">
-                                    <span>Delete step</span>
-                                </div>
-                            </template>
-                        </DropDown>
-                    </transition>
+                    <div @click.self="toggleAddDueDate(145)" :class="{ delete: dueDateStateClass }">
+                        <img @click="toggleAddDueDate(145)" src="@/assets/design-material/icons/calendar.png"
+                            alt="add due date" />
+                        <span @click="toggleAddDueDate(145)">{{ dueDateState }}</span>
+                        <img class="delete-due-date" @click="deleteDueDate" v-if="dueDateState != 'Add Due Date'"
+                            src="@/assets/design-material/icons/close.png" alt="delete due date">
+                    </div>
+                </div>
 
-                    <div class="add-steps" :class="{error:errorToggle}">
-                        <img :class="{active:activeToggle}" @click="addStep"
-                            src="@/assets/design-material/icons/plus.png" alt="add-steps" />
+                <transition name="to-bottom">
+                    <DropDown :dropDownSlots="dropDownDueDateSlots" :top="top" :right="right"
+                        v-if="toggleDueDateDropDown">
+                        <template #ToDay>
+                            <div @click="addDueDate('today')">
+                                <img src="@/assets/design-material/icons/date.png" alt="due date">
+                                <span>ToDay</span>
+                            </div>
+                        </template>
 
-                        <input v-model="inputValue" @keyup.enter="addStep" required placeholder="Add New step"
-                            type="text" />
+                        <template #Tomorrow>
+                            <div @click="addDueDate('tomorrow')">
+                                <img src="@/assets/design-material/icons/tomorrow.png" alt="due tomorrow">
+                                <span>Tomorrow</span>
+                            </div>
+                        </template>
+
+                        <template #NextWeek>
+                            <div @click="addDueDate('nextWeek')">
+                                <img src="@/assets/design-material/icons/next-week.png" alt="next week">
+                                <span>Next week</span>
+                            </div>
+                        </template>
+
+                        <template #PickADate>
+                            <div @click="addDueDate('customDate')">
+                                <template v-if="pickCustomDate">
+                                    <img @click="addCustomDate" src="@/assets/design-material/icons/plus.png"
+                                        alt="add custom date">
+                                    <input :class="{ error: errorCustomDateToggle }" class="custom-date"
+                                        v-model="pickedCustomDate" type="date" name="" id="">
+                                </template>
+
+                                <template v-else>
+                                    <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
+                                    <span>Pick a Date</span>
+                                </template>
+                            </div>
+                        </template>
+                    </DropDown>
+                </transition>
+
+                <transition name="to-bottom">
+                    <DropDown :dropDownSlots="dropDownRepeatDueDateSlots" :top="top" :right="right"
+                        v-if="toggleRepeatDropDown">
+                        <template #Daily>
+                            <div @click="repeatDueDate('daily')">
+                                <img src="@/assets/design-material/icons/tomorrow-repeat.png" alt="due date">
+                                <span>Daily</span>
+                            </div>
+                        </template>
+
+                        <template #WeekDays>
+                            <div @click="repeatDueDate('weekDays')">
+                                <img src="@/assets/design-material/icons/due-date.png" alt="due tomorrow">
+                                <span>WeekDays</span>
+                            </div>
+                        </template>
+
+                        <template #Weekly>
+                            <div @click="repeatDueDate('weekly')">
+                                <img src="@/assets/design-material/icons/next-week.png" alt="next week">
+                                <span>Weekly</span>
+                            </div>
+                        </template>
+
+                        <template #Monthly>
+                            <div @click="repeatDueDate('monthly')">
+                                <img src="@/assets/design-material/icons/30-days.png" alt="next week">
+                                <span>Monthly</span>
+                            </div>
+                        </template>
+
+                        <template #Yearly>
+                            <div @click="repeatDueDate('yearly')">
+                                <img src="@/assets/design-material/icons/365.png" alt="next week">
+                                <span>Yearly</span>
+                            </div>
+                        </template>
+
+                        <template #Custom>
+                            <div @click="repeatDueDate('customDate')">
+                                <template v-if="pickCustomRepeatDate">
+                                    <img @click="addCustomRepeatDate" src="@/assets/design-material/icons/plus.png"
+                                        alt="add custom date">
+                                    <input :class="{ error: errorCustomRepeatDateToggle }" class="custom-date"
+                                        v-model="pickedCustomRepeatDate" type="date" name="" id="">
+                                </template>
+
+                                <template v-else>
+                                    <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
+                                    <span>Custom</span>
+                                </template>
+                            </div>
+                        </template>
+                    </DropDown>
+                </transition>
+
+                <transition name="to-bottom">
+                    <DropDown :dropDownSlots="dropDownRemindDueDateSlots" :top="top" :right="right"
+                        v-if="toggleRemindDropDown">
+                        <template #LaterToDay>
+                            <div @click="remindDueDate('toDay')">
+                                <img src="@/assets/design-material/icons/remind-today.png" alt="due date">
+                                <span>Later today</span>
+                            </div>
+                        </template>
+
+                        <template #Tomorrow>
+                            <div @click="remindDueDate('tomorrow')">
+                                <img src="@/assets/design-material/icons/remind-tomorrow.png" alt="due tomorrow">
+                                <span>Tomorrow</span>
+                            </div>
+                        </template>
+
+                        <template #NextWeek>
+                            <div @click="remindDueDate('nextWeek')">
+                                <img src="@/assets/design-material/icons/remind-next-week.png" alt="next week">
+                                <span>Next Week</span>
+                            </div>
+                        </template>
+
+                        <template #PickADateAndTime>
+                            <div @click="remindDueDate('customDate')">
+                                <template v-if="pickCustomRemindDate">
+                                    <img @click="addCustomRemindDate" src="@/assets/design-material/icons/plus.png"
+                                        alt="add custom date">
+                                    <input :class="{ error: errorCustomRemindDateToggle }" class="custom-date"
+                                        v-model="pickedCustomRemindDate" type="datetime-local" name="" id="">
+                                </template>
+
+                                <template v-else>
+                                    <img src="@/assets/design-material/icons/custom-remind-date.png" alt="pick a date">
+                                    <span>Pick a date and time</span>
+                                </template>
+                            </div>
+                        </template>
+                    </DropDown>
+                </transition>
+
+                <div class="task-box task-notes">
+                    <h3>Task Description</h3>
+                    <!-- <textarea placeholder="Add Task Description" @blur="emptyTextValue" :data-id="index" v-model="textValue"
+            @keyup="addNote"> -->
+                    <textarea placeholder="Add Task Description" :data-id="index" v-model="textValue" @keyup="addNote">
+            {{ taskNoteText }}
+        </textarea>
+
+                    <div class="date">
+                        12/6/520
                     </div>
                 </div>
             </div>
 
-            <div @click.self="renameTask" class="task-box rename-task">
-                <template v-if="showRename">
-                    <img @click="newTaskName" class="renameTask" :class="{ active: itemDetect }"
-                        src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                    <input @keyup.enter="newTaskName" required @focus="toggleErrorClass" v-model="newName"
-                        placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
-                    <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
-                </template>
+            <div class="task-time-and-delete">
+                <div class="time">Created on {{ task.addTime }}</div>
 
-                <template v-else>
-                    <img @click="renameTask" src="@/assets/design-material/icons/rename.png" alt="rename task" />
-                    <span @click="renameTask">Rename Task</span>
-                </template>
-            </div>
-
-            <div class="task-box add-to-my-day" @click="addToMyDay" v-if="!addToMyDayState">
-                <img src="@/assets/design-material/icons/sun.png" alt="added to my day">
-                <span>Add to my day</span>
-            </div>
-
-            <div class="task-box add-to-my-day" @click="closeToMyDay" v-else>
-                <img src="@/assets/design-material/icons/sun.png" alt="remove from my day">
-                <span>Remove from my day</span>
-            </div>
-
-            <div ref="timeAndDate" class="task-box time-and-date">
-                <div @click.self="toggleRemind(53)">
-                    <img @click="toggleRemind(53)" src="@/assets/design-material/icons/alarm-clock.png"
-                        alt="remind me" />
-                    <span @click="toggleRemind(53)">{{remindState}}</span>
-
-                    <img class="delete-due-date" @click="closeRemind" v-if="remindState != 'Remind me'"
-                        src="@/assets/design-material/icons/close.png" alt="delete repeat">
-                </div>
-
-                <div @click.self="toggleRepeat(95)">
-                    <img @click="toggleRepeat(95)" src="@/assets/design-material/icons/event.png" alt="repeat" />
-                    <span @click="toggleRepeat(95)">{{repeatState}}</span>
-
-                    <img class="delete-due-date" @click="closeRepeat" v-if="repeatState != 'Repeat'"
-                        src="@/assets/design-material/icons/close.png" alt="delete repeat">
-                </div>
-
-                <div @click.self="toggleAddDueDate(145)" :class="{delete: dueDateStateClass}">
-                    <img @click="toggleAddDueDate(145)" src="@/assets/design-material/icons/calendar.png"
-                        alt="add due date" />
-                    <span @click="toggleAddDueDate(145)">{{dueDateState}}</span>
-                    <img class="delete-due-date" @click="deleteDueDate" v-if="dueDateState != 'Add Due Date'"
-                        src="@/assets/design-material/icons/close.png" alt="delete due date">
-                </div>
-            </div>
-
-            <transition name="to-bottom">
-                <DropDown :dropDownSlots="dropDownDueDateSlots" :top="top" :right="right" v-if="toggleDueDateDropDown">
-                    <template #ToDay>
-                        <div @click="addDueDate('today')">
-                            <img src="@/assets/design-material/icons/date.png" alt="due date">
-                            <span>ToDay</span>
-                        </div>
-                    </template>
-
-                    <template #Tomorrow>
-                        <div @click="addDueDate('tomorrow')">
-                            <img src="@/assets/design-material/icons/tomorrow.png" alt="due tomorrow">
-                            <span>Tomorrow</span>
-                        </div>
-                    </template>
-
-                    <template #NextWeek>
-                        <div @click="addDueDate('nextWeek')">
-                            <img src="@/assets/design-material/icons/next-week.png" alt="next week">
-                            <span>Next week</span>
-                        </div>
-                    </template>
-
-                    <template #PickADate>
-                        <div @click="addDueDate('customDate')">
-                            <template v-if="pickCustomDate">
-                                <img @click="addCustomDate" src="@/assets/design-material/icons/plus.png"
-                                    alt="add custom date">
-                                <input :class="{error:errorCustomDateToggle}" class="custom-date"
-                                    v-model="pickedCustomDate" type="date" name="" id="">
-                            </template>
-
-                            <template v-else>
-                                <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
-                                <span>Pick a Date</span>
-                            </template>
-                        </div>
-                    </template>
-                </DropDown>
-            </transition>
-
-            <transition name="to-bottom">
-                <DropDown :dropDownSlots="dropDownRepeatDueDateSlots" :top="top" :right="right"
-                    v-if="toggleRepeatDropDown">
-                    <template #Daily>
-                        <div @click="repeatDueDate('daily')">
-                            <img src="@/assets/design-material/icons/tomorrow-repeat.png" alt="due date">
-                            <span>Daily</span>
-                        </div>
-                    </template>
-
-                    <template #WeekDays>
-                        <div @click="repeatDueDate('weekDays')">
-                            <img src="@/assets/design-material/icons/due-date.png" alt="due tomorrow">
-                            <span>WeekDays</span>
-                        </div>
-                    </template>
-
-                    <template #Weekly>
-                        <div @click="repeatDueDate('weekly')">
-                            <img src="@/assets/design-material/icons/next-week.png" alt="next week">
-                            <span>Weekly</span>
-                        </div>
-                    </template>
-
-                    <template #Monthly>
-                        <div @click="repeatDueDate('monthly')">
-                            <img src="@/assets/design-material/icons/30-days.png" alt="next week">
-                            <span>Monthly</span>
-                        </div>
-                    </template>
-
-                    <template #Yearly>
-                        <div @click="repeatDueDate('yearly')">
-                            <img src="@/assets/design-material/icons/365.png" alt="next week">
-                            <span>Yearly</span>
-                        </div>
-                    </template>
-
-                    <template #Custom>
-                        <div @click="repeatDueDate('customDate')">
-                            <template v-if="pickCustomRepeatDate">
-                                <img @click="addCustomRepeatDate" src="@/assets/design-material/icons/plus.png"
-                                    alt="add custom date">
-                                <input :class="{error:errorCustomRepeatDateToggle}" class="custom-date"
-                                    v-model="pickedCustomRepeatDate" type="date" name="" id="">
-                            </template>
-
-                            <template v-else>
-                                <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
-                                <span>Custom</span>
-                            </template>
-                        </div>
-                    </template>
-                </DropDown>
-            </transition>
-
-            <transition name="to-bottom">
-                <DropDown :dropDownSlots="dropDownRemindDueDateSlots" :top="top" :right="right"
-                    v-if="toggleRemindDropDown">
-                    <template #LaterToDay>
-                        <div @click="remindDueDate('toDay')">
-                            <img src="@/assets/design-material/icons/remind-today.png" alt="due date">
-                            <span>Later today</span>
-                        </div>
-                    </template>
-
-                    <template #Tomorrow>
-                        <div @click="remindDueDate('tomorrow')">
-                            <img src="@/assets/design-material/icons/remind-tomorrow.png" alt="due tomorrow">
-                            <span>Tomorrow</span>
-                        </div>
-                    </template>
-
-                    <template #NextWeek>
-                        <div @click="remindDueDate('nextWeek')">
-                            <img src="@/assets/design-material/icons/remind-next-week.png" alt="next week">
-                            <span>Next Week</span>
-                        </div>
-                    </template>
-
-                    <template #PickADateAndTime>
-                        <div @click="remindDueDate('customDate')">
-                            <template v-if="pickCustomRemindDate">
-                                <img @click="addCustomRemindDate" src="@/assets/design-material/icons/plus.png"
-                                    alt="add custom date">
-                                <input :class="{error:errorCustomRemindDateToggle}" class="custom-date"
-                                    v-model="pickedCustomRemindDate" type="datetime-local" name="" id="">
-                            </template>
-
-                            <template v-else>
-                                <img src="@/assets/design-material/icons/custom-remind-date.png" alt="pick a date">
-                                <span>Pick a date and time</span>
-                            </template>
-                        </div>
-                    </template>
-                </DropDown>
-            </transition>
-
-            <div class="task-box task-notes">
-                <h3>Task Description</h3>
-                <!-- <textarea placeholder="Add Task Description" @blur="emptyTextValue" :data-id="index" v-model="textValue"
-                    @keyup="addNote"> -->
-                <textarea placeholder="Add Task Description" :data-id="index" v-model="textValue" @keyup="addNote">
-                    {{taskNoteText}}
-                </textarea>
-
-                <div class="date">
-                    12/6/520
-                </div>
+                <span class="delete">
+                    <img @click="togglePopup" src="@/assets/design-material/icons/delete.png" alt="">
+                </span>
             </div>
         </div>
 
-        <div class="task-time-and-delete">
-            <div class="time">Created on {{task.addTime}}</div>
+        <PopUp :showPopUp="showPopUp">
+            <template #title>
+                {{ dropDownStepId ? 'Delete Step' : 'Delete Task' }}
+            </template>
 
-            <span class="delete">
-                <img @click="togglePopup" src="@/assets/design-material/icons/delete.png" alt="">
-            </span>
-        </div>
+            <template #content>
+                {{ dropDownStepId ? `step ${step.name} will be permanently deleted` : `task ${task.name} will be
+                permanently
+                deleted.`}}
+
+            </template>
+
+            <template #button>
+                <button class="delete" @click="deleteTask">Delete</button>
+                <button class="close" @click="togglePopup">Cancel</button>
+            </template>
+        </PopUp>
+
+        <PopUp :showPopUp="alertPopup">
+            <template #title>
+                Uncomplete Planned Task
+            </template>
+
+            <template #content>
+                you need to complete this uncomplete Planned Task or change his time or delete it
+            </template>
+
+            <template #button>
+                <button class="delete" @click="deleteTask">Delete</button>
+                <button class="move" @click="completeAsideTask">Complete</button>
+                <button class="close" @click="toggleAlertPopup">Cancel</button>
+            </template>
+        </PopUp>
     </div>
-
-    <PopUp :showPopUp="showPopUp">
-        <template #title>
-            {{dropDownStepId? 'Delete Step': 'Delete Task'}}
-        </template>
-
-        <template #content>
-            {{dropDownStepId? `step ${step.name} will be permanently deleted`: `task ${task.name} will be permanently
-            deleted.`}}
-
-        </template>
-
-        <template #button>
-            <button class="delete" @click="deleteTask">Delete</button>
-            <button class="close" @click="togglePopup">Cancel</button>
-        </template>
-    </PopUp>
-
-    <PopUp :showPopUp="alertPopup">
-        <template #title>
-            Uncomplete Planned Task
-        </template>
-
-        <template #content>
-            you need to complete this uncomplete Planned Task or change his time or delete it
-        </template>
-
-        <template #button>
-            <button class="delete" @click="deleteTask">Delete</button>
-            <button class="move" @click="completeAsideTask">Complete</button>
-            <button class="close" @click="toggleAlertPopup">Cancel</button>
-        </template>
-    </PopUp>
 </template>
 
 <script>
@@ -349,7 +353,7 @@ import DropDown from '../components/DropDown.vue';
 
 export default {
     name: 'DescriptionTask',
-    props: ['descriptionTaskChildList', 'descriptionTaskList', 'descriptionTaskIndex', 'element'],
+    props: ['descriptionTaskList','descriptionTaskChildList', 'descriptionTaskIndex', 'element'],
     beforeMount() {
         if (!!this.descriptionTaskChildList) {
             this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
@@ -377,6 +381,7 @@ export default {
         PopUp,
         DropDown
     },
+    emits: ['closeDescription'],
     data() {
         return {
             task: {},
@@ -1144,7 +1149,7 @@ export default {
                     }
                 }
 
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps.forEach((step, index, arr) => {
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps.forEach((step, _, arr) => {
                     if (step.complete) {
                         this.completeStepsArray.push(step)
                         if (this.completeStepsArray.length === arr.length) {
@@ -1463,10 +1468,10 @@ export default {
         addToMyDay() {
             if (!!this.descriptionTaskChildList) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = true
-                this.smartList.myDay.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = true
-                this.smartList.myDay.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
             }
             localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
@@ -1475,10 +1480,10 @@ export default {
         closeToMyDay() {
             if (!!this.childId) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = false
-                this.smartList.myDay.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = false
-                this.smartList.myDay.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
             }
             localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))

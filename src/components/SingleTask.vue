@@ -16,7 +16,9 @@
                     <span :data-id="index" v-if="task.steps.length > 0" class="info-icon steps">
                         <img :data-id="index" src="@/assets/design-material/icons/process.png" alt="task steps"
                             title="task steps">
-                        {{ (task.steps.filter((step) => { return step.complete === true }).length) }} Of {{ task.steps.length }}
+                        {{ (task.steps.filter((step) => { return step.complete === true }).length) }} Of {{
+                                task.steps.length
+                        }}
                     </span>
 
                     <!-- <span :data-id="index" class="border" v-if="task.steps.length > 0 && task.note"></span> -->
@@ -212,7 +214,8 @@ import PopUp from './PopUp.vue'
 import DropDown from '../components/DropDown.vue';
 export default {
     name: 'SingleTask',
-    props: ['listId', 'toggleShrink', 'childId'],
+    props: ['listId', 'toggleShrink', 'childId', 'chosenSmartList'],
+    emits:['openDescriptionEvent'],
     components: {
         PopUp,
         DropDown
@@ -255,16 +258,24 @@ export default {
         }
     },
     computed: {
-        ...mapState(allLists, ['returnLists']),
+        ...mapState(allLists, ['returnLists', 'smartList']),
+        ...mapWritableState(allLists, ['lists', 'smartList']),
         ...mapWritableState(allLists, ['lists', 'smartList']),
         returnAllTasks() {
-            if (!!this.childId) {
-                if (this.returnLists[this.listId].listsArray[this.childId].tasks.length > 0) {
-                    return this.returnLists[this.listId].listsArray[this.childId].tasks
+
+            if (!!this.chosenSmartList) {
+                if (this.smartList[this.chosenSmartList].tasks.length > 0) {
+                    return this.smartList[this.chosenSmartList].tasks
                 }
             } else {
-                if (this.returnLists[this.listId].tasks.length > 0) {
-                    return this.returnLists[this.listId].tasks
+                if (!!this.childId) {
+                    if (this.returnLists[this.listId].listsArray[this.childId].tasks.length > 0) {
+                        return this.returnLists[this.listId].listsArray[this.childId].tasks
+                    }
+                } else {
+                    if (this.returnLists[this.listId].tasks.length > 0) {
+                        return this.returnLists[this.listId].tasks
+                    }
                 }
             }
         },
