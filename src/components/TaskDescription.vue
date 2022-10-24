@@ -1523,10 +1523,10 @@ export default {
         closeToMyDay() {
             if (!!this.childId) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = false
-                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+                this.smartList.myDay.tasks.splice(this.taskIndex, 1)
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = false
-                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+                this.smartList.myDay.tasks.splice(this.taskIndex, 1)
             }
             localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
@@ -1820,7 +1820,6 @@ export default {
         },
         toggleAlertPopup() {
             this.alertPopup = !this.alertPopup
-            console.log(this.alertPopup);
         }
     }
 }

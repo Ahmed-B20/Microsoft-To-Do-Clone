@@ -3,6 +3,10 @@
         <router-link to="/my-day">
             <img src="@/assets/design-material/icons/sun.png" alt="my day tab" />
             <span>MyDay</span>
+
+            <span class="tasks-count" v-if="smartList.myDay.tasks.length > 0">
+                {{smartList.myDay.tasks.length}}
+            </span>
         </router-link>
         <router-link to="/important">
             <img src="@/assets/design-material/icons/star.png" alt="important tab" />
@@ -18,3 +22,19 @@
         </router-link>
     </div>
 </template>
+
+<script>
+import { allLists } from '@/stores/allLists.js'
+import { mapState, mapWritableState } from 'pinia'
+
+export default {
+    name: 'AsideLinks',
+    data() {
+        return {
+        }
+    },
+    computed: {
+        ...mapState(allLists, ['smartList']),
+    },
+}
+</script>

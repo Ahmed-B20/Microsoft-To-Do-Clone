@@ -398,11 +398,7 @@ export default {
             } else {
                 if (+this.oldTaskIdDrop != +this.taskElementId) {
                     this.toggleDropDown = false
-
                     this.oldTaskIdDrop = event.target.getAttribute('data-id')
-
-                    console.log(this.oldTaskIdDrop, this.taskElementId);
-
                     setTimeout(() => {
                         this.toggleDropDown = true
                     }, 0)
