@@ -8,15 +8,15 @@
             </span>
 
             <span :data-id="index" class="task-main-info">
-                <span :data-id="index" class="task-name" :class="{complete: task.complete}">
-                    {{task.name}}
+                <span :data-id="index" class="task-name" :class="{ complete: task.complete }">
+                    {{ task.name }}
                 </span>
 
                 <span :data-id="index" class="info-icons">
                     <span :data-id="index" v-if="task.steps.length > 0" class="info-icon steps">
                         <img :data-id="index" src="@/assets/design-material/icons/process.png" alt="task steps"
                             title="task steps">
-                        {{(task.steps.filter((step)=>{return step.complete === true}).length)}} Of {{task.steps.length}}
+                        {{ (task.steps.filter((step) => { return step.complete === true }).length) }} Of {{ task.steps.length }}
                     </span>
 
                     <!-- <span :data-id="index" class="border" v-if="task.steps.length > 0 && task.note"></span> -->
@@ -30,11 +30,11 @@
                         v-if="task.steps.length > 0 && task.dueDateName || task.note && task.dueDateName"></span> -->
 
                     <span
-                        :class="{delete: new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete}"
+                        :class="{ delete: new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete }"
                         :data-id="index" class="info-icon note" v-if="task.dueDateName">
                         <img :data-id="index" src="@/assets/design-material/icons/due-date.png" :alt="task.dueDateName"
                             title="task notes">
-                        {{task.dueDateName}}
+                        {{ task.dueDateName }}
                     </span>
 
                     <!-- <span :data-id="index" class="border"
@@ -52,7 +52,7 @@
                     <span :data-id="index" class="info-icon note" v-if="!!task.repeatDueDateName">
                         <img :data-id="index" src="@/assets/design-material/icons/repeat.png"
                             :alt="task.repeatDueDateName" title="task notes">
-                        {{task.repeatDueDateName}}
+                        {{ task.repeatDueDateName }}
                     </span>
 
                     <!-- <span :data-id="index" class="border"
@@ -61,7 +61,7 @@
                     <span :data-id="index" class="info-icon note" v-if="!!task.remindMe">
                         <img :data-id="index" src="@/assets/design-material/icons/reminder.png" :alt="task.remindMe"
                             title="task notes">
-                        {{task.remindMe}}
+                        {{ task.remindMe }}
                     </span>
                 </span>
             </span>
@@ -82,7 +82,7 @@
                         <img @click="newTaskName" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
                         <input @keyup.enter="newTaskName" required @focus="toggleErrorClass" v-model="newName"
-                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                            placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
                         <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
 
@@ -100,7 +100,7 @@
 
                     <img v-else src="@/assets/design-material/icons/important-hover.png" alt="not important task">
 
-                    <span>{{returnImportantState? 'Remove Importance':'Mark As Important'}}</span>
+                    <span>{{ returnImportantState ? 'Remove Importance' : 'Mark As Important' }}</span>
                 </div>
             </template>
 
@@ -111,7 +111,7 @@
 
                     <img v-else src="@/assets/design-material/icons/dry-clean.png" alt="not complete task">
 
-                    <span>{{returnCompleteState? 'Mark As Not Complete':'Mark As Complete'}}</span>
+                    <span>{{ returnCompleteState ? 'Mark As Not Complete' : 'Mark As Complete' }}</span>
                 </div>
             </template>
 
@@ -152,7 +152,7 @@
                 <div @click="addDueDate('customDate')">
                     <template v-if="pickCustomDate">
                         <img @click="addCustomDate" src="@/assets/design-material/icons/plus.png" alt="add custom date">
-                        <input :class="{error:errorCustomDateToggle}" class="custom-date" v-model="pickedCustomDate"
+                        <input :class="{ error: errorCustomDateToggle }" class="custom-date" v-model="pickedCustomDate"
                             type="date" name="" id="">
                     </template>
 
@@ -181,19 +181,19 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            {{target=== 'move'? 'Move Task': 'Delete Task'}}
+            {{ target === 'move' ? 'Move Task' : 'Delete Task' }}
         </template>
 
         <template v-slot:content>
             <div v-if="moveTaskToggle" class="select-parent">
                 <select ref="selectedLists" name="" id="">
                     <option v-for="(groupOfList, index) in ReturnAllListsArray" :key="index" :value="groupOfList.id">
-                        {{groupOfList.listName}}
+                        {{ groupOfList.listName }}
                     </option>
                 </select>
             </div>
             <p v-else>
-                Task {{taskName}} will be permanently deleted
+                Task {{ taskName }} will be permanently deleted
             </p>
         </template>
 
@@ -540,7 +540,6 @@ export default {
                         this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = false
                     } else {
                         if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].repeatedTask) {
-
                             let oldObj = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
 
                             Object.keys(oldObj).forEach((key) => {
@@ -553,38 +552,64 @@ export default {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "ToDay"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'WeekDays') {
                                 if (new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1)).getDay() === 6) {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 3))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 3))
                                 } else if (new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1)).getDay() === 0) {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 2))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 2))
                                 } else {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
                                 }
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "Tomorrow"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Weekly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 7))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 7))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextWeek"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Monthly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 30))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 30))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextMonth"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Yearly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 365))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 365))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextYear"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'CustomDate') {
                                 // this.repeatedTaskObject.repeatDueDate = new Date(oldObj.repeatDueDate) + new Date(oldObj.repeatDueDate)
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + oldObj.repeatedCustomTaskDuration))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + oldObj.repeatedCustomTaskDuration))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "CustomDate"
                             }
 
                             this.lists[this.listId].listsArray[this.childId].tasks.push(this.repeatedTaskObject)
@@ -611,7 +636,6 @@ export default {
                         this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = false
                     } else {
                         if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].repeatedTask) {
-
                             let oldObj = this.lists[this.listId].listsArray[this.childId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId]
 
                             Object.keys(oldObj).forEach((key) => {
@@ -624,38 +648,64 @@ export default {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "ToDay"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'WeekDays') {
                                 if (new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1)).getDay() === 6) {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 3))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 3))
                                 } else if (new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1)).getDay() === 0) {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 2))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 2))
                                 } else {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
                                 }
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "Tomorrow"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Weekly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 7))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 7))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextWeek"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Monthly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 30))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 30))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextMonth"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Yearly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 365))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 365))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextYear"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'CustomDate') {
                                 // this.repeatedTaskObject.repeatDueDate = new Date(oldObj.repeatDueDate) + new Date(oldObj.repeatDueDate)
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + oldObj.repeatedCustomTaskDuration))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + oldObj.repeatedCustomTaskDuration))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "CustomDate"
                             }
 
                             this.lists[this.listId].listsArray[this.childId].tasks.push(this.repeatedTaskObject)
@@ -695,48 +745,79 @@ export default {
                     } else {
                         if (this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].repeatedTask) {
                             let oldObj = this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
+
                             Object.keys(oldObj).forEach((key) => {
                                 this.repeatedTaskObject[`${key}`] = oldObj[`${key}`]
                             })
+
                             this.repeatedTaskObject.id = this.lists[this.listId].tasks.length
+
                             if (this.repeatedTaskObject.realRepeatDueDateName === 'Daily') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "ToDay"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'WeekDays') {
                                 if (new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1)).getDay() === 6) {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 3))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 3))
                                 } else if (new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1)).getDay() === 0) {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 2))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 2))
                                 } else {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
                                 }
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "Tomorrow"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Weekly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 7))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 7))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextWeek"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Monthly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 30))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 30))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextMonth"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Yearly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 365))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 365))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextYear"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'CustomDate') {
                                 // this.repeatedTaskObject.repeatDueDate = new Date(oldObj.repeatDueDate) + new Date(oldObj.repeatDueDate)
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + oldObj.repeatedCustomTaskDuration))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + oldObj.repeatedCustomTaskDuration))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "CustomDate"
                             }
+
                             this.lists[this.listId].tasks.push(this.repeatedTaskObject)
+
                             this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].complete = true
                             this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].repeatedTask = false
                         }
@@ -759,7 +840,6 @@ export default {
                         this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = false
                     } else {
                         if (this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].repeatedTask) {
-
                             let oldObj = this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId]
 
                             Object.keys(oldObj).forEach((key) => {
@@ -772,45 +852,70 @@ export default {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "ToDay"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'WeekDays') {
                                 if (new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1)).getDay() === 6) {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 3))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 3))
                                 } else if (new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1)).getDay() === 0) {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 2))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 2))
                                 } else {
                                     this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
+                                    this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 1))
                                 }
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "Tomorrow"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Weekly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 7))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 7))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextWeek"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Monthly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 30))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 30))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextMonth"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'Yearly') {
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 365))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + 365))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "NextYear"
                             } else if (this.repeatedTaskObject.realRepeatDueDateName === 'CustomDate') {
                                 // this.repeatedTaskObject.repeatDueDate = new Date(oldObj.repeatDueDate) + new Date(oldObj.repeatDueDate)
                                 this.repeatedTaskObject.repeatDueDate = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + oldObj.repeatedCustomTaskDuration))
 
                                 let name = new Date(this.repeatedTaskObject.repeatDueDate).toString().split(' ')
                                 this.repeatedTaskObject.repeatDueDateName = name.slice(0, 4).join(' ')
+
+                                this.repeatedTaskObject.dueTime = new Date(new Date(oldObj.repeatDueDate).setDate(new Date(oldObj.repeatDueDate).getDate() + oldObj.repeatedCustomTaskDuration))
+                                this.repeatedTaskObject.dueDateName = name.slice(0, 4).join(' ')
+                                this.repeatedTaskObject.realDueDateName = "CustomDate"
                             }
 
-                            this.lists[this.listId].listsArray[this.childId].tasks.push(this.repeatedTaskObject)
+                            this.lists[this.listId].tasks.push(this.repeatedTaskObject)
 
                             this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = true
                             this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].repeatedTask = false
-
                         } else {
                             this.lists[this.listId].tasks[event.target.parentElement.getAttribute('data-id') || this.taskElementId].complete = true
                         }

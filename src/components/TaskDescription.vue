@@ -345,6 +345,7 @@ import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 import PopUp from './PopUp.vue'
 import DropDown from '../components/DropDown.vue';
+// import Worker from '../worker.js'
 
 export default {
     name: 'DescriptionTask',
@@ -663,7 +664,6 @@ export default {
                     if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete) {
                         this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete = false
                     } else {
-
                         if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatedTask) {
                             let oldObj = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
 
@@ -1666,6 +1666,9 @@ export default {
                     hours = hours ? hours : 12;
                     minutes = minutes < 10 ? '0' + minutes : minutes;
                     let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                    // const worker = new Worker(Worker)
+                    // worker.postMessage('llll')
 
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'toDay'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
