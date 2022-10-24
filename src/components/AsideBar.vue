@@ -29,10 +29,10 @@ export default {
   name: "side-bar",
   components: {
     UserInfo,
-    AsideLinks,
-    // AsideRenderLists,
     RenderList,
     AddList,
+    AsideLinks,
+    // AsideRenderLists,
   },
   computed: {
     ...mapWritableState(toggleAside, ['toggleState']),

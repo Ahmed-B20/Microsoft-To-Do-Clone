@@ -1,6 +1,6 @@
 <template>
     <transition name="render-list">
-        <dev class="lists-parent">
+        <div class="lists-parent">
             <ul ref="listParent" class="lists-container">
                 <transition-group name="render-list">
                     <li @contextmenu.self="openDropDown" @click.self="showListTasks" v-for="(list,index) in lists"
@@ -69,7 +69,7 @@
                     </DropDown>
                 </transition>
             </ul>
-        </dev>
+        </div>
     </transition>
 
     <PopUp :showPopUp="showPopUp">
@@ -262,7 +262,8 @@ export default {
             this.showPopUp = !this.showPopUp
             this.listId = null
 
-            this.$router.push({ name: 'list', params: { listId: 0, closeDescription: false } })
+            this.$router.push({ name: 'list', params: { listId: 0 } })
+            // this.$router.push({ name: 'list', params: { listId: 0, closeDescription: false } })
         },
         DuplicateList() {
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
@@ -288,15 +289,18 @@ export default {
             if (event.target.tagName === 'LI' && event.target.classList.contains("single-list")) {
                 this.listName = event.target.getAttribute('data-name')
                 this.listIndex = event.target.getAttribute('data-id')
-                this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
+                // this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
+                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
             } else if (event.target.tagName === 'P' && event.target.parentElement.classList.contains("single-list")) {
                 this.listName = event.target.parentElement.getAttribute('data-name')
                 this.listIndex = event.target.parentElement.getAttribute('data-id')
-                this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
+                // this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
+                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
             } else if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG' || event.target.parentElement.parentElement.classList.contains("single-list")) {
                 this.listName = event.target.parentElement.parentElement.getAttribute('data-name')
                 this.listIndex = event.target.parentElement.parentElement.getAttribute('data-id')
-                this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
+                // this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
+                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
             }
         },
         closeRename() {

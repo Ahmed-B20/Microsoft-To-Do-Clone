@@ -276,7 +276,8 @@ export default {
             this.listNameRoute = event.target.getAttribute('data-name')
             this.listIndex = event.target.getAttribute('data-id')
             this.teleportToggle = true
-            this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex, closeDescription: false } })
+            this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex} })
+            // this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex, closeDescription: false } })
         },
         openDropDown(target) {
             event.preventDefault()

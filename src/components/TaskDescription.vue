@@ -354,7 +354,7 @@ import DropDown from '../components/DropDown.vue';
 
 export default {
     name: 'DescriptionTask',
-    props: ['descriptionTaskList','descriptionTaskChildList', 'descriptionTaskIndex', 'element'],
+    props: ['descriptionTaskList', 'descriptionTaskChildList', 'descriptionTaskIndex', 'element'],
     beforeMount() {
         if (!!this.descriptionTaskChildList) {
             this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
@@ -573,19 +573,55 @@ export default {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
 
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.forEach((step, index) => {
-                        if (index >= this.dropDownStepId) {
-                            step.id -= 1
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.length > 0) {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps.forEach((step, index) => {
+                            if (index >= this.dropDownStepId) {
+                                step.id -= 1
+                            }
+                        });
+                    } else {
+                        if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
+                            this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete = false
+
+                            if (this.element.classList.contains('add-animation-x')) {
+                                this.element.classList.remove('add-animation-x')
+                                setTimeout(() => {
+                                    this.element.classList.add('add-animation-x')
+                                }, 0)
+                            } else {
+                                this.element.classList.remove('add-animation-x')
+                                setTimeout(() => {
+                                    this.element.classList.add('add-animation-x')
+                                }, 0)
+                            }
                         }
-                    });
+                    }
                 } else {
                     this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.splice(this.dropDownStepId, 1)
 
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.forEach((step, index) => {
-                        if (index >= this.dropDownStepId) {
-                            step.id -= 1
+                    if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.length > 0) {
+                        this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps.forEach((step, index) => {
+                            if (index >= this.dropDownStepId) {
+                                step.id -= 1
+                            }
+                        });
+                    } else {
+                        if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                            this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete = false
+
+                            if (this.element.classList.contains('add-animation-x')) {
+                                this.element.classList.remove('add-animation-x')
+                                setTimeout(() => {
+                                    this.element.classList.add('add-animation-x')
+                                }, 0)
+                            } else {
+                                this.element.classList.remove('add-animation-x')
+                                setTimeout(() => {
+                                    this.element.classList.add('add-animation-x')
+                                }, 0)
+                            }
                         }
-                    });
+                    }
                 }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.showPopUp = !this.showPopUp
@@ -1262,8 +1298,8 @@ export default {
             if (!!this.descriptionTaskChildList) {
                 let step = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
                 this.promoteTask.name = step.name
-                // this.promoteTask.id = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.length
-                this.promoteTask.id = 0
+                this.promoteTask.id = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.length
+                // this.promoteTask.id = 0
                 this.promoteTask.complete = false
                 this.promoteTask.important = false
 
@@ -1293,21 +1329,24 @@ export default {
                     }
                 });
 
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.promoteTask)
+                // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.promoteTask)
 
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((task, index) => {
-                    if (index > 0) {
-                        task.id += 1
-                    }
-                })
+                // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((task, index) => {
+                //     if (index > 0) {
+                //         task.id += 1
+                //     }
+                // })
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.promoteTask)
+
 
                 this.promoteTask = {}
             } else {
                 let step = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
 
                 this.promoteTask.name = step.name
-                // this.promoteTask.id = this.lists[this.descriptionTaskList].tasks.length
-                this.promoteTask.id = 0
+                this.promoteTask.id = this.lists[this.descriptionTaskList].tasks.length
+                // this.promoteTask.id = 0
                 this.promoteTask.complete = false
                 this.promoteTask.important = false
 
@@ -1337,13 +1376,16 @@ export default {
                     }
                 });
 
-                this.lists[this.descriptionTaskList].tasks.unshift(this.promoteTask)
+                // this.lists[this.descriptionTaskList].tasks.unshift(this.promoteTask)
 
-                this.lists[this.descriptionTaskList].tasks.forEach((task, index) => {
-                    if (index > 0) {
-                        task.id += 1
-                    }
-                })
+                // this.lists[this.descriptionTaskList].tasks.forEach((task, index) => {
+                //     if (index > 0) {
+                //         task.id += 1
+                //     }
+                // })
+
+                this.lists[this.descriptionTaskList].tasks.push(this.promoteTask)
+
 
                 this.promoteTask = {}
             }
