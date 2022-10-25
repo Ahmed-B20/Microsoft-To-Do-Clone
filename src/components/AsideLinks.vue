@@ -14,7 +14,7 @@
         </router-link>
 
         <router-link to="/completed">
-            <img src="@/assets/design-material/icons/task.png" alt="completed tasks tab" />
+            <img src="@/assets/design-material/icons/complete.png" alt="completed tasks tab" />
             <span>Tasks</span>
         </router-link>
 
