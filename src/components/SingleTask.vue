@@ -7,7 +7,7 @@
                 <img :data-id="index" src="@/assets/design-material/icons/check.png" alt="check" />
             </span>
 
-            <span :data-id="index" class="task-main-info">
+            <span @click="openDescription" :data-id="index" class="task-main-info">
                 <span :data-id="index" class="task-name" :class="{ complete: task.complete }">
                     {{ task.name }}
                 </span>
