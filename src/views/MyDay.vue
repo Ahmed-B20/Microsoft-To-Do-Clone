@@ -56,7 +56,7 @@ import { toggleAside } from '@/stores/toggleAside.js'
 import PopUp from '@/components/PopUp.vue'
 
 export default {
-    name: 'List',
+    name: 'MyDay',
     props: ['listId', 'childId', 'closeDescription'],
     components: {
         ContentView,

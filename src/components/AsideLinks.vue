@@ -5,19 +5,34 @@
             <span>MyDay</span>
 
             <span class="tasks-count" v-if="smartList.myDay.tasks.length > 0">
-                {{smartList.myDay.tasks.length}}
+                {{ smartList.myDay.tasks.length }}
             </span>
         </router-link>
         <router-link to="/important">
             <img src="@/assets/design-material/icons/star.png" alt="important tab" />
             <span>Important</span>
         </router-link>
+
+        <router-link to="/completed">
+            <img src="@/assets/design-material/icons/task.png" alt="completed tasks tab" />
+            <span>Tasks</span>
+        </router-link>
+
+        <router-link to="/all">
+            <img src="@/assets/design-material/icons/infinity.png" alt="all tasks tab" />
+            <span>All</span>
+        </router-link>
+
         <router-link to="/planned">
             <img src="@/assets/design-material/icons/plan.png" alt="planned tab" />
             <span>Planned</span>
+
+            <span class="tasks-count" v-if="smartList.planned.tasks.length > 0">
+                {{ smartList.planned.tasks.length }}
+            </span>
         </router-link>
         <router-link to="/tasks">
-            <img src="@/assets/design-material/icons/task.png" alt="completed tasks tab" />
+            <img src="@/assets/design-material/icons/task.png" alt="tasks tab" />
             <span>Tasks</span>
         </router-link>
     </div>

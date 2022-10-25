@@ -8,9 +8,15 @@ export const allLists = defineStore('allLists', {
           myDay: {
             tasks: []
           },
-          important: [],
-          planned: [],
-          tasks: []
+          important: {
+            tasks: []
+          },
+          planned: {
+            tasks: []
+          },
+          tasks: {
+            tasks: []
+          }
         }
     }
   },
