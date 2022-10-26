@@ -176,6 +176,15 @@
     }
 }
 
+.view-content-container .tasks .completed-task {
+    background-color: #dfdfdf;
+    color: black;
+    padding: 8px 15px;
+    border-radius: 5px;
+    width: fit-content;
+    margin: 5px 0;
+}
+
 .view-content-container .tasks li:not(.drop-down ul li) {
     background-color: white;
     border-radius: 3px;
