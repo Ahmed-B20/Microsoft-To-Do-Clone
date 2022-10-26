@@ -401,7 +401,24 @@
     border-radius: 3px;
 }
 
-.dashboard-content-container .task-description .task-notes .date {
+
+
+.dashboard-content-container .task-description .task-notes .note-controller {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    gap: 10px;
+}
+
+.dashboard-content-container .task-description .task-notes .note-controller button {
+    background-color: #5f73c1;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 3px 5px;
+}
+
+.dashboard-content-container .task-description .task-notes .note-controller .date {
     color: #666;
     font-size: 15px;
 }

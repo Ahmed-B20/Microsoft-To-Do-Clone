@@ -289,12 +289,16 @@
                     <!-- <textarea placeholder="Add Task Description" @blur="emptyTextValue" :data-id="index" v-model="textValue"
             @keyup="addNote"> -->
                     <!-- <textarea placeholder="Add Task Description" :data-id="index" v-model="textValue" @keyup="addNote"> -->
-                    <textarea placeholder="Add Task Description" v-model="textValue" @keyup="addNote">
+                    <textarea placeholder="Add Task Description" v-model="textValue">
                         {{ taskNoteText }}
                     </textarea>
 
-                    <div class="date">
-                        12/6/520
+
+                    <div class="note-controller">
+                        <button @click="addNote">add note</button>
+                        <div class="date">
+                            {{ taskNoteDate }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -438,6 +442,15 @@ export default {
                 return this.textValue = ''
             }
         },
+        taskNoteDate() {
+            if (this.task.noteModified && this.task.note.length > 0) {
+                return `Modified At ${new Date(this.task.modifiedDate).toDateString()}`
+            } else {
+                if (this.task.noteDate && this.task.note.length > 0) {
+                    return `Added At ${new Date(this.task.noteDate).toDateString()}`
+                }
+            }
+        },
         itemDetect() {
             if (this.newName.length > 0) {
                 return true;
@@ -556,9 +569,25 @@ export default {
         },
         addNote() {
             if (!!this.descriptionTaskChildList) {
+                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].note) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].noteModified = true
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].modifiedDate = new Date()
+                } else {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].noteModified = false
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].modifiedDate = null
+                }
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].note = this.textValue
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].noteDate = new Date()
             } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note) {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].noteModified = true
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].modifiedDate = new Date()
+                } else {
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].noteModified = false
+                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].modifiedDate = null
+                }
                 this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note = this.textValue
+                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].noteDate = new Date()
             }
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
         },

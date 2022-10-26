@@ -81,7 +81,12 @@ export default {
                 this.taskObj.remindMeName= ''
 
                 this.taskObj.addToMyDay = false
+
                 this.taskObj.note = ''
+                this.taskObj.noteDate = null
+                this.taskObj.noteModified = false
+                this.taskObj.modifiedDate = null
+
                 this.taskObj.steps = []
                 this.chosenListTasks.push(this.taskObj)
                 this.$refs.taskInput.value = ''
