@@ -8,7 +8,7 @@
             </template>
 
             <template v-slot:title>
-                My Day
+                {{ listName }}
             </template>
 
             <template #toggle-description>
@@ -34,10 +34,121 @@
 
             <template #allTaskSlot>
                 <!-- <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId" /> -->
-                <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" chosenSmartList="myDay" />
+                <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :childId="childId" chosenSmartList="myDay" />
             </template>
         </content-view>
     </keep-alive>
+
+    <transition name="to-left" :css="animated">
+        <TaskDescription :key="descriptionTaskIndex" :toggleShrink="toggleShrink"
+            @closeDescription="closeDescriptionMethod" :descriptionTaskList="descriptionTaskList"
+            :descriptionTaskChildList="descriptionTaskChildList" :descriptionTaskIndex="descriptionTaskIndex"
+            v-if="toggleShrink" :element="element" chosenSmartList="myDay" />
+    </transition>
+
+    <transition name="to-bottom">
+        <DropDown :dropDownSlots="dropDownSlots" :top="top" :right="right" v-if="toggleDropDown">
+            <template #RenameList>
+                <div class="renameList" @click.self="renameList">
+                    <template v-if="showRename">
+                        <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                            src="@/assets/design-material/icons/plus.png" alt="add-item" />
+                        <input @keyup.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
+                            placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
+                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                    </template>
+
+                    <template v-else>
+                        <img @click="renameList" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                        <span @click="renameList">Rename List</span>
+                    </template>
+                </div>
+            </template>
+
+            <template #MoveListTo v-if="ReturnGroupOfLists">
+                <div @click="togglePopUp('move')">
+                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
+                    <span>Move list to...</span>
+                </div>
+            </template>
+
+            <template #SortBy>
+                <div @click="togglePopUp('sort')">
+                    <img src="@/assets/design-material/icons/sort.png" alt="">
+                    <span>Sort By</span>
+                </div>
+            </template>
+
+            <template #DuplicateList>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/copy.png" alt="">
+                    <span>Duplicate list</span>
+                </div>
+            </template>
+
+            <template #DeleteList>
+                <div @click="togglePopUp('delete')">
+                    <img src="@/assets/design-material/icons/delete.png" alt="">
+                    <span>Delete list</span>
+                </div>
+            </template>
+        </DropDown>
+    </transition>
+
+    <PopUp :showPopUp="showPopUp">
+        <template #title>
+            {{ target === 'move' ? 'Move List' : target === 'delete' ? 'Delete List' : 'Sort By' }}
+        </template>
+
+        <template v-slot:content>
+            <div v-if="target === 'move'" class="select-parent">
+                <select ref="selectedGroupOfList" name="" id="">
+                    <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
+                        :value="groupOfList.id">
+                        {{ groupOfList.listName }}
+                    </option>
+                </select>
+            </div>
+
+            <div v-else-if="target === 'sort'" class="select-parent">
+                <select ref="selectedSortValue" name="" id="">
+                    <option v-for="(sortMethod, index) in sortingMethods" :key="index" :value="index">
+                        {{ sortMethod }}
+                    </option>
+                </select>
+            </div>
+            <p v-else>
+                list {{ listName }} will be permanently deleted
+            </p>
+        </template>
+
+        <template #button>
+            <button v-if="target === 'move'" class="move" @click="MoveListTo">Move</button>
+            <button v-else-if="target === 'sort'" class="sort" @click="sortBy">Sort</button>
+            <button v-else class="delete" @click="deleteList">Delete</button>
+            <button class="close" @click="closePopUp">Cancel</button>
+        </template>
+    </PopUp>
+
+    <!-- <transition name="to-bottom">
+        <DropDown>
+            <template #rename>
+                <span>rename list</span>
+            </template>
+
+            <template #move-list>
+                <span>move list</span>
+            </template>
+
+            <template #sort-by>
+                <span>sort by</span>
+            </template>
+
+            <template #delete-list>
+                <span>delete list</span>
+            </template>
+        </DropDown>
+    </transition> -->
 </template>
 
 <script>
@@ -56,7 +167,7 @@ import { toggleAside } from '@/stores/toggleAside.js'
 import PopUp from '@/components/PopUp.vue'
 
 export default {
-    name: 'MyDay',
+    name: 'List',
     props: ['listId', 'childId', 'closeDescription'],
     components: {
         ContentView,
@@ -121,7 +232,9 @@ export default {
             target: '',
             sortMethodTarget: '',
             showSortBy: false,
-            reverseState: false
+            reverseState: false,
+            oldTaskIndex: null,
+            animated: true,
             // sendedArray: []
         }
     },
@@ -195,7 +308,25 @@ export default {
             this.descriptionTaskIndex = index
 
             // this.toggleOpenDescription = !this.toggleOpenDescription
-            this.toggleShrink = shrink
+
+
+            if (shrink) {
+                if (+this.oldTaskIndex !== +index && this.oldTaskIndex !== null) {
+
+                    this.animated = false
+                    this.toggleShrink = true
+                    this.oldTaskIndex = index
+                } else {
+                    this.animated = true
+                    this.toggleShrink = true
+                    this.oldTaskIndex = index
+                }
+            } else {
+                this.animated = true
+                this.toggleShrink = shrink
+                this.oldTaskIndex = index
+            }
+
             this.element = element
             this.toggleDropDown = false
         },

@@ -358,28 +358,33 @@ import DropDown from '../components/DropDown.vue';
 
 export default {
     name: 'DescriptionTask',
-    props: ['descriptionTaskList', 'descriptionTaskChildList', 'descriptionTaskIndex', 'element'],
+    props: ['descriptionTaskList', 'descriptionTaskChildList', 'descriptionTaskIndex', 'element', 'chosenSmartList'],
     beforeMount() {
-        if (!!this.descriptionTaskChildList) {
-            this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
-                .tasks[this.descriptionTaskIndex]
-            this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
-                .tasks.forEach((singleTask, index) => {
+
+        if (!!this.chosenSmartList) {
+            this.task = this.smartList[this.chosenSmartList].tasks
+        } else {
+            if (!!this.descriptionTaskChildList) {
+                this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
+                    .tasks[this.descriptionTaskIndex]
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
+                    .tasks.forEach((singleTask, index) => {
+                        if (singleTask.id == this.task.id) {
+                            this.taskIndex = index
+                        }
+                    })
+
+                this.addToMyDayState = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].addToMyDay
+            } else {
+                this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+                this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
                     if (singleTask.id == this.task.id) {
                         this.taskIndex = index
                     }
                 })
 
-            this.addToMyDayState = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].addToMyDay
-        } else {
-            this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
-            this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
-                if (singleTask.id == this.task.id) {
-                    this.taskIndex = index
-                }
-            })
-
-            this.addToMyDayState = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].addToMyDay
+                this.addToMyDayState = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].addToMyDay
+            }
         }
     },
     components: {
@@ -436,88 +441,117 @@ export default {
         ...mapWritableState(allLists, ['lists', 'smartList']),
 
         taskNoteText() {
-            if (this.task.note.length > 0) {
-                return this.textValue = this.task.note
+            if (this.chosenSmartList) {
+
             } else {
-                return this.textValue = ''
+                if (this.task.note.length > 0) {
+                    return this.textValue = this.task.note
+                } else {
+                    return this.textValue = ''
+                }
             }
+
         },
         taskNoteDate() {
-            if (this.task.noteModified && this.task.note.length > 0) {
-                return `Modified At ${new Date(this.task.modifiedDate).toDateString()}`
+            if (this.chosenSmartList) {
+
             } else {
-                if (this.task.noteDate && this.task.note.length > 0) {
-                    return `Added At ${new Date(this.task.noteDate).toDateString()}`
+                if (this.task.noteModified && this.task.note.length > 0) {
+                    return `Modified At ${new Date(this.task.modifiedDate).toDateString()}`
+                } else {
+                    if (this.task.noteDate && this.task.note.length > 0) {
+                        return `Added At ${new Date(this.task.noteDate).toDateString()}`
+                    }
                 }
             }
         },
         itemDetect() {
-            if (this.newName.length > 0) {
-                return true;
+            if (this.chosenSmartList) {
+
             } else {
-                return false;
+                if (this.newName.length > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         },
         dueDateState() {
-            if (!!this.descriptionTaskChildList) {
-                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName) {
-                    return 'Due ' + this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName
-                } else {
-                    return 'Add Due Date'
-                }
+            if (this.chosenSmartList) {
+
             } else {
-                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName) {
-                    return 'Due ' + this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName
+                if (!!this.descriptionTaskChildList) {
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName) {
+                        return 'Due ' + this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName
+                    } else {
+                        return 'Add Due Date'
+                    }
                 } else {
-                    return 'Add Due Date'
+                    if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName) {
+                        return 'Due ' + this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName
+                    } else {
+                        return 'Add Due Date'
+                    }
                 }
             }
         },
         dueDateStateClass() {
-            if (!!this.descriptionTaskChildList) {
-                // if (new Date() > new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
-                if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
-                    return true
-                } else {
-                    return false
-                }
+            if (this.chosenSmartList) {
+
             } else {
-                // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
-                // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
-                if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
-                    return true
+                if (!!this.descriptionTaskChildList) {
+                    // if (new Date() > new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
+                    if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
+                        return true
+                    } else {
+                        return false
+                    }
                 } else {
-                    return false
+                    // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                    // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                    if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                        return true
+                    } else {
+                        return false
+                    }
                 }
             }
         },
         repeatState() {
-            if (!!this.descriptionTaskChildList) {
-                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
-                    return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName
-                } else {
-                    return 'Repeat'
-                }
+            if (this.chosenSmartList) {
+
             } else {
-                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
-                    return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName
+                if (!!this.descriptionTaskChildList) {
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
+                        return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName
+                    } else {
+                        return 'Repeat'
+                    }
                 } else {
-                    return 'Repeat'
+                    if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
+                        return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName
+                    } else {
+                        return 'Repeat'
+                    }
                 }
             }
         },
         remindState() {
-            if (!!this.descriptionTaskChildList) {
-                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName) {
-                    return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName
-                } else {
-                    return 'Remind me'
-                }
+            if (this.chosenSmartList) {
+
             } else {
-                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName) {
-                    return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName
+                if (!!this.descriptionTaskChildList) {
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName) {
+                        return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName
+                    } else {
+                        return 'Remind me'
+                    }
                 } else {
-                    return 'Remind me'
+                    if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName) {
+                        return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName
+                    } else {
+                        return 'Remind me'
+                    }
                 }
             }
         }
