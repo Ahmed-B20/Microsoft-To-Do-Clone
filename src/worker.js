@@ -29,7 +29,6 @@
 
 
 self.onmessage = (taskDate)=>{
-    // let reminderDate = (new Date(taskDate.data) - new Date()) / 24*60*60*1000
     let reminderDate = (new Date(taskDate.data).getTime() - new Date().getTime())
     let timeChunk = reminderDate / 10
 
@@ -37,11 +36,8 @@ self.onmessage = (taskDate)=>{
 
     let myInterval = setInterval(()=>{
         if (new Date() >= new Date(taskDate.data)) {
-            console.log('gg');
             postMessage(true)
             clearInterval(myInterval)
-        } else {
-            console.log('now');
         }
     },timeChunk)
 }
