@@ -1755,6 +1755,7 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
                     this.toggleRemindDropDown = false
+                    sendMessage(time)
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = 'tomorrow'
                     let time = new Date(new Date().setDate(new Date().getDate() + 1) + 2 * 60 * 60 * 1000)
@@ -1769,6 +1770,7 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `tomorrow at ${strTime}`
                     this.toggleRemindDropDown = false
+                    sendMessage(time)
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = 'nextWeek'
                     let time = new Date(new Date().setDate(new Date().getDate() + 7) + 2 * 60 * 60 * 1000)
@@ -1783,6 +1785,7 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
                     this.toggleRemindDropDown = false
+                    sendMessage(time)
                 } else if (date === 'customDate') {
                     this.pickCustomRemindDate = true
                 }
@@ -1820,6 +1823,7 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `tomorrow at ${strTime}`
                     this.toggleRemindDropDown = false
+                    sendMessage(time)
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'nextWeek'
                     let time = new Date(new Date().setDate(new Date().getDate() + 7) + 2 * 60 * 60 * 1000)
@@ -1834,6 +1838,7 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
                     this.toggleRemindDropDown = false
+                    sendMessage(time)
                 } else if (date === 'customDate') {
                     this.pickCustomRemindDate = true
                 }
@@ -1856,6 +1861,7 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
 
+                    sendMessage(time)
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 } else {
                     let time = new Date(this.pickedCustomRemindDate)
@@ -1872,7 +1878,6 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
 
                     sendMessage(time)
-
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 }
                 this.pickCustomRemindDate = false
