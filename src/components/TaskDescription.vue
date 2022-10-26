@@ -354,7 +354,8 @@ import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 import PopUp from './PopUp.vue'
 import DropDown from '../components/DropDown.vue';
-// import Worker from '../worker.js'
+
+import sendMessage from '@/worker-api.js'
 
 export default {
     name: 'DescriptionTask',
@@ -1163,7 +1164,6 @@ export default {
 
             this.alertPopup = false
         },
-
         completeStep() {
             if (!!this.descriptionTaskChildList) {
                 if (!!this.dropDownStepId) {
@@ -1805,6 +1805,8 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
                     this.toggleRemindDropDown = false
+
+                    sendMessage(time)
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'tomorrow'
                     let time = new Date(new Date().setDate(new Date().getDate() + 1) + 2 * 60 * 60 * 1000)
@@ -1835,7 +1837,6 @@ export default {
                 } else if (date === 'customDate') {
                     this.pickCustomRemindDate = true
                 }
-
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             }
         },
@@ -1869,6 +1870,8 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'CustomDate'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
+
+                    sendMessage(time)
 
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 }
