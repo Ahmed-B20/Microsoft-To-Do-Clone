@@ -1,6 +1,6 @@
 <template>
     <keep-alive>
-        <content-view ref="tasksParent" :class="[toggleShrink? 'shrink': 'grow']" :key="listId">
+        <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :key="listId">
             <template #toggle-sidebar>
                 <button @click="openSideBarDescription">
                     <img src="@/assets/design-material/icons/menu.png" alt="open-sidebar">
@@ -8,7 +8,7 @@
             </template>
 
             <template v-slot:title>
-                {{listName}}
+                {{ listName }}
             </template>
 
             <template #toggle-description>
@@ -23,7 +23,7 @@
                     <button @click="reverseResults" class="button-sort sorted-by">
                         <img v-if="reverseState" src="@/assets/design-material/icons/up-arrow.png" alt="close sort" />
                         <img v-else src="@/assets/design-material/icons/down-arrow.png" alt="close sort" />
-                        sorted by {{sortMethodTarget}}
+                        sorted by {{ sortMethodTarget }}
                     </button>
                     <button @click="closeSort" class="button-sort close">
                         <img src="@/assets/design-material/icons/close.png" alt="close sort" />
@@ -40,7 +40,7 @@
         </content-view>
     </keep-alive>
 
-    <transition name="to-left">
+    <transition name="to-left" :css="animated">
         <TaskDescription :key="descriptionTaskIndex" :toggleShrink="toggleShrink"
             @closeDescription="closeDescriptionMethod" :descriptionTaskList="descriptionTaskList"
             :descriptionTaskChildList="descriptionTaskChildList" :descriptionTaskIndex="descriptionTaskIndex"
@@ -55,7 +55,7 @@
                         <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
                         <input @keyup.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
-                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
+                            placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
                         <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
 
@@ -98,28 +98,28 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            {{target=== 'move'? 'Move List': target==='delete'?'Delete List':'Sort By'}}
+            {{ target === 'move' ? 'Move List' : target === 'delete' ? 'Delete List' : 'Sort By' }}
         </template>
 
         <template v-slot:content>
-            <div v-if="target=== 'move'" class="select-parent">
+            <div v-if="target === 'move'" class="select-parent">
                 <select ref="selectedGroupOfList" name="" id="">
                     <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
                         :value="groupOfList.id">
-                        {{groupOfList.listName}}
+                        {{ groupOfList.listName }}
                     </option>
                 </select>
             </div>
 
-            <div v-else-if="target=== 'sort'" class="select-parent">
+            <div v-else-if="target === 'sort'" class="select-parent">
                 <select ref="selectedSortValue" name="" id="">
                     <option v-for="(sortMethod, index) in sortingMethods" :key="index" :value="index">
-                        {{sortMethod}}
+                        {{ sortMethod }}
                     </option>
                 </select>
             </div>
             <p v-else>
-                list {{listName}} will be permanently deleted
+                list {{ listName }} will be permanently deleted
             </p>
         </template>
 
@@ -233,7 +233,9 @@ export default {
             target: '',
             sortMethodTarget: '',
             showSortBy: false,
-            reverseState: false
+            reverseState: false,
+            oldTaskIndex: null,
+            animated: true,
             // sendedArray: []
         }
     },
@@ -307,7 +309,25 @@ export default {
             this.descriptionTaskIndex = index
 
             // this.toggleOpenDescription = !this.toggleOpenDescription
-            this.toggleShrink = shrink
+
+
+            if (shrink) {
+                if (+this.oldTaskIndex !== +index && this.oldTaskIndex !== null) {
+
+                    this.animated = false
+                    this.toggleShrink = true
+                    this.oldTaskIndex = index
+                } else {
+                    this.animated = true
+                    this.toggleShrink = true
+                    this.oldTaskIndex = index
+                }
+            } else {
+                this.animated = true
+                this.toggleShrink = shrink
+                this.oldTaskIndex = index
+            }
+
             this.element = element
             this.toggleDropDown = false
         },

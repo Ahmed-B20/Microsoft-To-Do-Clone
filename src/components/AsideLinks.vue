@@ -13,7 +13,7 @@
             <span>Important</span>
         </router-link>
 
-        <router-link to="/completed">
+        <router-link to="/complete">
             <img src="@/assets/design-material/icons/complete.png" alt="completed tasks tab" />
             <span>Tasks</span>
         </router-link>
