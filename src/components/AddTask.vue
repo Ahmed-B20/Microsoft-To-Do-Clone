@@ -53,6 +53,8 @@ export default {
 
                 this.taskObj.name = this.inputValue
                 this.taskObj.id = this.taskId
+                this.taskObj.listId = this.chosenListId()
+                this.taskObj.childListId = this.chosenChildIdListId()
                 this.taskObj.complete = false
                 this.taskObj.important = false
 

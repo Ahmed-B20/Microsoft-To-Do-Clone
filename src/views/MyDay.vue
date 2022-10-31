@@ -8,7 +8,7 @@
             </template>
 
             <template v-slot:title>
-                {{ listName }}
+                My Day
             </template>
 
             <template #toggle-description>
@@ -239,9 +239,9 @@ export default {
         }
     },
     computed: {
-        ...mapState(allLists, ['returnLists']),
-        ...mapWritableState(allLists, ['lists']),
         ...mapWritableState(toggleAside, ['toggleState']),
+        ...mapState(allLists, ['returnLists', 'smartList']),
+        ...mapWritableState(allLists, ['lists', 'smartList']),
 
         comListId() {
             return this.listId
@@ -268,7 +268,6 @@ export default {
             }
         },
         childId() {
-
             if (!!this.childId) {
                 this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
                 this.chosenList = this.allList[this.$route.params.listId]
@@ -301,12 +300,15 @@ export default {
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
         },
         openDescription(listId, index, shrink, element) {
-            if (!!this.childId) {
-                this.descriptionTaskChildList = this.childId
+            
+            // if (!!this.childId) {
+            if (!!this.smartList['myDay'].tasks[index].childListId) {
+                this.descriptionTaskChildList = this.smartList['myDay'].tasks[index].childListId
             }
-            this.descriptionTaskList = listId
-            this.descriptionTaskIndex = index
-
+            this.descriptionTaskList = this.smartList['myDay'].tasks[index].listId
+            this.descriptionTaskIndex = this.smartList['myDay'].tasks[index].id
+            
+            console.log(this.descriptionTaskList);
             // this.toggleOpenDescription = !this.toggleOpenDescription
 
 

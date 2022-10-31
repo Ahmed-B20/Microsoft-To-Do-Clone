@@ -13,8 +13,6 @@
                     @click="toggleAlertPopup" src="@/assets/design-material/icons/notification.gif" alt=""
                     class="alert-message">
 
-
-
                 <img @click="closeDescription" src="@/assets/design-material/icons/close.png" alt=""
                     class="close-description">
             </div>
@@ -362,9 +360,14 @@ export default {
     props: ['descriptionTaskList', 'descriptionTaskChildList', 'descriptionTaskIndex', 'element', 'chosenSmartList'],
     beforeMount() {
 
-        if (!!this.chosenSmartList) {
-            this.task = this.smartList[this.chosenSmartList].tasks
-        } else {
+        // if (!!this.chosenSmartList) {
+        //     this.task = this.smartList[this.chosenSmartList].tasks
+
+        //     console.log(this.descriptionTaskList);
+        //     console.log(this.descriptionTaskChildList);
+        //     console.log(this.descriptionTaskIndex);
+        // } else {
+            console.log(this.descriptionTaskChildList);
             if (!!this.descriptionTaskChildList) {
                 this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
                     .tasks[this.descriptionTaskIndex]
@@ -386,7 +389,7 @@ export default {
 
                 this.addToMyDayState = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].addToMyDay
             }
-        }
+        // }
     },
     components: {
         PopUp,
@@ -442,21 +445,21 @@ export default {
         ...mapWritableState(allLists, ['lists', 'smartList']),
 
         taskNoteText() {
-            if (this.chosenSmartList) {
+            // if (this.chosenSmartList) {
 
-            } else {
+            // } else {
                 if (this.task.note.length > 0) {
                     return this.textValue = this.task.note
                 } else {
                     return this.textValue = ''
                 }
-            }
+            // }
 
         },
         taskNoteDate() {
-            if (this.chosenSmartList) {
+            // if (this.chosenSmartList) {
 
-            } else {
+            // } else {
                 if (this.task.noteModified && this.task.note.length > 0) {
                     return `Modified At ${new Date(this.task.modifiedDate).toDateString()}`
                 } else {
@@ -464,23 +467,23 @@ export default {
                         return `Added At ${new Date(this.task.noteDate).toDateString()}`
                     }
                 }
-            }
+            // }
         },
         itemDetect() {
-            if (this.chosenSmartList) {
+            // if (this.chosenSmartList) {
 
-            } else {
+            // } else {
                 if (this.newName.length > 0) {
                     return true;
                 } else {
                     return false;
                 }
-            }
+            // }
         },
         dueDateState() {
-            if (this.chosenSmartList) {
+            // if (this.chosenSmartList) {
 
-            } else {
+            // } else {
                 if (!!this.descriptionTaskChildList) {
                     if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName) {
                         return 'Due ' + this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName
@@ -494,12 +497,12 @@ export default {
                         return 'Add Due Date'
                     }
                 }
-            }
+            // }
         },
         dueDateStateClass() {
-            if (this.chosenSmartList) {
+            // if (this.chosenSmartList) {
 
-            } else {
+            // } else {
                 if (!!this.descriptionTaskChildList) {
                     // if (new Date() > new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
                     if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
@@ -516,12 +519,12 @@ export default {
                         return false
                     }
                 }
-            }
+            // }
         },
         repeatState() {
-            if (this.chosenSmartList) {
+            // if (this.chosenSmartList) {
 
-            } else {
+            // } else {
                 if (!!this.descriptionTaskChildList) {
                     if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
                         return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName
@@ -535,12 +538,12 @@ export default {
                         return 'Repeat'
                     }
                 }
-            }
+            // }
         },
         remindState() {
-            if (this.chosenSmartList) {
+            // if (this.chosenSmartList) {
 
-            } else {
+            // } else {
                 if (!!this.descriptionTaskChildList) {
                     if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName) {
                         return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName
@@ -554,7 +557,7 @@ export default {
                         return 'Remind me'
                     }
                 }
-            }
+            // }
         }
     },
     watch: {
