@@ -17,19 +17,14 @@
                         <img :data-id="index" src="@/assets/design-material/icons/process.png" alt="task steps"
                             title="task steps">
                         {{ (task.steps.filter((step) => { return step.complete === true }).length) }} Of {{
-                                task.steps.length
+                        task.steps.length
                         }}
                     </span>
-
-                    <!-- <span :data-id="index" class="border" v-if="task.steps.length > 0 && task.note"></span> -->
 
                     <span :data-id="index" class="info-icon note" v-if="task.note">
                         <img :data-id="index" src="@/assets/design-material/icons/notes.png" alt="task notes"
                             title="task notes">Note
                     </span>
-
-                    <!-- <span :data-id="index" class="border"
-                        v-if="task.steps.length > 0 && task.dueDateName || task.note && task.dueDateName"></span> -->
 
                     <span
                         :class="{ delete: new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete }"
@@ -39,26 +34,17 @@
                         {{ task.dueDateName }}
                     </span>
 
-                    <!-- <span :data-id="index" class="border"
-                        v-if="task.steps.length > 0 && task.addToMyDay || task.note && task.addToMyDay || task.dueDateName && task.addToMyDay"></span> -->
-
                     <span :data-id="index" class="info-icon add-task-container note" v-if="task.addToMyDay">
                         <img :data-id="index" src="@/assets/design-material/icons/my-day.png" :alt="task.addToMyDay"
                             title="task notes">
                         My Day
                     </span>
 
-                    <!-- <span :data-id="index" class="border"
-                        v-if="task.steps.length > 0 && task.addToMyDay || task.note && task.addToMyDay || task.dueDateName && task.addToMyDay|| task.dueDateName && !!task.repeatDueDateName"></span> -->
-
                     <span :data-id="index" class="info-icon note" v-if="!!task.repeatDueDateName">
                         <img :data-id="index" src="@/assets/design-material/icons/repeat.png"
                             :alt="task.repeatDueDateName" title="task notes">
                         {{ task.repeatDueDateName }}
                     </span>
-
-                    <!-- <span :data-id="index" class="border"
-                        v-if="task.steps.length > 0 && task.addToMyDay || task.note && task.addToMyDay || task.dueDateName && task.addToMyDay|| task.dueDateName && !!task.repeatDueDateName|| task.repeatDueDateName && !!task.remindMe"></span> -->
 
                     <span :data-id="index" class="info-icon note" v-if="!!task.remindMe">
                         <img :data-id="index" src="@/assets/design-material/icons/reminder.png" :alt="task.remindMe"
@@ -229,6 +215,31 @@ export default {
                 if (index != this.listId) {
                     this.ReturnAllListsArray.push(list)
                 }
+
+                list.tasks.forEach((task) => {
+                    if (!!task.remindMe) {
+                        console.log('rr');
+                        const worker = new Worker('../src/worker.js')
+                        worker.postMessage(new Date(task.remindMeDate))
+                        worker.onmessage = (time) => {
+                            this.remindToggle = time.returnValue
+                        }
+                    }
+                })
+            } else {
+                list.listsArray.forEach((childList) => {
+                    childList.tasks.forEach((task) => {
+                        if (!!task.remindMe) {
+                            console.log('rr');
+                            const worker = new Worker('../src/worker.js')
+                            worker.postMessage(new Date(task.remindMeDate))
+                            worker.onmessage = (time) => {
+                                this.remindToggle = time.returnValue
+                            }
+                        }
+                    })
+                })
+
             }
         })
     },
@@ -257,7 +268,8 @@ export default {
             pickedCustomDate: null,
             errorCustomDateToggle: false,
             addToMyDayState: false,
-            repeatedTaskObject: {}
+            repeatedTaskObject: {},
+            remindToggle: false
         }
     },
     computed: {

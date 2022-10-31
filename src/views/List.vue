@@ -153,6 +153,7 @@
 </template>
 
 <script>
+
 import ContentView from '@/components/ContentView.vue';
 import SingleTask from '@/components/SingleTask.vue';
 import TaskDescription from '@/components/TaskDescription.vue'

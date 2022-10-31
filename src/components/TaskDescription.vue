@@ -9,6 +9,9 @@
                 <!-- <img v-if="new Date() > new Date(task.dueTime) && !task.complete" @click="toggleAlertPopup"
         src="@/assets/design-material/icons/notification.gif" alt="" class="alert-message"> -->
 
+                <img v-if="remindToggle || new Date() > new Date(task.remindMeDate) && !task.complete" @click="toggleAlertPopup" src="@/assets/design-material/icons/bell.png"
+                    alt="task reminder" class="alert-message">
+
                 <img v-if="new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete"
                     @click="toggleAlertPopup" src="@/assets/design-material/icons/notification.gif" alt=""
                     class="alert-message">
@@ -353,7 +356,7 @@ import { mapState, mapWritableState } from 'pinia'
 import PopUp from './PopUp.vue'
 import DropDown from '../components/DropDown.vue';
 
-import sendMessage from '@/worker-api.js'
+// import sendMessage from '@/worker-api.js'
 
 export default {
     name: 'DescriptionTask',
@@ -437,7 +440,8 @@ export default {
             toggleDueDateDropDown: false,
             alertPopup: false,
             repeatedTaskObject: {},
-            smartListTaskId: this.element.getAttribute('data-id')
+            smartListTaskId: this.element.getAttribute('data-id'),
+            remindToggle: false
         }
     },
     computed: {
@@ -1806,7 +1810,7 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
                     this.toggleRemindDropDown = false
-                    sendMessage(time)
+                    this.sendMessage(time)
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = 'tomorrow'
                     let time = new Date(new Date().setDate(new Date().getDate() + 1) + 2 * 60 * 60 * 1000)
@@ -1821,7 +1825,7 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `tomorrow at ${strTime}`
                     this.toggleRemindDropDown = false
-                    sendMessage(time)
+                    this.sendMessage(time)
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = 'nextWeek'
                     let time = new Date(new Date().setDate(new Date().getDate() + 7) + 2 * 60 * 60 * 1000)
@@ -1836,7 +1840,7 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
                     this.toggleRemindDropDown = false
-                    sendMessage(time)
+                    this.sendMessage(time)
                 } else if (date === 'customDate') {
                     this.pickCustomRemindDate = true
                 }
@@ -1852,15 +1856,12 @@ export default {
                     minutes = minutes < 10 ? '0' + minutes : minutes;
                     let strTime = hours + ':' + minutes + ' ' + ampm;
 
-                    // const worker = new Worker(Worker)
-                    // worker.postMessage('llll')
-
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'toDay'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
                     this.toggleRemindDropDown = false
 
-                    sendMessage(time)
+                    this.sendMessage(time)
                 } else if (date === 'tomorrow') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'tomorrow'
                     let time = new Date(new Date().setDate(new Date().getDate() + 1) + 2 * 60 * 60 * 1000)
@@ -1874,7 +1875,7 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `tomorrow at ${strTime}`
                     this.toggleRemindDropDown = false
-                    sendMessage(time)
+                    this.sendMessage(time)
                 } else if (date === 'nextWeek') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'nextWeek'
                     let time = new Date(new Date().setDate(new Date().getDate() + 7) + 2 * 60 * 60 * 1000)
@@ -1889,11 +1890,18 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
                     this.toggleRemindDropDown = false
-                    sendMessage(time)
+                    this.sendMessage(time)
                 } else if (date === 'customDate') {
                     this.pickCustomRemindDate = true
                 }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            }
+        },
+        sendMessage(time) {
+            const worker = new Worker('../src/worker.js')
+            worker.postMessage(time)
+            worker.onmessage = (time) => {
+                this.remindToggle = time.returnValue
             }
         },
         addCustomRemindDate() {
@@ -1912,7 +1920,7 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
 
-                    sendMessage(time)
+                    this.sendMessage(time)
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 } else {
                     let time = new Date(this.pickedCustomRemindDate)
@@ -1928,7 +1936,7 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `${time.toDateString().slice(0, 10)} at ${strTime}`
 
-                    sendMessage(time)
+                    this.sendMessage(time)
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 }
                 this.pickCustomRemindDate = false
