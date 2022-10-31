@@ -46,6 +46,55 @@
             v-if="toggleShrink" :element="element" chosenSmartList="important" />
     </transition>
 
+    <transition name="to-bottom">
+        <DropDown :dropDownSlots="dropDownSlots" :top="top" :right="right" v-if="toggleDropDown">
+            <template #RenameList>
+                <div class="renameList" @click.self="renameList">
+                    <template v-if="showRename">
+                        <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                            src="@/assets/design-material/icons/plus.png" alt="add-item" />
+                        <input @keyup.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
+                            placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
+                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                    </template>
+
+                    <template v-else>
+                        <img @click="renameList" src="@/assets/design-material/icons/rename.png" alt="rename task" />
+                        <span @click="renameList">Rename List</span>
+                    </template>
+                </div>
+            </template>
+
+            <template #MoveListTo v-if="ReturnGroupOfLists">
+                <div @click="togglePopUp('move')">
+                    <img src="@/assets/design-material/icons/curve-arrow.png" alt="">
+                    <span>Move list to...</span>
+                </div>
+            </template>
+
+            <template #SortBy>
+                <div @click="togglePopUp('sort')">
+                    <img src="@/assets/design-material/icons/sort.png" alt="">
+                    <span>Sort By</span>
+                </div>
+            </template>
+
+            <template #DuplicateList>
+                <div @click="DuplicateList">
+                    <img src="@/assets/design-material/icons/copy.png" alt="">
+                    <span>Duplicate list</span>
+                </div>
+            </template>
+
+            <template #DeleteList>
+                <div @click="togglePopUp('delete')">
+                    <img src="@/assets/design-material/icons/delete.png" alt="">
+                    <span>Delete list</span>
+                </div>
+            </template>
+        </DropDown>
+    </transition>
+
     <PopUp :showPopUp="showPopUp">
         <template #title>
             {{ target === 'move' ? 'Move List' : target === 'delete' ? 'Delete List' : 'Sort By' }}
@@ -259,6 +308,7 @@ export default {
             this.descriptionTaskList = this.smartList['important'].tasks[index].listId
             this.descriptionTaskIndex = this.smartList['important'].tasks[index].id
             
+            console.log(this.descriptionTaskList);
             // this.toggleOpenDescription = !this.toggleOpenDescription
 
 
