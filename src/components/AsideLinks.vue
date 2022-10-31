@@ -17,7 +17,7 @@
             </span>
         </router-link>
 
-        <router-link to="/complete">
+        <!-- <router-link to="/complete">
             <img src="@/assets/design-material/icons/complete.png" alt="completed tasks tab" />
             <span>Complete</span>
 
@@ -33,7 +33,7 @@
             <span class="tasks-count" v-if="smartList.all.tasks.length > 0">
                 {{ smartList.all.tasks.length }}
             </span>
-        </router-link>
+        </router-link> -->
 
         <router-link to="/planned">
             <img src="@/assets/design-material/icons/plan.png" alt="planned tab" />
