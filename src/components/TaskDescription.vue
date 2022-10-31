@@ -1988,6 +1988,7 @@ export default {
 
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].snooze = true
                 this.toggleRemindDropDown = false
                 this.sendMessage(time)
 
@@ -2006,6 +2007,7 @@ export default {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'toDay'
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].snooze = true
                 this.toggleRemindDropDown = false
 
                 this.sendMessage(time)

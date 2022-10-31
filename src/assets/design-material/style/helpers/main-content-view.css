@@ -198,29 +198,41 @@
     transform-origin: center center;
     position: relative;
     overflow: hidden;
+    /* z-index: 6; */
 }
 
 .view-content-container .tasks li.delete:not(.drop-down ul li)::before {
     content: '';
     position: absolute;
-    bottom: 0;
+    /* bottom: 0;
     left: 0;
-    right: 0;
+    right: 0; */
+    transform: rotate(-45deg) translateY(-50%);
+    left: -60px;
+    width: 100px;
+    top: 50%;
     height: 5px;
     background-color: #ffe586;
+    z-index: 5;
 }
 
 .view-content-container .tasks li.remind:not(.drop-down ul li)::after {
     content: '';
     position: absolute;
-    top: 0;
+    /* top: 0;
     left: 0;
-    right: 0;
+    right: 0; */
+
+    transform: rotate(-45deg) translateY(-50%);
+    left: -50px;
+    width: 100px;
+    top: 50%;
     height: 5px;
     background-color: #B01C58;
+    z-index: 5;
 }
 
-.view-content-container .tasks li.remind.delete:not(.drop-down ul li){
+.view-content-container .tasks li.remind.delete:not(.drop-down ul li) {
     animation: important 2s linear infinite;
 }
 

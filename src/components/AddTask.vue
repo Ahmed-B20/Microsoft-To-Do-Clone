@@ -95,6 +95,8 @@ export default {
                 this.taskObj.noteModified = false
                 this.taskObj.modifiedDate = null
 
+                this.taskObj.snooze = false
+
                 switch (this.chosenSmartList) {
                     case 'important':
                         this.taskObj.important = true

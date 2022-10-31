@@ -37,6 +37,12 @@
                 title="task notes">
             {{ task.remindMe }}
         </span>
+
+        <span :data-id="index" class="info-icon note" v-if="task.snooze">
+            <img :data-id="index" src="@/assets/design-material/icons/snooze.png" alt="task snooze"
+                title="task snooze">
+            Snoozed Task
+        </span>
     </span>
 </template>
 
