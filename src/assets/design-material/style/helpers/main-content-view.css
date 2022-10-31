@@ -210,12 +210,48 @@
     background-color: #ffe586;
 }
 
+.view-content-container .tasks li.remind:not(.drop-down ul li)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-color: #B01C58;
+}
+
+.view-content-container .tasks li.remind.delete:not(.drop-down ul li){
+    animation: important 2s linear infinite;
+}
+
 .view-content-container .tasks li.add-animation {
     animation: pop 0.3s linear forwards;
 }
 
 .view-content-container .tasks li.add-animation-x {
     animation: shift 0.3s linear forwards;
+}
+
+@keyframes important {
+    0% {
+        transform: scaleY(0.8);
+    }
+
+    5% {
+        transform: scaleY(1.1);
+    }
+
+    10% {
+        transform: scaleY(1);
+    }
+
+    20% {
+        transform: scaleY(1);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
 }
 
 @keyframes shift {

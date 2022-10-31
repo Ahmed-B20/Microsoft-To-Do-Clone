@@ -1,7 +1,7 @@
 <template>
     <transition-group name="tasks-transition">
         <li ref="taskElement" @contextmenu="openDropDown" @click.self="openDescription"
-            :class="{complete: task.complete, delete: new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete}"
+            :class="{complete: task.complete, delete: new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete, remind: new Date() > new Date(task.remindMeDate) && !task.complete}"
             v-for="(task,index) in returnAllTasks" :key="task.id" :data-id="index">
             <span :data-id="index" @click="completeTask('task')" class="check">
                 <img :data-id="index" src="@/assets/design-material/icons/check.png" alt="check" />
@@ -17,7 +17,7 @@
                         <img :data-id="index" src="@/assets/design-material/icons/process.png" alt="task steps"
                             title="task steps">
                         {{ (task.steps.filter((step) => { return step.complete === true }).length) }} Of {{
-                        task.steps.length
+                                task.steps.length
                         }}
                     </span>
 
@@ -216,31 +216,31 @@ export default {
                     this.ReturnAllListsArray.push(list)
                 }
 
-                list.tasks.forEach((task) => {
-                    if (!!task.remindMe) {
-                        console.log('rr');
-                        const worker = new Worker('../src/worker.js')
-                        worker.postMessage(new Date(task.remindMeDate))
-                        worker.onmessage = (time) => {
-                            this.remindToggle = time.returnValue
-                        }
-                    }
-                })
-            } else {
-                list.listsArray.forEach((childList) => {
-                    childList.tasks.forEach((task) => {
-                        if (!!task.remindMe) {
-                            console.log('rr');
-                            const worker = new Worker('../src/worker.js')
-                            worker.postMessage(new Date(task.remindMeDate))
-                            worker.onmessage = (time) => {
-                                this.remindToggle = time.returnValue
-                            }
-                        }
-                    })
-                })
-
+                // list.tasks.forEach((task) => {
+                //     if (!!task.remindMe) {
+                //         console.log('rr');
+                //         const worker = new Worker('../src/worker.js')
+                //         worker.postMessage(new Date(task.remindMeDate))
+                //         worker.onmessage = (time) => {
+                //             this.remindToggle = time.returnValue
+                //         }
+                //     }
+                // })
             }
+            // else {
+            //     list.listsArray.forEach((childList) => {
+            //         childList.tasks.forEach((task) => {
+            //             if (!!task.remindMe) {
+            //                 console.log('rr');
+            //                 const worker = new Worker('../src/worker.js')
+            //                 worker.postMessage(new Date(task.remindMeDate))
+            //                 worker.onmessage = (time) => {
+            //                     this.remindToggle = time.returnValue
+            //                 }
+            //             }
+            //         })
+            //     })
+            // }
         })
     },
 

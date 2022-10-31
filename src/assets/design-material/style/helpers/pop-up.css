@@ -19,6 +19,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 40px;
 }
 
 .pop-up-parent .pop-up-container .pop-up-content {
@@ -67,6 +68,7 @@
     align-items: center;
     justify-content: center;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .pop-up-parent .pop-up-container .pop-up-content .button-container button {

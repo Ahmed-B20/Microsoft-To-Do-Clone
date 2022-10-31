@@ -9,8 +9,9 @@
                 <!-- <img v-if="new Date() > new Date(task.dueTime) && !task.complete" @click="toggleAlertPopup"
         src="@/assets/design-material/icons/notification.gif" alt="" class="alert-message"> -->
 
-                <img v-if="remindToggle || new Date() > new Date(task.remindMeDate) && !task.complete" @click="toggleAlertPopup" src="@/assets/design-material/icons/bell.png"
-                    alt="task reminder" class="alert-message">
+                <img v-if="remindToggle || new Date() > new Date(task.remindMeDate) && !task.complete"
+                    @click="toggleRemindPopup" src="@/assets/design-material/icons/note.gif" alt="task reminder"
+                    class="alert-message">
 
                 <img v-if="new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete"
                     @click="toggleAlertPopup" src="@/assets/design-material/icons/notification.gif" alt=""
@@ -346,6 +347,23 @@
                 <button class="close" @click="toggleAlertPopup">Cancel</button>
             </template>
         </PopUp>
+
+        <PopUp :showPopUp="remindPopup">
+            <template #title>
+                Uncomplete Planned Task
+            </template>
+
+            <template #content>
+                you need to complete this uncomplete Task or Snooze it for ten minutes or delete it
+            </template>
+
+            <template #button>
+                <button class="delete" @click="deleteTask">Delete</button>
+                <button class="move" @click="completeAsideTask">Complete</button>
+                <button class="sort" @click="snoozeTask">Snooze</button>
+                <button class="close" @click="toggleRemindPopup">Cancel</button>
+            </template>
+        </PopUp>
     </div>
 </template>
 
@@ -441,7 +459,8 @@ export default {
             alertPopup: false,
             repeatedTaskObject: {},
             smartListTaskId: this.element.getAttribute('data-id'),
-            remindToggle: false
+            remindToggle: false,
+            remindPopup: false
         }
     },
     computed: {
@@ -1955,6 +1974,47 @@ export default {
                 }
             }
         },
+        snoozeTask() {
+            if (!!this.descriptionTaskChildList) {
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = 'toDay'
+                let time = new Date(new Date().getTime() + 10 * 60000)
+                let hours = time.getHours()
+                let minutes = time.getMinutes()
+                let ampm = hours >= 12 ? 'pm' : 'am';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeDate = time
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
+                this.toggleRemindDropDown = false
+                this.sendMessage(time)
+
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            } else {
+                let time = new Date(new Date().getTime() + 10 * 60000)
+
+                let hours = time.getHours()
+                let minutes = time.getMinutes()
+                let ampm = hours >= 12 ? 'pm' : 'am';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMe = 'toDay'
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeDate = time
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = `toDay at ${strTime}`
+                this.toggleRemindDropDown = false
+
+                this.sendMessage(time)
+                this.remindToggle = false
+                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
+            }
+
+            this.remindPopup = !this.remindPopup
+        },
         closeRemind() {
             if (!!this.descriptionTaskChildList) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].remindMe = ''
@@ -1970,6 +2030,9 @@ export default {
         },
         toggleAlertPopup() {
             this.alertPopup = !this.alertPopup
+        },
+        toggleRemindPopup() {
+            this.remindPopup = !this.remindPopup
         }
     }
 }
