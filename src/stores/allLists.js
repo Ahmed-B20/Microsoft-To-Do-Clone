@@ -16,6 +16,12 @@ export const allLists = defineStore('allLists', {
           },
           tasks: {
             tasks: []
+          },
+          complete: {
+            tasks: []
+          },
+          all: {
+            tasks: []
           }
         }
     }

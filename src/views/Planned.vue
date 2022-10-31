@@ -1,6 +1,6 @@
 <template>
     <keep-alive>
-        <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :key="listId">
+        <content-view chosenSmartList="planned" ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :key="listId">
             <template #toggle-sidebar>
                 <button @click="openSideBarDescription">
                     <img src="@/assets/design-material/icons/menu.png" alt="open-sidebar">
@@ -34,11 +34,72 @@
 
             <template #allTaskSlot>
                 <!-- <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId" /> -->
-                <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription"
-                    chosenSmartList="planned" />
+                <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :childId="childId" chosenSmartList="planned" />
             </template>
         </content-view>
     </keep-alive>
+
+    <transition name="to-left" :css="animated">
+        <TaskDescription :key="descriptionTaskIndex" :toggleShrink="toggleShrink"
+            @closeDescription="closeDescriptionMethod" :descriptionTaskList="descriptionTaskList"
+            :descriptionTaskChildList="descriptionTaskChildList" :descriptionTaskIndex="descriptionTaskIndex"
+            v-if="toggleShrink" :element="element" chosenSmartList="planned" />
+    </transition>
+
+    <PopUp :showPopUp="showPopUp">
+        <template #title>
+            {{ target === 'move' ? 'Move List' : target === 'delete' ? 'Delete List' : 'Sort By' }}
+        </template>
+
+        <template v-slot:content>
+            <div v-if="target === 'move'" class="select-parent">
+                <select ref="selectedGroupOfList" name="" id="">
+                    <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
+                        :value="groupOfList.id">
+                        {{ groupOfList.listName }}
+                    </option>
+                </select>
+            </div>
+
+            <div v-else-if="target === 'sort'" class="select-parent">
+                <select ref="selectedSortValue" name="" id="">
+                    <option v-for="(sortMethod, index) in sortingMethods" :key="index" :value="index">
+                        {{ sortMethod }}
+                    </option>
+                </select>
+            </div>
+            <p v-else>
+                list {{ listName }} will be permanently deleted
+            </p>
+        </template>
+
+        <template #button>
+            <button v-if="target === 'move'" class="move" @click="MoveListTo">Move</button>
+            <button v-else-if="target === 'sort'" class="sort" @click="sortBy">Sort</button>
+            <button v-else class="delete" @click="deleteList">Delete</button>
+            <button class="close" @click="closePopUp">Cancel</button>
+        </template>
+    </PopUp>
+
+    <!-- <transition name="to-bottom">
+        <DropDown>
+            <template #rename>
+                <span>rename list</span>
+            </template>
+
+            <template #move-list>
+                <span>move list</span>
+            </template>
+
+            <template #sort-by>
+                <span>sort by</span>
+            </template>
+
+            <template #delete-list>
+                <span>delete list</span>
+            </template>
+        </DropDown>
+    </transition> -->
 </template>
 
 <script>
@@ -122,14 +183,16 @@ export default {
             target: '',
             sortMethodTarget: '',
             showSortBy: false,
-            reverseState: false
+            reverseState: false,
+            oldTaskIndex: null,
+            animated: true,
             // sendedArray: []
         }
     },
     computed: {
-        ...mapState(allLists, ['returnLists']),
-        ...mapWritableState(allLists, ['lists']),
         ...mapWritableState(toggleAside, ['toggleState']),
+        ...mapState(allLists, ['returnLists', 'smartList']),
+        ...mapWritableState(allLists, ['lists', 'smartList']),
 
         comListId() {
             return this.listId
@@ -156,7 +219,6 @@ export default {
             }
         },
         childId() {
-
             if (!!this.childId) {
                 this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
                 this.chosenList = this.allList[this.$route.params.listId]
@@ -189,14 +251,34 @@ export default {
             this.lists[this.listId].tasks[event.target.getAttribute('data-id')].complete = true
         },
         openDescription(listId, index, shrink, element) {
-            if (!!this.childId) {
-                this.descriptionTaskChildList = this.childId
+            
+            // if (!!this.childId) {
+            if (!!this.smartList['planned'].tasks[index].childListId) {
+                this.descriptionTaskChildList = this.smartList['planned'].tasks[index].childListId
             }
-            this.descriptionTaskList = listId
-            this.descriptionTaskIndex = index
-
+            this.descriptionTaskList = this.smartList['planned'].tasks[index].listId
+            this.descriptionTaskIndex = this.smartList['planned'].tasks[index].id
+            
             // this.toggleOpenDescription = !this.toggleOpenDescription
-            this.toggleShrink = shrink
+
+
+            if (shrink) {
+                if (+this.oldTaskIndex !== +index && this.oldTaskIndex !== null) {
+
+                    this.animated = false
+                    this.toggleShrink = true
+                    this.oldTaskIndex = index
+                } else {
+                    this.animated = true
+                    this.toggleShrink = true
+                    this.oldTaskIndex = index
+                }
+            } else {
+                this.animated = true
+                this.toggleShrink = shrink
+                this.oldTaskIndex = index
+            }
+
             this.element = element
             this.toggleDropDown = false
         },

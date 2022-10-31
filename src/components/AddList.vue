@@ -105,7 +105,6 @@ export default {
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
                     this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
                 } else {
-                    console.log(this.taskNumber);
                     this.listObj.listName = this.itemValue;
                     this.listObj.id = this.taskNumber;
                     this.listObj.listChildren = false;

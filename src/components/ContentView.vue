@@ -17,7 +17,7 @@
         <ul class="tasks">
             <slot name="allTaskSlot"></slot>
         </ul>
-        <AddTask />
+        <AddTask :chosenSmartList="chosenSmartList" />
     </div>
 </template>
 
@@ -28,6 +28,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'RenderContent',
+    props: ['chosenSmartList'],
     components: {
         AddTask
     },

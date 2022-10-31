@@ -11,16 +11,28 @@
         <router-link to="/important">
             <img src="@/assets/design-material/icons/star.png" alt="important tab" />
             <span>Important</span>
+
+            <span class="tasks-count" v-if="smartList.important.tasks.length > 0">
+                {{ smartList.important.tasks.length }}
+            </span>
         </router-link>
 
         <router-link to="/complete">
             <img src="@/assets/design-material/icons/complete.png" alt="completed tasks tab" />
             <span>Complete</span>
+
+            <span class="tasks-count" v-if="smartList.complete.tasks.length > 0">
+                {{ smartList.complete.tasks.length }}
+            </span>
         </router-link>
 
         <router-link to="/all">
             <img src="@/assets/design-material/icons/infinity.png" alt="all tasks tab" />
             <span>All</span>
+
+            <span class="tasks-count" v-if="smartList.all.tasks.length > 0">
+                {{ smartList.all.tasks.length }}
+            </span>
         </router-link>
 
         <router-link to="/planned">
@@ -34,6 +46,10 @@
         <router-link to="/tasks">
             <img src="@/assets/design-material/icons/task.png" alt="tasks tab" />
             <span>Tasks</span>
+
+            <span class="tasks-count" v-if="smartList.tasks.tasks.length > 0">
+                {{ smartList.tasks.tasks.length }}
+            </span>
         </router-link>
     </div>
 </template>

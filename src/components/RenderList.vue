@@ -15,10 +15,10 @@
 
                         <p @click="showListTasks" @contextmenu="openDropDown" v-else>
                             <img src="@/assets/design-material/icons/menu.png" alt="single-list">
-                            <span>{{list.listName}}</span>
+                            <span>{{ list.listName }}</span>
 
                             <span class="tasks-count" v-if="!list.listChildren && list.tasks.length > 0">
-                                {{list.tasks.length}}
+                                {{ list.tasks.length }}
                             </span>
                         </p>
                     </li>
@@ -29,11 +29,15 @@
                         <template #RenameList>
                             <div class="renameList" @click.self="renameList">
                                 <template v-if="showRename">
-                                    <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                                    <!-- <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
+                                        src="@/assets/design-material/icons/plus.png" alt="add-item" /> -->
+
+                                    <img @click="newListName" class="renameTask"
                                         src="@/assets/design-material/icons/plus.png" alt="add-item" />
+
                                     <input @keyup.enter="newListName" required @focus="toggleErrorClass"
                                         v-model="newName" placeholder="New Name" type="text" name="" id=""
-                                        :class="{error:toggleError}" />
+                                        :class="{ error: toggleError }" />
                                     <img @click="closeRename" src="@/assets/design-material/icons/close.png"
                                         alt="close rename" />
                                 </template>
@@ -74,7 +78,7 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            {{target=== 'move'? 'Move List': 'Delete List'}}
+            {{ target === 'move' ? 'Move List' : 'Delete List' }}
         </template>
 
         <template v-slot:content>
@@ -82,12 +86,12 @@
                 <select ref="selectedGroupOfList" name="" id="">
                     <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
                         :value="groupOfList.id">
-                        {{groupOfList.listName}}
+                        {{ groupOfList.listName }}
                     </option>
                 </select>
             </div>
             <p v-else>
-                list {{listName}} will be permanently deleted
+                list {{ listName }} will be permanently deleted
             </p>
         </template>
 
@@ -211,7 +215,6 @@ export default {
 
             if (this.toggleDropDown) {
                 this.oldListId = this.listId
-                console.log(this.oldListId);
             } else {
                 if (+this.oldListId != +this.listId) {
                     this.toggleDropDown = false
@@ -222,7 +225,6 @@ export default {
                     setTimeout(() => {
                         this.toggleDropDown = true
                     }, 0)
-                    console.log(+this.oldListId, +this.listId);
                 }
             }
         },

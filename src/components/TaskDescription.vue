@@ -367,28 +367,27 @@ export default {
         //     console.log(this.descriptionTaskChildList);
         //     console.log(this.descriptionTaskIndex);
         // } else {
-            console.log(this.descriptionTaskChildList);
-            if (!!this.descriptionTaskChildList) {
-                this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
-                    .tasks[this.descriptionTaskIndex]
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
-                    .tasks.forEach((singleTask, index) => {
-                        if (singleTask.id == this.task.id) {
-                            this.taskIndex = index
-                        }
-                    })
-
-                this.addToMyDayState = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].addToMyDay
-            } else {
-                this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
-                this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
+        if (!!this.descriptionTaskChildList) {
+            this.task = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
+                .tasks[this.descriptionTaskIndex]
+            this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList]
+                .tasks.forEach((singleTask, index) => {
                     if (singleTask.id == this.task.id) {
                         this.taskIndex = index
                     }
                 })
 
-                this.addToMyDayState = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].addToMyDay
-            }
+            this.addToMyDayState = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].addToMyDay
+        } else {
+            this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
+            this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
+                if (singleTask.id == this.task.id) {
+                    this.taskIndex = index
+                }
+            })
+
+            this.addToMyDayState = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].addToMyDay
+        }
         // }
     },
     components: {
@@ -437,7 +436,8 @@ export default {
             pickCustomRemindDate: false,
             toggleDueDateDropDown: false,
             alertPopup: false,
-            repeatedTaskObject: {}
+            repeatedTaskObject: {},
+            smartListTaskId: this.element.getAttribute('data-id')
         }
     },
     computed: {
@@ -448,11 +448,11 @@ export default {
             // if (this.chosenSmartList) {
 
             // } else {
-                if (this.task.note.length > 0) {
-                    return this.textValue = this.task.note
-                } else {
-                    return this.textValue = ''
-                }
+            if (this.task.note.length > 0) {
+                return this.textValue = this.task.note
+            } else {
+                return this.textValue = ''
+            }
             // }
 
         },
@@ -460,103 +460,103 @@ export default {
             // if (this.chosenSmartList) {
 
             // } else {
-                if (this.task.noteModified && this.task.note.length > 0) {
-                    return `Modified At ${new Date(this.task.modifiedDate).toDateString()}`
-                } else {
-                    if (this.task.noteDate && this.task.note.length > 0) {
-                        return `Added At ${new Date(this.task.noteDate).toDateString()}`
-                    }
+            if (this.task.noteModified && this.task.note.length > 0) {
+                return `Modified At ${new Date(this.task.modifiedDate).toDateString()}`
+            } else {
+                if (this.task.noteDate && this.task.note.length > 0) {
+                    return `Added At ${new Date(this.task.noteDate).toDateString()}`
                 }
+            }
             // }
         },
         itemDetect() {
             // if (this.chosenSmartList) {
 
             // } else {
-                if (this.newName.length > 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+            if (this.newName.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
             // }
         },
         dueDateState() {
             // if (this.chosenSmartList) {
 
             // } else {
-                if (!!this.descriptionTaskChildList) {
-                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName) {
-                        return 'Due ' + this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName
-                    } else {
-                        return 'Add Due Date'
-                    }
+            if (!!this.descriptionTaskChildList) {
+                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName) {
+                    return 'Due ' + this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueDateName
                 } else {
-                    if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName) {
-                        return 'Due ' + this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName
-                    } else {
-                        return 'Add Due Date'
-                    }
+                    return 'Add Due Date'
                 }
+            } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName) {
+                    return 'Due ' + this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueDateName
+                } else {
+                    return 'Add Due Date'
+                }
+            }
             // }
         },
         dueDateStateClass() {
             // if (this.chosenSmartList) {
 
             // } else {
-                if (!!this.descriptionTaskChildList) {
-                    // if (new Date() > new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
-                    if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
-                        return true
-                    } else {
-                        return false
-                    }
+            if (!!this.descriptionTaskChildList) {
+                // if (new Date() > new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
+                if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
+                    return true
                 } else {
-                    // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
-                    // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
-                    if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
-                        return true
-                    } else {
-                        return false
-                    }
+                    return false
                 }
+            } else {
+                // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                // if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                if (new Date() > new Date(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).setDate(new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].dueTime).getDate() + 1)) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
+                    return true
+                } else {
+                    return false
+                }
+            }
             // }
         },
         repeatState() {
             // if (this.chosenSmartList) {
 
             // } else {
-                if (!!this.descriptionTaskChildList) {
-                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
-                        return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName
-                    } else {
-                        return 'Repeat'
-                    }
+            if (!!this.descriptionTaskChildList) {
+                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
+                    return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].repeatDueDateName
                 } else {
-                    if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
-                        return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName
-                    } else {
-                        return 'Repeat'
-                    }
+                    return 'Repeat'
                 }
+            } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName) {
+                    return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].repeatDueDateName
+                } else {
+                    return 'Repeat'
+                }
+            }
             // }
         },
         remindState() {
             // if (this.chosenSmartList) {
 
             // } else {
-                if (!!this.descriptionTaskChildList) {
-                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName) {
-                        return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName
-                    } else {
-                        return 'Remind me'
-                    }
+            if (!!this.descriptionTaskChildList) {
+                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName) {
+                    return this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeName
                 } else {
-                    if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName) {
-                        return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName
-                    } else {
-                        return 'Remind me'
-                    }
+                    return 'Remind me'
                 }
+            } else {
+                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName) {
+                    return this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeName
+                } else {
+                    return 'Remind me'
+                }
+            }
             // }
         }
     },
@@ -588,6 +588,12 @@ export default {
                 } else {
                     this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].name = this.newName
                 }
+
+                if (this.chosenSmartList) {
+                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].name = this.newName
+                }
+
+                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
                 this.newName = ''
@@ -627,6 +633,20 @@ export default {
                 this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note = this.textValue
                 this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].noteDate = new Date()
             }
+
+            if (this.chosenSmartList) {
+                if (this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].note) {
+                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].noteModified = true
+                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].modifiedDate = new Date()
+                } else {
+                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].noteModified = false
+                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].modifiedDate = null
+                }
+                this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].note = this.textValue
+                this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].noteDate = new Date()
+            }
+
+            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
         },
         emptyTextValue() {
@@ -697,12 +717,26 @@ export default {
                 if (this.toggleDropDown === false) {
                     this.dropDownStepId = null
                 }
+
+                if (this.chosenSmartList) {
+                    this.smartList[this.chosenSmartList].tasks.splice(this.smartListTaskId, 1)
+                }
+
+                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
+
             } else {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.descriptionTaskIndex, 1)
                 } else {
                     this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
                 }
+
+                if (this.chosenSmartList) {
+                    this.smartList[this.chosenSmartList].tasks.splice(this.smartListTaskId, 1)
+                }
+
+                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
+
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.$emit('closeDescription', false)
                 this.showPopUp = !this.showPopUp
@@ -741,6 +775,12 @@ export default {
                         this.taskIndex = index
                     }
                 })
+
+                // if (this.chosenSmartList) {
+                //     this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].important = true
+                // }
+
+                // localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             } else {
                 if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
@@ -758,6 +798,12 @@ export default {
                     this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
                     this.importantTask = {}
                 }
+
+                // if (this.chosenSmartList) {
+                //     this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].important = true
+                // }
+
+                // localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
@@ -1598,9 +1644,11 @@ export default {
             if (!!this.descriptionTaskChildList) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = true
                 this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+                // this.smartList.myDay.tasks[this.smartList.myDay.tasks.length] = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = true
                 this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+                // this.smartList.myDay.tasks[this.smartList.myDay.tasks.length] = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
             }
             localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))

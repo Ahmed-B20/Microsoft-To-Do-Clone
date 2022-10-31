@@ -1,7 +1,7 @@
 <template>
     <div class="add-task">
-        <div class="add-task-container" :class="{error:errorToggle}">
-            <span :class="{active:activeToggle}" ref="addTask" @click="addTaskToList">
+        <div class="add-task-container" :class="{ error: errorToggle }">
+            <span :class="{ active: activeToggle }" ref="addTask" @click="addTaskToList">
                 <img src="@/assets/design-material/icons/plus.png" alt="add-task" />
             </span>
 
@@ -18,6 +18,7 @@ import { mapState, mapWritableState } from 'pinia'
 export default {
     name: 'MainContent',
     // props: ['chosenListIdProp'],
+    props: ['chosenSmartList'],
     inject: ['chosenListId', 'chosenChildIdListId'],
     data() {
         return {
@@ -33,7 +34,7 @@ export default {
     },
     computed: {
         ...mapState(allLists, ['returnLists']),
-        ...mapWritableState(allLists, ['lists']),
+        ...mapWritableState(allLists, ['lists', 'smartList']),
     },
     methods: {
         addTaskToList() {
@@ -41,11 +42,16 @@ export default {
                 this.errorToggle = false
 
                 this.allLists = this.returnLists || []
-                if (!!this.chosenListId() && !this.chosenChildIdListId()) {
-                    this.chosenList = this.allLists[this.chosenListId()]
+                if (!!this.chosenSmartList) {
+                    this.chosenList = this.smartList[this.chosenSmartList]
                 } else {
-                    this.chosenList = this.allLists[this.chosenListId()].listsArray[this.chosenChildIdListId()]
+                    if (!!this.chosenListId() && !this.chosenChildIdListId()) {
+                        this.chosenList = this.allLists[this.chosenListId()]
+                    } else {
+                        this.chosenList = this.allLists[this.chosenListId()].listsArray[this.chosenChildIdListId()]
+                    }
                 }
+
 
                 this.chosenListTasks = this.chosenList.tasks
 
@@ -70,17 +76,17 @@ export default {
                 this.taskObj.addTime = today
                 this.taskObj.dueDate = ''
                 this.taskObj.dueDateName = ''
-                this.taskObj.realDueDateName= ''
-                
+                this.taskObj.realDueDateName = ''
+
                 this.taskObj.repeatDueDate = ''
                 this.taskObj.repeatDueDateName = ''
-                this.taskObj.realRepeatDueDateName= ''
+                this.taskObj.realRepeatDueDateName = ''
                 this.taskObj.repeatedTask = false
                 this.taskObj.repeatedCustomTaskDuration = ''
 
-                this.taskObj.remindMe= ''
-                this.taskObj.remindMeDate= ''
-                this.taskObj.remindMeName= ''
+                this.taskObj.remindMe = ''
+                this.taskObj.remindMeDate = ''
+                this.taskObj.remindMeName = ''
 
                 this.taskObj.addToMyDay = false
 
@@ -89,14 +95,34 @@ export default {
                 this.taskObj.noteModified = false
                 this.taskObj.modifiedDate = null
 
+                switch (this.chosenSmartList) {
+                    case 'important':
+                        this.taskObj.important = true
+                        break;
+
+                    case 'myDay':
+                        this.taskObj.addToMyDay = true
+                        break;
+
+                    case 'planned':
+                        this.taskObj.dueDate = new Date()
+                        this.taskObj.dueDateName = 'ToDay'
+                        this.taskObj.realDueDateName = 'ToDay'
+                        break;
+                }
+
+
                 this.taskObj.steps = []
                 this.chosenListTasks.push(this.taskObj)
                 this.$refs.taskInput.value = ''
                 this.inputValue = ''
                 this.taskObj = {}
 
+
+
                 this.taskId++
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.allLists))
+                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
                 this.lists = this.allLists
 
             } else {
