@@ -27,7 +27,6 @@
 //     });
 //   };
 
-
 self.onmessage = (taskDate)=>{
     let reminderDate = (new Date(taskDate.data).getTime() - new Date().getTime())
     let timeChunk = reminderDate / 10

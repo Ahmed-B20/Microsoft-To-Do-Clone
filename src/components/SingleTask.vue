@@ -26,34 +26,20 @@
     <transition name="to-bottom">
         <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left" v-if="toggleDropDown">
             <template #RenameTask>
-                <div class="renameList" @click.self="renameTask">
-                    <template v-if="showRename">
-                        <!-- <img @click="newTaskName" class="renameTask" :class="{ active: itemDetect }"
-                            src="@/assets/design-material/icons/plus.png" alt="add-item" /> -->
-
-                        <img @click="newTaskName" class="renameTask" src="@/assets/design-material/icons/plus.png"
-                            alt="add-item" />
-                        <input @keyup.enter="newTaskName" required @focus="toggleErrorClass" v-model="newName"
-                            placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
-                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
-                    </template>
-
-                    <template v-else>
-                        <img @click="renameTask" src="@/assets/design-material/icons/rename.png" alt="rename task" />
-                        <span @click="renameTask">Rename Task</span>
-                    </template>
-                </div>
+                <RenameTask :listId='listId' :childId='childId' :taskElementId='taskElementId' @componentEvent='closeDropDown'/>
             </template>
 
             <template #MarkAsImportant>
-                <div @click="importantToggle('dropdown')">
+                <!-- <div @click="importantToggle('dropdown')">
                     <img v-if="returnImportantState" src="@/assets/design-material/icons/important-task.png"
                         alt="important task">
 
                     <img v-else src="@/assets/design-material/icons/important-hover.png" alt="not important task">
 
                     <span>{{ returnImportantState ? 'Remove Importance' : 'Mark As Important' }}</span>
-                </div>
+                </div> -->
+
+                <MarkAsImportant :taskElements="this.$refs.taskElement" :listId='listId' :childId='childId' :taskElementId='taskElementId' @componentEvent='resetImportant'/>
             </template>
 
             <template #MarkAsComplete>
@@ -163,6 +149,10 @@ import { mapState, mapWritableState } from 'pinia'
 import PopUp from './PopUp.vue'
 import DropDown from '../components/DropDown.vue';
 import TaskInfoIcons from './task/TaskInfoIcons.vue';
+
+import RenameTask from './task/drop down/RenameTask.vue';
+import MarkAsImportant from './task/drop down/MarkAsImportant.vue';
+
 export default {
     name: 'SingleTask',
     props: ['listId', 'toggleShrink', 'childId', 'chosenSmartList'],
@@ -170,7 +160,9 @@ export default {
     components: {
         PopUp,
         DropDown,
-        TaskInfoIcons
+        TaskInfoIcons,
+        RenameTask,
+        MarkAsImportant
     },
     beforeMount() {
         this.lists.forEach((list, index) => {
@@ -1111,6 +1103,11 @@ export default {
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.toggleDropDown = false
             this.addToMyDayState = false
+        },
+        resetImportant(){
+            this.toggleDropDown = false
+            this.taskElementId = null
+            this.parentElementDomRect = null
         }
     }
 }
