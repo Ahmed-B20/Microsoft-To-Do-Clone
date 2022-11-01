@@ -64,7 +64,7 @@
     }
 }
 
-.drop-down ul li div {
+.drop-down ul li>div {
     padding: 10px !important;
     width: 100%;
     font-size: 14px;
@@ -75,11 +75,11 @@
     cursor: pointer;
 }
 
-.drop-down ul li div img {
+.drop-down ul li>div img {
     height: 15px;
 }
 
-/* .drop-down ul li div img.custom-image {
+/* .drop-down ul li>div img.custom-image {
     margin-left: auto;
 } */
 
