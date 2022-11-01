@@ -24,18 +24,13 @@
             <div class="task-main-content">
                 <div class="task-box task-info-and-steps">
                     <h2 :class="{ complete: task.complete }">
-                        <span :data-id="taskIndex" @click="completeAsideTask" class="check">
-                            <img src="@/assets/design-material/icons/check.png" alt="check" />
-                        </span>
+                        <CompleteToggle :element='element' :task='task' :taskIndex='taskIndex' :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId'/>
+
                         <span class="task-name" :class="{ complete: task.complete }">
                             {{ task.name }}
                         </span>
-
-                        <img v-if="task.important" :data-id="taskIndex" @click="importantAsideToggle"
-                            class="important-toggle" src="@/assets/design-material/icons/important-task.png" alt="">
-
-                        <img v-else :data-id="taskIndex" @click="importantAsideToggle" class="important-toggle"
-                            src="@/assets/design-material/icons/important-hover.png" alt="">
+                        
+                        <ImportantToggle :element='element' :task='task' :taskIndex='taskIndex' :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId'/>
                     </h2>
 
                     <div class="task-steps-container">
@@ -94,30 +89,9 @@
                     </div>
                 </div>
 
-                <div @click.self="renameTask" class="task-box rename-task">
-                    <template v-if="showRename">
-                        <img @click="newTaskName" class="renameTask" :class="{ active: itemDetect }"
-                            src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input @keyup.enter="newTaskName" required @focus="toggleErrorClass" v-model="newName"
-                            placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
-                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
-                    </template>
+                <Rename :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList' :descriptionTaskIndex='descriptionTaskIndex' :task='task'/>
 
-                    <template v-else>
-                        <img @click="renameTask" src="@/assets/design-material/icons/rename.png" alt="rename task" />
-                        <span @click="renameTask">Rename Task</span>
-                    </template>
-                </div>
-
-                <div class="task-box add-to-my-day" @click="addToMyDay" v-if="!addToMyDayState">
-                    <img src="@/assets/design-material/icons/sun.png" alt="added to my day">
-                    <span>Add to my day</span>
-                </div>
-
-                <div class="task-box add-to-my-day" @click="closeToMyDay" v-else>
-                    <img src="@/assets/design-material/icons/sun.png" alt="remove from my day">
-                    <span>Remove from my day</span>
-                </div>
+                <AddToMyDay :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex' :descriptionTaskIndex='descriptionTaskIndex'/>
 
                 <div ref="timeAndDate" class="task-box time-and-date">
                     <div @click.self="toggleRemind(53)">
@@ -374,6 +348,11 @@ import { mapState, mapWritableState } from 'pinia'
 import PopUp from './PopUp.vue'
 import DropDown from '../components/DropDown.vue';
 
+import ImportantToggle from './description_component/ImportantToggle.vue';
+import CompleteToggle from './description_component/CompleteToggle.vue';
+import Rename from './description_component/Rename.vue';
+import AddToMyDay from './description_component/AddToMyDay.vue';
+
 // import sendMessage from '@/worker-api.js'
 
 export default {
@@ -398,7 +377,6 @@ export default {
                     }
                 })
 
-            this.addToMyDayState = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].addToMyDay
         } else {
             this.task = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
             this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
@@ -407,13 +385,16 @@ export default {
                 }
             })
 
-            this.addToMyDayState = this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].addToMyDay
         }
         // }
     },
     components: {
         PopUp,
-        DropDown
+        DropDown,
+        ImportantToggle,
+        CompleteToggle,
+        Rename,
+        AddToMyDay
     },
     emits: ['closeDescription'],
     data() {
@@ -444,7 +425,6 @@ export default {
             pickCustomDate: false,
             pickedCustomDate: null,
             errorCustomDateToggle: false,
-            addToMyDayState: false,
             toggleRepeatDropDown: false,
             dropDownRepeatDueDateSlots: ['Daily', 'WeekDays', 'Weekly', 'Monthly', 'Yearly', 'Custom'],
             pickCustomRepeatDate: false,
@@ -489,17 +469,6 @@ export default {
                 if (this.task.noteDate && this.task.note.length > 0) {
                     return `Added At ${new Date(this.task.noteDate).toDateString()}`
                 }
-            }
-            // }
-        },
-        itemDetect() {
-            // if (this.chosenSmartList) {
-
-            // } else {
-            if (this.newName.length > 0) {
-                return true;
-            } else {
-                return false;
             }
             // }
         },
@@ -600,39 +569,6 @@ export default {
         renameTask() {
             this.showRename = !this.showRename
             this.newName = this.task.name
-        },
-        closeRename() {
-            this.showRename = !this.showRename
-        },
-        newTaskName() {
-            if (this.newName.length > 0) {
-                if (!!this.descriptionTaskChildList) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].name = this.newName
-                } else {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].name = this.newName
-                }
-
-                if (this.chosenSmartList) {
-                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].name = this.newName
-                }
-
-                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
-                this.newName = ''
-                this.showRename = false
-            } else {
-                if (!!this.toggleError) {
-                    this.toggleError = false
-                    setTimeout(() => {
-                        this.toggleError = true
-                    }, 0)
-                } else {
-                    setTimeout(() => {
-                        this.toggleError = true
-                    }, 0)
-                }
-            }
         },
         addNote() {
             if (!!this.descriptionTaskChildList) {
@@ -769,72 +705,6 @@ export default {
         closeDescription() {
             this.element.classList.remove('add-animation-x')
             this.$emit('closeDescription', false)
-        },
-        importantAsideToggle() {
-            // this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
-            this.element.classList.remove('add-animation-x')
-            this.element.classList.remove('add-animation')
-
-            if (!!this.descriptionTaskChildList) {
-                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = false
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-                    this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.importantTask)
-                    this.importantTask = {}
-                } else {
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = true
-                    this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.importantTask)
-                    this.importantTask = {}
-                }
-
-                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((singleTask, index) => {
-                    if (singleTask.id == this.task.id) {
-                        this.taskIndex = index
-                    }
-                })
-
-                // if (this.chosenSmartList) {
-                //     this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].important = true
-                // }
-
-                // localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-            } else {
-                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-                    this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
-                    this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
-                    this.lists[this.descriptionTaskList].tasks.push(this.importantTask)
-                    this.importantTask = {}
-
-                } else {
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = true
-                    this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
-                    this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
-                    this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
-                    this.importantTask = {}
-                }
-
-                // if (this.chosenSmartList) {
-                //     this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].important = true
-                // }
-
-                // localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-
-                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-                this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
-                    if (singleTask.id == this.task.id) {
-                        this.taskIndex = index
-                    }
-                })
-            }
         },
         completeAsideTask() {
             if (!!this.descriptionTaskChildList) {
@@ -1663,32 +1533,6 @@ export default {
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
         },
-        addToMyDay() {
-            if (!!this.descriptionTaskChildList) {
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = true
-                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
-                // this.smartList.myDay.tasks[this.smartList.myDay.tasks.length] = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
-            } else {
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = true
-                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
-                // this.smartList.myDay.tasks[this.smartList.myDay.tasks.length] = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
-            }
-            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-            this.addToMyDayState = true
-        },
-        closeToMyDay() {
-            if (!!this.childId) {
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = false
-                this.smartList.myDay.tasks.splice(this.taskIndex, 1)
-            } else {
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = false
-                this.smartList.myDay.tasks.splice(this.taskIndex, 1)
-            }
-            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-            this.addToMyDayState = false
-        },
         repeatDueDate(date) {
             if (!!this.descriptionTaskChildList) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date()
@@ -2035,6 +1879,9 @@ export default {
         },
         toggleRemindPopup() {
             this.remindPopup = !this.remindPopup
+        },
+        changeId(index){
+            this.taskIndex = index
         }
     }
 }
