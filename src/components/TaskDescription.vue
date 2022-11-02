@@ -211,6 +211,11 @@
                                 <img src="@/assets/design-material/icons/remind-today.png" alt="due date">
                                 <span>Later today</span>
                             </div>
+<!-- 
+                            <RemindDueDate @workerResponse="showRemind" @componentEvent='resetRemindDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="toDay" /> -->
                         </template>
 
                         <template #Tomorrow>
@@ -218,6 +223,11 @@
                                 <img src="@/assets/design-material/icons/remind-tomorrow.png" alt="due tomorrow">
                                 <span>Tomorrow</span>
                             </div>
+
+                            <!-- <RemindDueDate @workerResponse="showRemind" @componentEvent='resetRemindDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="tomorrow" /> -->
                         </template>
 
                         <template #NextWeek>
@@ -225,6 +235,11 @@
                                 <img src="@/assets/design-material/icons/remind-next-week.png" alt="next week">
                                 <span>Next Week</span>
                             </div>
+
+                            <!-- <RemindDueDate @workerResponse="showRemind" @componentEvent='resetRemindDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="nextWeek" /> -->
                         </template>
 
                         <template #PickADateAndTime>
@@ -241,6 +256,11 @@
                                     <span>Pick a date and time</span>
                                 </template>
                             </div>
+
+                            <!-- <RemindDueDate @workerResponse="showRemind" @componentEvent='resetRemindDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="customDate" /> -->
                         </template>
                     </DropDown>
                 </transition>
@@ -248,7 +268,6 @@
                 <TaskNote :descriptionTaskList='descriptionTaskList'
                     :descriptionTaskChildList='descriptionTaskChildList' :descriptionTaskIndex='descriptionTaskIndex'
                     :task='task' />
-
             </div>
 
             <div class="task-time-and-delete">
@@ -327,6 +346,7 @@ import AddToMyDay from './description_component/AddToMyDay.vue';
 import TaskNote from './description_component/TaskNote.vue';
 import AddDueDate from './description_component/AddDueDate.vue';
 import RepeatDueDate from './description_component/RepeatDueDate.vue';
+import RemindDueDate from './description_component/RemindDueDate.vue';
 
 // import sendMessage from '@/worker-api.js'
 
@@ -372,7 +392,8 @@ export default {
         AddToMyDay,
         TaskNote,
         AddDueDate,
-        RepeatDueDate
+        RepeatDueDate,
+        RemindDueDate
     },
     emits: ['closeDescription'],
     data() {
@@ -1604,6 +1625,12 @@ export default {
         },
         resetRepeatDueDate() {
             this.toggleRepeatDropDown = false
+        },
+        resetRemindDueDate(){
+            this.toggleRemindDropDown = false
+        },
+        showRemind(time){
+            this.remindToggle = time.returnValue
         }
     }
 }
