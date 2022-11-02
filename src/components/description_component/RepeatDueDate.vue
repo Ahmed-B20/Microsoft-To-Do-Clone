@@ -60,13 +60,15 @@ export default {
     methods: {
         repeatDueDate(date) {
             if (!!this.descriptionTaskChildList) {
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date()
-                let name = new Date().toString().split(' ')
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
+                if (date !== 'customDate') {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date()
+                    let name = new Date().toString().split(' ')
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
 
-                if (!this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = name.slice(0, 4).join(' ')
+                    if (!this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime) {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = name.slice(0, 4).join(' ')
+                    }
                 }
 
                 if (date === 'daily') {
@@ -95,13 +97,15 @@ export default {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatedTask = true
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             } else {
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = new Date()
-                let name = new Date().toString().split(' ')
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
+                if (date !== 'customDate') {
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = new Date()
+                    let name = new Date().toString().split(' ')
+                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
 
-                if (!this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime) {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = name.slice(0, 4).join(' ')
+                    if (!this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime) {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = name.slice(0, 4).join(' ')
+                    }
                 }
 
                 if (date === 'daily') {
@@ -134,6 +138,7 @@ export default {
             }
         },
         addCustomRepeatDate() {
+            console.log('ddd');
             if (!!this.pickedCustomRepeatDate) {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date()
@@ -142,6 +147,9 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'CustomDate'
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex] = Math.ceil((new Date(this.pickedCustomRepeatDate) - new Date()) / (24 * 60 * 60 * 1000))
 
+                    let dueName = new Date().toString().split(' ')
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = dueName.slice(0, 4).join(' ')
 
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 } else {
@@ -150,6 +158,12 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'CustomDate'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatedCustomTaskDuration = Math.ceil((new Date(this.pickedCustomRepeatDate) - new Date()) / (24 * 60 * 60 * 1000))
+
+                    let dueName = new Date().toString().split(' ')
+                    if (!this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime) {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = dueName.slice(0, 4).join(' ')
+                    }
 
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 }

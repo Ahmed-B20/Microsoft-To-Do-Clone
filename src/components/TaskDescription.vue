@@ -1002,7 +1002,8 @@ export default {
             this.toggleDueDateDropDown = false
             this.toggleRemindDropDown = false
             this.toggleRepeatDropDown = !this.toggleRepeatDropDown
-            this.top = this.$refs.timeAndDate.getBoundingClientRect().top + height
+            // this.top = this.$refs.timeAndDate.getBoundingClientRect().top + height
+            this.top = 152
             this.right = 70
         },
         toggleRemind(height) {
