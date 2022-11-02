@@ -24,13 +24,17 @@
             <div class="task-main-content">
                 <div class="task-box task-info-and-steps">
                     <h2 :class="{ complete: task.complete }">
-                        <CompleteToggle :element='element' :task='task' :taskIndex='taskIndex' :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId'/>
+                        <CompleteToggle :element='element' :task='task' :taskIndex='taskIndex'
+                            :descriptionTaskList='descriptionTaskList'
+                            :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId' />
 
                         <span class="task-name" :class="{ complete: task.complete }">
                             {{ task.name }}
                         </span>
-                        
-                        <ImportantToggle :element='element' :task='task' :taskIndex='taskIndex' :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId'/>
+
+                        <ImportantToggle :element='element' :task='task' :taskIndex='taskIndex'
+                            :descriptionTaskList='descriptionTaskList'
+                            :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId' />
                     </h2>
 
                     <div class="task-steps-container">
@@ -89,9 +93,12 @@
                     </div>
                 </div>
 
-                <Rename :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList' :descriptionTaskIndex='descriptionTaskIndex' :task='task'/>
+                <Rename :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList'
+                    :descriptionTaskIndex='descriptionTaskIndex' :task='task' />
 
-                <AddToMyDay :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex' :descriptionTaskIndex='descriptionTaskIndex'/>
+                <AddToMyDay :descriptionTaskList='descriptionTaskList'
+                    :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                    :descriptionTaskIndex='descriptionTaskIndex' />
 
                 <div ref="timeAndDate" class="task-box time-and-date">
                     <div @click.self="toggleRemind(53)">
@@ -260,23 +267,10 @@
                     </DropDown>
                 </transition>
 
-                <div class="task-box task-notes">
-                    <h3>Task Description</h3>
-                    <!-- <textarea placeholder="Add Task Description" @blur="emptyTextValue" :data-id="index" v-model="textValue"
-            @keyup="addNote"> -->
-                    <!-- <textarea placeholder="Add Task Description" :data-id="index" v-model="textValue" @keyup="addNote"> -->
-                    <textarea placeholder="Add Task Description" v-model="textValue">
-                        {{ taskNoteText }}
-                    </textarea>
+                <TaskNote :descriptionTaskList='descriptionTaskList'
+                    :descriptionTaskChildList='descriptionTaskChildList' :descriptionTaskIndex='descriptionTaskIndex'
+                    :task='task' />
 
-
-                    <div class="note-controller">
-                        <button @click="addNote">add note</button>
-                        <div class="date">
-                            {{ taskNoteDate }}
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="task-time-and-delete">
@@ -352,6 +346,7 @@ import ImportantToggle from './description_component/ImportantToggle.vue';
 import CompleteToggle from './description_component/CompleteToggle.vue';
 import Rename from './description_component/Rename.vue';
 import AddToMyDay from './description_component/AddToMyDay.vue';
+import TaskNote from './description_component/TaskNote.vue';
 
 // import sendMessage from '@/worker-api.js'
 
@@ -394,7 +389,8 @@ export default {
         ImportantToggle,
         CompleteToggle,
         Rename,
-        AddToMyDay
+        AddToMyDay,
+        TaskNote
     },
     emits: ['closeDescription'],
     data() {
@@ -447,31 +443,7 @@ export default {
         ...mapState(allLists, ['returnLists']),
         ...mapWritableState(allLists, ['lists', 'smartList']),
 
-        taskNoteText() {
-            // if (this.chosenSmartList) {
 
-            // } else {
-            if (this.task.note.length > 0) {
-                return this.textValue = this.task.note
-            } else {
-                return this.textValue = ''
-            }
-            // }
-
-        },
-        taskNoteDate() {
-            // if (this.chosenSmartList) {
-
-            // } else {
-            if (this.task.noteModified && this.task.note.length > 0) {
-                return `Modified At ${new Date(this.task.modifiedDate).toDateString()}`
-            } else {
-                if (this.task.noteDate && this.task.note.length > 0) {
-                    return `Added At ${new Date(this.task.noteDate).toDateString()}`
-                }
-            }
-            // }
-        },
         dueDateState() {
             // if (this.chosenSmartList) {
 
@@ -569,44 +541,6 @@ export default {
         renameTask() {
             this.showRename = !this.showRename
             this.newName = this.task.name
-        },
-        addNote() {
-            if (!!this.descriptionTaskChildList) {
-                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].note) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].noteModified = true
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].modifiedDate = new Date()
-                } else {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].noteModified = false
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].modifiedDate = null
-                }
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].note = this.textValue
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].noteDate = new Date()
-            } else {
-                if (this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note) {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].noteModified = true
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].modifiedDate = new Date()
-                } else {
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].noteModified = false
-                    this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].modifiedDate = null
-                }
-                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].note = this.textValue
-                this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].noteDate = new Date()
-            }
-
-            if (this.chosenSmartList) {
-                if (this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].note) {
-                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].noteModified = true
-                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].modifiedDate = new Date()
-                } else {
-                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].noteModified = false
-                    this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].modifiedDate = null
-                }
-                this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].note = this.textValue
-                this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].noteDate = new Date()
-            }
-
-            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-            localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
         },
         emptyTextValue() {
             this.textValue = ''
@@ -1880,7 +1814,7 @@ export default {
         toggleRemindPopup() {
             this.remindPopup = !this.remindPopup
         },
-        changeId(index){
+        changeId(index) {
             this.taskIndex = index
         }
     }
