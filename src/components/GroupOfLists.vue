@@ -501,7 +501,6 @@ export default {
             // this.showAddNewList = !this.showAddNewList
             this.showAddNewList = false
             this.newName = ''
-            console.log('ff');
         },
         deleteList() {
             this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
