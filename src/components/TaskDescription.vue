@@ -222,11 +222,29 @@
             <div class="task-time-and-delete">
                 <div class="time">Created on {{ task.addTime }}</div>
 
-                <span class="delete">
-                    <img @click="togglePopup" src="@/assets/design-material/icons/delete.png" alt="">
+                <span class="delete" @click="togglePopup">
+                    <img  src="@/assets/design-material/icons/delete.png" alt="">
                 </span>
             </div>
         </div>
+
+        <PopUp :showPopUp="showPopUp">
+            <template #title>
+                {{ dropDownStepId ? 'Delete Step' : 'Delete Task' }}
+            </template>
+
+            <template #content>
+                {{ dropDownStepId ? `step ${step.name} will be permanently deleted` : `task ${task.name} will be
+                permanently
+                deleted.`}}
+
+            </template>
+
+            <template #button>
+                <button class="delete" @click="deleteTask">Delete</button>
+                <button class="close" @click="togglePopup">Cancel</button>
+            </template>
+        </PopUp>
 
         <PopUp :showPopUp="alertPopup">
             <template #title>
@@ -1263,6 +1281,19 @@ export default {
         },
         showRemind(time){
             this.remindToggle = time.returnValue
+        },
+        togglePopUp(target) {
+            console.log('dd');
+            if (target === 'move') {
+                this.moveTaskToggle = !this.moveTaskToggle
+                this.showPopUp = !this.showPopUp
+                this.target = 'move'
+                this.toggleDropDown = false
+            } else {
+                this.toggleDropDown = false
+                this.showPopUp = !this.showPopUp
+                this.target = 'delete'
+            }
         }
     }
 }
