@@ -273,7 +273,6 @@ export default {
             this.top = null
             this.right = null
 
-            console.log(this.$refs.openListDropDownElement);
 
             if (!this.childId) {
                 this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []

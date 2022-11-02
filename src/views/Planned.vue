@@ -315,7 +315,6 @@ export default {
             this.descriptionTaskList = this.smartList['planned'].tasks[index].listId
             this.descriptionTaskIndex = this.smartList['planned'].tasks[index].id
             
-            console.log(this.descriptionTaskList);
             // this.toggleOpenDescription = !this.toggleOpenDescription
 
 

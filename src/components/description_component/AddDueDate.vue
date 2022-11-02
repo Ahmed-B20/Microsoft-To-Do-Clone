@@ -96,7 +96,6 @@ export default {
             }
         },
         addCustomDate() {
-            console.log('dd');
             if (!!this.pickedCustomDate) {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.pickedCustomDate

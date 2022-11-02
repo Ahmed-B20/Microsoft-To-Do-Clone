@@ -275,7 +275,6 @@ export default {
             }
         },
         openDropDown() {
-            console.log(event.target.parentElement.getAttribute('data-id'));
             this.toggleDropDown = !this.toggleDropDown
             this.dropDownStepId = event.target.parentElement.getAttribute('data-id');
             this.stepElement = event.target.parentElement

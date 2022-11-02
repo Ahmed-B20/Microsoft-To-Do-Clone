@@ -138,7 +138,6 @@ export default {
             }
         },
         addCustomRepeatDate() {
-            console.log('ddd');
             if (!!this.pickedCustomRepeatDate) {
                 if (!!this.descriptionTaskChildList) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date()

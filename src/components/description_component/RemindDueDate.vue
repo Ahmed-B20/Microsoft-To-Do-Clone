@@ -166,8 +166,6 @@ export default {
         workAround(time) {
             // this.$emit('workerResponse', time.returnValue)
 
-            console.log('ff');
-
         },
         addCustomRemindDate() {
             if (!!this.pickedCustomRemindDate) {

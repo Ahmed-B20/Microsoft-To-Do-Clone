@@ -1025,7 +1025,6 @@ export default {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = ''
                 this.smartList.planned.tasks.splice(this.taskIndex, 1)
             }
-            console.log(this.smartList.planned);
 
             this.toggleDueDateDropDown = false
 
@@ -1284,7 +1283,6 @@ export default {
             this.remindToggle = time.returnValue
         },
         togglePopUp(target) {
-            console.log('dd');
             if (target === 'move') {
                 this.moveTaskToggle = !this.moveTaskToggle
                 this.showPopUp = !this.showPopUp

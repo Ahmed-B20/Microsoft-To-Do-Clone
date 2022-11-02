@@ -4,6 +4,8 @@
     flex-direction: column;
     /* margin-top: 10px; */
     border-bottom: 1px solid #dfdfdf;
+    margin-right: 3px;
+    padding-bottom: 8px;
 }
 
 .aside-link a {
