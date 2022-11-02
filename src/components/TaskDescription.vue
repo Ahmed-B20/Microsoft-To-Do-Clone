@@ -131,40 +131,27 @@
                     <DropDown :dropDownSlots="dropDownDueDateSlots" :top="top" :right="right"
                         v-if="toggleDueDateDropDown">
                         <template #ToDay>
-                            <div @click="addDueDate('today')">
-                                <img src="@/assets/design-material/icons/date.png" alt="due date">
-                                <span>ToDay</span>
-                            </div>
+                            <AddDueDate @componentEvent='resetDueDate' :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="today" />
                         </template>
 
                         <template #Tomorrow>
-                            <div @click="addDueDate('tomorrow')">
-                                <img src="@/assets/design-material/icons/tomorrow.png" alt="due tomorrow">
-                                <span>Tomorrow</span>
-                            </div>
+                            <AddDueDate @componentEvent='resetDueDate' :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="tomorrow" />
                         </template>
 
                         <template #NextWeek>
-                            <div @click="addDueDate('nextWeek')">
-                                <img src="@/assets/design-material/icons/next-week.png" alt="next week">
-                                <span>Next week</span>
-                            </div>
+                            <AddDueDate @componentEvent='resetDueDate' :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="nextWeek" />
                         </template>
 
                         <template #PickADate>
-                            <div @click="addDueDate('customDate')">
-                                <template v-if="pickCustomDate">
-                                    <img @click="addCustomDate" src="@/assets/design-material/icons/plus.png"
-                                        alt="add custom date">
-                                    <input :class="{ error: errorCustomDateToggle }" class="custom-date"
-                                        v-model="pickedCustomDate" type="date" name="" id="">
-                                </template>
-
-                                <template v-else>
-                                    <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
-                                    <span>Pick a Date</span>
-                                </template>
-                            </div>
+                            <AddDueDate @componentEvent='resetDueDate' :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="customDate" />
                         </template>
                     </DropDown>
                 </transition>
@@ -173,54 +160,45 @@
                     <DropDown :dropDownSlots="dropDownRepeatDueDateSlots" :top="top" :right="right"
                         v-if="toggleRepeatDropDown">
                         <template #Daily>
-                            <div @click="repeatDueDate('daily')">
-                                <img src="@/assets/design-material/icons/tomorrow-repeat.png" alt="due date">
-                                <span>Daily</span>
-                            </div>
+                            <RepeatDueDate @componentEvent='resetRepeatDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="daily" />
                         </template>
 
                         <template #WeekDays>
-                            <div @click="repeatDueDate('weekDays')">
-                                <img src="@/assets/design-material/icons/due-date.png" alt="due tomorrow">
-                                <span>WeekDays</span>
-                            </div>
+                            <RepeatDueDate @componentEvent='resetRepeatDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="weekDays" />
                         </template>
 
                         <template #Weekly>
-                            <div @click="repeatDueDate('weekly')">
-                                <img src="@/assets/design-material/icons/next-week.png" alt="next week">
-                                <span>Weekly</span>
-                            </div>
+                            <RepeatDueDate @componentEvent='resetRepeatDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="weekly" />
                         </template>
 
                         <template #Monthly>
-                            <div @click="repeatDueDate('monthly')">
-                                <img src="@/assets/design-material/icons/30-days.png" alt="next week">
-                                <span>Monthly</span>
-                            </div>
+                            <RepeatDueDate @componentEvent='resetRepeatDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="monthly" />
                         </template>
 
                         <template #Yearly>
-                            <div @click="repeatDueDate('yearly')">
-                                <img src="@/assets/design-material/icons/365.png" alt="next week">
-                                <span>Yearly</span>
-                            </div>
+                            <RepeatDueDate @componentEvent='resetRepeatDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="yearly" />
                         </template>
 
                         <template #Custom>
-                            <div @click="repeatDueDate('customDate')">
-                                <template v-if="pickCustomRepeatDate">
-                                    <img @click="addCustomRepeatDate" src="@/assets/design-material/icons/plus.png"
-                                        alt="add custom date">
-                                    <input :class="{ error: errorCustomRepeatDateToggle }" class="custom-date"
-                                        v-model="pickedCustomRepeatDate" type="date" name="" id="">
-                                </template>
-
-                                <template v-else>
-                                    <img src="@/assets/design-material/icons/custom-date.png" alt="pick a date">
-                                    <span>Custom</span>
-                                </template>
-                            </div>
+                            <RepeatDueDate @componentEvent='resetRepeatDueDate'
+                                :descriptionTaskList='descriptionTaskList'
+                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
+                                :descriptionTaskIndex='descriptionTaskIndex' date="customDate" />
                         </template>
                     </DropDown>
                 </transition>
@@ -347,6 +325,8 @@ import CompleteToggle from './description_component/CompleteToggle.vue';
 import Rename from './description_component/Rename.vue';
 import AddToMyDay from './description_component/AddToMyDay.vue';
 import TaskNote from './description_component/TaskNote.vue';
+import AddDueDate from './description_component/AddDueDate.vue';
+import RepeatDueDate from './description_component/RepeatDueDate.vue';
 
 // import sendMessage from '@/worker-api.js'
 
@@ -390,7 +370,9 @@ export default {
         CompleteToggle,
         Rename,
         AddToMyDay,
-        TaskNote
+        TaskNote,
+        AddDueDate,
+        RepeatDueDate
     },
     emits: ['closeDescription'],
     data() {
@@ -1359,98 +1341,6 @@ export default {
             this.top = this.$refs.timeAndDate.getBoundingClientRect().top + height
             this.right = 70
         },
-        addDueDate(date) {
-            if (!!this.descriptionTaskChildList) {
-                if (date === 'today') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'ToDay'
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'ToDay'
-                    this.toggleDueDateDropDown = false
-
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
-                } else if (date === 'tomorrow') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
-                    this.toggleDueDateDropDown = false
-
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
-                } else if (date === 'nextWeek') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
-                    this.toggleDueDateDropDown = false
-
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
-                } else if (date === 'customDate') {
-                    this.pickCustomDate = true
-                }
-                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-            } else {
-                if (date === 'today') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'ToDay'
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'ToDay'
-                    this.toggleDueDateDropDown = false
-
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
-                } else if (date === 'tomorrow') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
-                    this.toggleDueDateDropDown = false
-
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
-                } else if (date === 'nextWeek') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
-                    this.toggleDueDateDropDown = false
-
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
-                } else if (date === 'customDate') {
-                    this.pickCustomDate = true
-                }
-
-                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-            }
-        },
-        addCustomDate() {
-            if (!!this.pickedCustomDate) {
-                if (!!this.descriptionTaskChildList) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
-
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
-                } else {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
-
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
-                }
-
-                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-                this.pickCustomDate = false
-                this.toggleDueDateDropDown = false
-                this.pickedCustomDate = null
-            } else {
-                if (!!this.errorCustomDateToggle) {
-                    this.errorCustomDateToggle = false
-                    setTimeout(() => {
-                        this.errorCustomDateToggle = true
-                    }, 0)
-                } else {
-                    setTimeout(() => {
-                        this.errorCustomDateToggle = true
-                    }, 0)
-                }
-            }
-        },
         deleteDueDate() {
             if (!!this.descriptionTaskChildList) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = ''
@@ -1464,119 +1354,11 @@ export default {
                 this.smartList.planned.tasks.splice(this.taskIndex, 1)
             }
             console.log(this.smartList.planned);
+
+            this.toggleDueDateDropDown = false
+
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-        },
-        repeatDueDate(date) {
-            if (!!this.descriptionTaskChildList) {
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date()
-                let name = new Date().toString().split(' ')
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
-
-                if (!this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = name.slice(0, 4).join(' ')
-                }
-
-                if (date === 'daily') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Daily'
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'ToDay'
-                    this.toggleRepeatDropDown = false
-                } else if (date === 'weekDays') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'WeekDays'
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
-                    this.toggleRepeatDropDown = false
-                } else if (date === 'weekly') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Weekly'
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
-                    this.toggleRepeatDropDown = false
-                } else if (date === 'monthly') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Monthly'
-                    this.toggleRepeatDropDown = false
-                } else if (date === 'yearly') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Yearly'
-                    this.toggleRepeatDropDown = false
-                } else if (date === 'customDate') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
-                    this.pickCustomRepeatDate = true
-                }
-
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatedTask = true
-                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-            } else {
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = new Date()
-                let name = new Date().toString().split(' ')
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
-
-                if (!this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime) {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = name.slice(0, 4).join(' ')
-                }
-
-                if (date === 'daily') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Daily'
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'ToDay'
-                    this.toggleRepeatDropDown = false
-                } else if (date === 'weekDays') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'WeekDays'
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
-                    this.toggleRepeatDropDown = false
-                } else if (date === 'weekly') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Weekly'
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
-                    this.toggleRepeatDropDown = false
-                }
-                else if (date === 'monthly') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Monthly'
-                    this.toggleRepeatDropDown = false
-                }
-                else if (date === 'yearly') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Yearly'
-                    this.toggleRepeatDropDown = false
-                } else if (date === 'customDate') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
-                    this.pickCustomRepeatDate = true
-                }
-
-                this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatedTask = true
-                localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-            }
-        },
-        addCustomRepeatDate() {
-            if (!!this.pickedCustomRepeatDate) {
-                if (!!this.descriptionTaskChildList) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDate = new Date()
-                    let name = new Date(this.pickedCustomRepeatDate).toString().split(' ')
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'CustomDate'
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex] = Math.ceil((new Date(this.pickedCustomRepeatDate) - new Date()) / (24 * 60 * 60 * 1000))
-
-
-                    localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-                } else {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDate = new Date()
-                    let name = new Date(this.pickedCustomRepeatDate).toString().split(' ')
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'CustomDate'
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatedCustomTaskDuration = Math.ceil((new Date(this.pickedCustomRepeatDate) - new Date()) / (24 * 60 * 60 * 1000))
-
-                    localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-                }
-                this.pickCustomRepeatDate = false
-                this.toggleRepeatDropDown = false
-                this.pickedCustomRepeatDate = null
-            } else {
-                if (!!this.errorCustomRepeatDateToggle) {
-                    this.errorCustomRepeatDateToggle = false
-                    setTimeout(() => {
-                        this.errorCustomRepeatDateToggle = true
-                    }, 0)
-                } else {
-                    setTimeout(() => {
-                        this.errorCustomRepeatDateToggle = true
-                    }, 0)
-                }
-            }
         },
         closeRepeat() {
             if (!!this.descriptionTaskChildList) {
@@ -1816,6 +1598,12 @@ export default {
         },
         changeId(index) {
             this.taskIndex = index
+        },
+        resetDueDate() {
+            this.toggleDueDateDropDown = false
+        },
+        resetRepeatDueDate() {
+            this.toggleRepeatDropDown = false
         }
     }
 }
