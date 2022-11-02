@@ -12,7 +12,7 @@
             </template>
 
             <template #toggle-description>
-                <button ref="openListDropDown" class="toggle-list-nav" @click="openListDropDown">
+                <button ref="openListDropDownElement" class="toggle-list-nav" @click="openListDropDown">
                     <img src="@/assets/design-material/icons/ellipsis.png" alt="open list navbar">
                 </button>
             </template>
@@ -186,7 +186,6 @@ export default {
         }
     },
     beforeMount: function () {
-
         this.lists.forEach((list) => {
             if (list.listChildren) {
                 if (list.listChildren) {
@@ -210,6 +209,7 @@ export default {
     },
     data() {
         return {
+            parentElementDomRect: null,
             allList: [],
             chosenList: [],
             listName: '',
@@ -268,6 +268,13 @@ export default {
     },
     watch: {
         listId() {
+            this.toggleDropDown = false
+            this.parentElementDomRect = this.$refs.openListDropDownElement.getBoundingClientRect()
+            this.top = null
+            this.right = null
+
+            console.log(this.$refs.openListDropDownElement);
+
             if (!this.childId) {
                 this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
                 this.chosenList = this.allList[this.listId]
@@ -277,6 +284,10 @@ export default {
             }
         },
         childId() {
+            this.toggleDropDown = false
+            this.parentElementDomRect = this.$refs.openListDropDownElement.getBoundingClientRect()
+            this.top = null
+            this.right = null
 
             if (!!this.childId) {
                 this.allList = JSON.parse(localStorage.getItem("allListAndTasks")) || []
@@ -343,9 +354,10 @@ export default {
             this.toggleShrink = value
         },
         openListDropDown() {
-            this.parentElementDomRect = this.$refs.openListDropDown.getBoundingClientRect()
+            this.parentElementDomRect = this.$refs.openListDropDownElement.getBoundingClientRect()
 
-            this.top = this.parentElementDomRect.top + 20
+            // this.top = this.parentElementDomRect.top + 20
+            this.top = 82.5
 
             // this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
 

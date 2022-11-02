@@ -4,7 +4,7 @@
         class="group-of-lists-controller">
         <p>
             <img src="@/assets/design-material/icons/tab.png" alt="single-list">
-            {{listName}}
+            {{ listName }}
         </p>
         <span class="toggle">
             <img src="@/assets/design-material/icons/arrow-down-sign-to-navigate.png" alt="arrow-down-sign-to-navigate">
@@ -20,8 +20,8 @@
                         <img @click="newGroupName" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
                         <input ref="inputFiled" @keyup.enter="newGroupName" required v-model="newName"
-                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
-                        <img @click="closeNewList" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                            placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
+                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
 
                     <template v-else>
@@ -37,8 +37,8 @@
                         <img @click="newChildList" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
                         <input ref="inputFiled" @keyup.enter="newChildList" required v-model="newListName"
-                            placeholder="New Name" type="text" name="" id="" :class="{error:toggleError}" />
-                        <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
+                            placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
+                        <img @click="closeNewList" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
 
                     <template v-else>
@@ -74,7 +74,7 @@
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
                         <input @keyup.enter="newChildListNameFun" required @focus="toggleErrorClass"
                             v-model="newChildListName" placeholder="New Name" type="text" name="" id=""
-                            :class="{error:toggleError}" />
+                            :class="{ error: toggleError }" />
                         <img @click="closeChildRename" src="@/assets/design-material/icons/close.png"
                             alt="close rename" />
                     </template>
@@ -130,10 +130,10 @@
                         <img :data-name="childrenList.listName" :data-id="childrenList.id"
                             src="@/assets/design-material/icons/menu.png" alt="single-list">
                         <span :data-name="childrenList.listName"
-                            :data-id="childrenList.id">{{childrenList.listName}}</span>
+                            :data-id="childrenList.id">{{ childrenList.listName }}</span>
 
                         <span v-if="childrenList.tasks.length > 0" class="tasks-count">
-                            {{childrenList.tasks.length}}
+                            {{ childrenList.tasks.length }}
                         </span>
                     </p>
                 </li>
@@ -144,8 +144,9 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            {{togglePopupTarget === 'deleteList'?`Delete Child Lists`:togglePopupTarget === 'deleteGroup'?`Delete Group
-            Of Lists`:`Move Child List To`}}
+            {{ togglePopupTarget === 'deleteList' ? `Delete Child Lists` : togglePopupTarget === 'deleteGroup' ? `Delete Group
+                        Of Lists`: `Move Child List To`
+            }}
         </template>
 
         <template #content>
@@ -153,14 +154,15 @@
                 <select ref="selectedLists" name="" id="">
                     <option v-for="(groupOfList, index) in ReturnGroupOfListsArray" :key="index"
                         :value="groupOfList.id">
-                        {{groupOfList.listName}}
+                        {{ groupOfList.listName }}
                     </option>
                 </select>
             </div>
 
             <p v-else>
-                {{togglePopupTarget === 'deleteList'?`Child list: ${selectedChildListName} will be permanently
-                deleted`:`Group of list: ${listName} will be permanently deleted`}}
+                {{ togglePopupTarget === 'deleteList' ? `Child list: ${selectedChildListName} will be permanently
+                                deleted`: `Group of list: ${listName} will be permanently deleted`
+                }}
             </p>
         </template>
 
@@ -283,7 +285,7 @@ export default {
             this.listNameRoute = event.target.getAttribute('data-name')
             this.listIndex = event.target.getAttribute('data-id')
             this.teleportToggle = true
-            this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex} })
+            this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex } })
             // this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex, closeDescription: false } })
         },
         openDropDown(target) {
@@ -343,19 +345,19 @@ export default {
                 this.left = 38.5
 
                 if (this.toggleDropDown) {
-                this.oldChildListId = this.groupOfListId
-            } else {
-                if (+this.oldChildListId != +this.groupOfListId) {
-                    this.toggleDropDown = false
-
                     this.oldChildListId = this.groupOfListId
-                    this.showRename = false
+                } else {
+                    if (+this.oldChildListId != +this.groupOfListId) {
+                        this.toggleDropDown = false
 
-                    setTimeout(() => {
-                        this.toggleDropDown = true
-                    }, 0)
+                        this.oldChildListId = this.groupOfListId
+                        this.showRename = false
+
+                        setTimeout(() => {
+                            this.toggleDropDown = true
+                        }, 0)
+                    }
                 }
-            }
             } else if (target === 'childList') {
                 this.parentElementDomRect = this.$refs.groupOfLists.parentElement.parentElement.getBoundingClientRect()
 
@@ -427,12 +429,18 @@ export default {
             })
         },
         renameGroup() {
-            this.showRename = !this.showRename
+            // this.showRename = !this.showRename
+            this.showRename = true
+            this.showAddNewList = false
+
             this.newName = this.listName
             // this.$refs.inputFiled.focus()
         },
         addNewList() {
-            this.showAddNewList = !this.showAddNewList
+            // this.showAddNewList = !this.showAddNewList
+            this.showAddNewList = true
+            this.showRename = false
+
         },
         newGroupName() {
             if (this.newName.length > 0) {
@@ -485,12 +493,15 @@ export default {
             }
         },
         closeRename() {
-            this.showRename = !this.showRename
+            // this.showRename = !this.showRename
+            this.showRename = false
             this.newName = ''
         },
         closeNewList() {
-            this.showAddNewList = !this.showAddNewList
+            // this.showAddNewList = !this.showAddNewList
+            this.showAddNewList = false
             this.newName = ''
+            console.log('ff');
         },
         deleteList() {
             this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
