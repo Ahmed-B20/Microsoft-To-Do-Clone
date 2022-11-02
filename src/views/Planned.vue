@@ -255,6 +255,13 @@ export default {
             } else {
                 return false
             }
+        },
+        itemDetect() {
+            if (this.newName.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
     },
     watch: {

@@ -42,6 +42,13 @@ export default {
     computed: {
         ...mapState(allLists, ['returnLists', 'smartList']),
         ...mapWritableState(allLists, ['lists', 'smartList']),
+        itemDetect() {
+            if (this.newName.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     },
     methods: {
         closeRename() {

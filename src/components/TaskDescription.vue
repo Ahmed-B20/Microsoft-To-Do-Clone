@@ -38,8 +38,8 @@
                     </h2>
 
                     <Steps :element='element' :taskIndex='taskIndex' :descriptionTaskList='descriptionTaskList'
-                    :descriptionTaskChildList='descriptionTaskChildList' :descriptionTaskIndex='descriptionTaskIndex'
-                    :task='task'/>
+                        :descriptionTaskChildList='descriptionTaskChildList'
+                        :descriptionTaskIndex='descriptionTaskIndex' :task='task' />
                 </div>
 
                 <Rename :descriptionTaskList='descriptionTaskList' :descriptionTaskChildList='descriptionTaskChildList'
@@ -160,7 +160,7 @@
                                 <img src="@/assets/design-material/icons/remind-today.png" alt="due date">
                                 <span>Later today</span>
                             </div>
-<!-- 
+                            <!-- 
                             <RemindDueDate @workerResponse="showRemind" @componentEvent='resetRemindDueDate'
                                 :descriptionTaskList='descriptionTaskList'
                                 :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
@@ -223,7 +223,7 @@
                 <div class="time">Created on {{ task.addTime }}</div>
 
                 <span class="delete" @click="togglePopup">
-                    <img  src="@/assets/design-material/icons/delete.png" alt="">
+                    <img src="@/assets/design-material/icons/delete.png" alt="">
                 </span>
             </div>
         </div>
@@ -1276,10 +1276,10 @@ export default {
         resetRepeatDueDate() {
             this.toggleRepeatDropDown = false
         },
-        resetRemindDueDate(){
+        resetRemindDueDate() {
             this.toggleRemindDropDown = false
         },
-        showRemind(time){
+        showRemind(time) {
             this.remindToggle = time.returnValue
         },
         togglePopUp(target) {
@@ -1294,6 +1294,9 @@ export default {
                 this.showPopUp = !this.showPopUp
                 this.target = 'delete'
             }
+        },
+        togglePopup() {
+            this.showPopUp = !this.showPopUp
         }
     }
 }

@@ -249,6 +249,13 @@ export default {
                 this.dropDownSlotsChildList = ['RenameList', 'PromoteToList', 'DuplicateList', 'DeleteList']
                 return false
             }
+        },
+        itemDetect() {
+            if (this.newName.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
     },
     methods: {
