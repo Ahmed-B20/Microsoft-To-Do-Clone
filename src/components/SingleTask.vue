@@ -1,13 +1,13 @@
 <template>
     <transition-group name="tasks-transition">
-        <li ref="taskElement" @contextmenu="openDropDown" @click.self="openDescription"
+        <li ref="taskElement" @contextmenu="openDropDown(task, index)" @click.self="openDescription(task, index)"
             :class="{complete: task.complete, delete: new Date() > new Date(new Date(task.dueTime).setDate(new Date(task.dueTime).getDate() + 1)) && !task.complete, remind: new Date() > new Date(task.remindMeDate) && !task.complete}"
             v-for="(task,index) in returnAllTasks" :key="task.id" :data-id="index">
 
             <Complete :listId='listId' :childId='childId' :taskElementId='taskElementId' :task="task" :index="index"
                 @componentEvent='resetChildComponent' />
 
-            <span @click="openDescription" :data-id="index" class="task-main-info">
+            <span @click="openDescription(task, index)" :data-id="index" class="task-main-info">
                 <span :data-id="index" class="task-name" :class="{ complete: task.complete }">
                     {{ task.name }}
                 </span>
@@ -296,11 +296,12 @@ export default {
         }
     },
     methods: {
-        openDropDown() {
+        openDropDown(task, index) {
             event.preventDefault()
-            this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), false, this.taskElement)
+            this.$emit('openDescriptionEvent', this.listId, index, false, this.taskElement)
 
-            this.taskElementId = event.target.getAttribute('data-id')
+            // this.taskElementId = event.target.getAttribute('data-id')
+            this.taskElementId = index
             if (event.target.tagName === 'IMG' || (event.target.tagName === 'SPAN' && event.target.classList.contains('task-main-info') || event.target.classList.contains('check'))) {
                 this.parentElementDomRect = event.target.parentElement.getBoundingClientRect()
             } else if (event.target.tagName === 'LI') {
@@ -327,11 +328,13 @@ export default {
             }
 
             if (this.toggleDropDown) {
-                this.oldTaskIdDrop = event.target.getAttribute('data-id')
+                // this.oldTaskIdDrop = event.target.getAttribute('data-id')
+                this.oldTaskIdDrop = index
             } else {
                 if (+this.oldTaskIdDrop != +this.taskElementId) {
                     this.toggleDropDown = false
-                    this.oldTaskIdDrop = event.target.getAttribute('data-id')
+                    // this.oldTaskIdDrop = event.target.getAttribute('data-id')
+                    this.oldTaskIdDrop = index
                     setTimeout(() => {
                         this.toggleDropDown = true
                     }, 0)
@@ -361,7 +364,7 @@ export default {
             this.moveTaskToggle = false
             this.target = ''
         },
-        openDescription() {
+        openDescription(task, index) {
             this.toggleDropDown = false
             this.taskElement = event.target
             this.taskElement.classList.remove('add-animation-x')
@@ -375,15 +378,16 @@ export default {
             }
             if (!this.toggleShrink) {
                 this.shrink = !this.toggleShrink
-                this.oldTaskId = event.target.getAttribute('data-id')
-                this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
+                // this.oldTaskId = event.target.getAttribute('data-id')
+                this.oldTaskId = index
+                this.$emit('openDescriptionEvent', this.listId, index, this.shrink, this.taskElement)
             } else {
-                if (this.oldTaskId != +event.target.getAttribute('data-id')) {
-                    this.oldTaskId = event.target.getAttribute('data-id')
-                    this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
+                if (this.oldTaskId != index) {
+                    this.oldTaskId = index
+                    this.$emit('openDescriptionEvent', this.listId, index, this.shrink, this.taskElement)
                 } else {
                     this.shrink = !this.toggleShrink
-                    this.$emit('openDescriptionEvent', this.listId, event.target.getAttribute('data-id'), this.shrink, this.taskElement)
+                    this.$emit('openDescriptionEvent', this.listId, index, this.shrink, this.taskElement)
                 }
             }
         },
