@@ -1,6 +1,6 @@
 <template>
     <!-- tabindex="0" @blur="closeDropDown" -->
-    <div ref="groupOfLists" @contextmenu="openDropDown('parentList')" @click="toggleGroup"
+    <div ref="groupOfLists" @contextmenu="openDropDown('parentList', lists[parentId])" @click="toggleGroup"
         class="group-of-lists-controller">
         <p>
             <img src="@/assets/design-material/icons/tab.png" alt="single-list">
@@ -55,7 +55,7 @@
                 </div>
             </template>
 
-            <template v-if="!showSlotForGroupOfList" #DeleteGroup>
+            <template v-else #DeleteGroup>
                 <div class="delete" @click="togglePopUp('deleteGroup')">
                     <img src="@/assets/design-material/icons/delete.png" alt="">
                     <span>Delete group</span>
@@ -122,15 +122,13 @@
     <transition name="toggle-group-of-list">
         <ul v-if="groupOfListsToggle || lists[parentId].toggleChildList">
             <transition-group name="render-list">
-                <li @contextmenu.self="openDropDown('childList')" @click="showChildListTasks"
-                    :data-name="childrenList.listName" :data-id="childrenList.id"
-                    v-for="childrenList in childrenListsArray" :key="childrenList.id">
-                    <p @contextmenu="openDropDown('childList')" :data-name="childrenList.listName"
-                        :data-id="childrenList.id">
-                        <img :data-name="childrenList.listName" :data-id="childrenList.id"
-                            src="@/assets/design-material/icons/menu.png" alt="single-list">
-                        <span :data-name="childrenList.listName"
-                            :data-id="childrenList.id">{{ childrenList.listName }}</span>
+                <li @contextmenu.self="openDropDown('childList', childrenList)"
+                    @click="showChildListTasks(childrenList)" v-for="childrenList in childrenListsArray"
+                    :key="childrenList.id">
+                    <p @contextmenu="openDropDown('childList', childrenList)">
+                        <img src="@/assets/design-material/icons/menu.png" alt="single-list">
+                        <span>{{ childrenList.listName
+                        }}</span>
 
                         <span v-if="childrenList.tasks.length > 0" class="tasks-count">
                             {{ childrenList.tasks.length }}
@@ -144,7 +142,8 @@
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
-            {{ togglePopupTarget === 'deleteList' ? `Delete Child Lists` : togglePopupTarget === 'deleteGroup' ? `Delete Group
+            {{ togglePopupTarget === 'deleteList' ? `Delete Child Lists` : togglePopupTarget === 'deleteGroup' ? `Delete
+                        Group
                         Of Lists`: `Move Child List To`
             }}
         </template>
@@ -229,17 +228,24 @@ export default {
             togglePopupTarget: '',
             newChildListName: '',
             promoteList: {},
-            oldChildListId: null
+            oldChildListId: null,
+            // dropDownSlotsWatcher: false
         }
     },
     computed: {
         ...mapWritableState(allLists, ['lists']),
         showSlotForGroupOfList() {
             if (this.lists[this.groupOfListId].listsArray.length > 0) {
-                this.dropDownSlots.splice(3, 1)
+                // this.dropDownSlots.splice(3, 1)
+                this.dropDownSlots = ['RenameGroup', 'NewList', 'UngroupLists']
+
+                // this.dropDownSlotsWatcher = true
                 return true
             } else {
-                this.dropDownSlots.splice(2, 1)
+                // this.dropDownSlots.splice(2, 1)
+                this.dropDownSlots = ['RenameGroup', 'NewList', 'DeleteGroup']
+
+                // this.dropDownSlotsWatcher = false
                 return false
             }
         },
@@ -281,51 +287,54 @@ export default {
                 this.groupOfListsToggle = !this.groupOfListsToggle
             }
         },
-        showChildListTasks() {
-            this.listNameRoute = event.target.getAttribute('data-name')
-            this.listIndex = event.target.getAttribute('data-id')
+        showChildListTasks(childrenList) {
+            this.listNameRoute = childrenList.listName
+            this.listIndex = childrenList.id
             this.teleportToggle = true
             this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex } })
             // this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex, closeDescription: false } })
         },
-        openDropDown(target) {
+        openDropDown(target, childrenList) {
             event.preventDefault()
 
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'P') {
                 if (target === 'parentList') {
-                    this.groupOfListId = event.target.parentElement.parentElement.getAttribute('data-id')
-                    this.groupOfListName = event.target.parentElement.parentElement.getAttribute('data-name')
+                    this.groupOfListId = childrenList.id
+                    this.groupOfListName = childrenList.listName
                     this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
                 } else if (target === 'childList') {
                     if (event.target.tagName === 'P') {
-                        this.selectedChildListId = event.target.parentElement.getAttribute('data-id')
-                        this.selectedChildListName = event.target.parentElement.getAttribute('data-name')
+                        this.selectedChildListId = childrenList.id
+                        this.selectedChildListName = childrenList.listName
                         this.elementDomRect = event.target.parentElement.getBoundingClientRect()
                     } else {
-                        this.selectedChildListId = event.target.parentElement.parentElement.getAttribute('data-id')
-                        this.selectedChildListName = event.target.parentElement.parentElement.getAttribute('data-name')
+                        this.selectedChildListId = childrenList.id
+                        this.selectedChildListName = childrenList.listName
                         this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
                     }
                 }
 
             } else if (event.target.tagName === 'IMG') {
                 if (target === 'parentList') {
-                    this.groupOfListId = event.target.parentElement.parentElement.parentElement.getAttribute('data-id')
-                    this.groupOfListName = event.target.parentElement.parentElement.parentElement.getAttribute('data-name')
+                    this.groupOfListId = childrenList.id
+                    this.groupOfListName = childrenList.listName
                     this.elementDomRect = event.target.parentElement.parentElement.parentElement.getBoundingClientRect()
                 } else if (target === 'childList') {
-                    this.selectedChildListId = event.target.parentElement.parentElement.getAttribute('data-id')
-                    this.selectedChildListName = event.target.parentElement.parentElement.getAttribute('data-name')
+                    this.selectedChildListId = childrenList.id
+                    this.selectedChildListName = childrenList.listName
                     this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
                 }
             } else {
                 if (target === 'parentList') {
-                    this.groupOfListId = event.target.parentElement.getAttribute('data-id')
-                    this.groupOfListName = event.target.parentElement.getAttribute('data-name')
+
+                    console.log(childrenList);
+
+                    this.groupOfListId = childrenList.id
+                    this.groupOfListName = childrenList.listName
                     this.elementDomRect = event.target.parentElement.getBoundingClientRect()
                 } else if (target === 'childList') {
-                    this.selectedChildListId = event.target.getAttribute('data-id')
-                    this.selectedChildListName = event.target.getAttribute('data-name')
+                    this.selectedChildListId = childrenList.id
+                    this.selectedChildListName = childrenList.listName
                     this.elementDomRect = event.target.getBoundingClientRect()
                 }
             }
@@ -388,6 +397,8 @@ export default {
                     }
                 }
             }
+
+            this.showChildRename = false
         },
         closeDropDown() {
             this.toggleDropDown = false
@@ -538,7 +549,7 @@ export default {
             this.showChildRename = !this.showChildRename
         },
         renameChildList() {
-            this.showChildRename = !this.showChildRename
+            this.showChildRename = true
             this.newChildListName = this.selectedChildListName
         },
         newChildListNameFun() {
@@ -623,7 +634,16 @@ export default {
                 })
             },
             deep: true
-        }
+        },
+        // dropDownSlotsWatcher() {
+        //     console.log(this.dropDownSlotsWatcher);
+        //     if (this.dropDownSlotsWatcher) {
+        //         this.dropDownSlots.splice(3, 1)
+        //     } else {
+        //         this.dropDownSlots.splice(2, 1)
+        //     }
+        //     console.log(this.dropDownSlots);
+        // }
     }
 }
 </script>
