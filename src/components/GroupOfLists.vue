@@ -326,9 +326,6 @@ export default {
                 }
             } else {
                 if (target === 'parentList') {
-
-                    console.log(childrenList);
-
                     this.groupOfListId = childrenList.id
                     this.groupOfListName = childrenList.listName
                     this.elementDomRect = event.target.parentElement.getBoundingClientRect()

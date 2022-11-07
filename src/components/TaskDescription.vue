@@ -442,7 +442,6 @@ export default {
             // }
         },
         remindDueDateStateClass() {
-            console.log('sdgf');
             if (!!this.descriptionTaskChildList) {
                 if (new Date() > new Date(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].remindMeDate) && !this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].complete) {
                     return true
@@ -450,7 +449,6 @@ export default {
                     return false
                 }
             } else {
-                console.log(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeDate);
                 if (new Date() > new Date(this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].remindMeDate) && !this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex].complete) {
                     return true
                 } else {
