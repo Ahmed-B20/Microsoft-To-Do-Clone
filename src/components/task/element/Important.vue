@@ -1,8 +1,8 @@
 <template>
-    <img v-if="task.important" :data-id="index" @click="importantToggle" class="important-toggle"
+    <img v-if="task.important" @click="importantToggle" class="important-toggle"
         src="@/assets/design-material/icons/important-task.png" alt="">
 
-    <img v-else :data-id="index" @click="importantToggle('task')" class="important-toggle"
+    <img v-else @click="importantToggle('task')" class="important-toggle"
         src="@/assets/design-material/icons/important-hover.png" alt="">
 </template>
 
@@ -30,42 +30,42 @@ export default {
             this.taskElement.classList.remove('add-animation-x')
             this.taskElement.classList.remove('add-animation')
             if (!!this.childId) {
-                if (this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important) {
-                    this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important = false
+                if (this.lists[this.listId].listsArray[this.childId].tasks[this.index].important) {
+                    this.lists[this.listId].listsArray[this.childId].tasks[this.index].important = false
                     if (!!event.target.getAttribute('src')) {
                         event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
                     }
-                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
-                    this.lists[this.listId].listsArray[this.childId].tasks.splice(event.target.getAttribute('data-id') || this.taskElementId, 1)
+                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[this.index]
+                    this.lists[this.listId].listsArray[this.childId].tasks.splice(this.index, 1)
                     this.lists[this.listId].listsArray[this.childId].tasks.push(this.importantTask)
                     this.importantTask = {}
                 } else {
                     if (!!event.target.getAttribute('src')) {
                         event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                     }
-                    this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important = true
-                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
-                    this.lists[this.listId].listsArray[this.childId].tasks.splice(event.target.getAttribute('data-id') || this.taskElementId, 1)
+                    this.lists[this.listId].listsArray[this.childId].tasks[this.index].important = true
+                    this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[this.index]
+                    this.lists[this.listId].listsArray[this.childId].tasks.splice(this.index, 1)
                     this.lists[this.listId].listsArray[this.childId].tasks.unshift(this.importantTask)
                     this.importantTask = {}
                 }
             } else {
-                if (this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important) {
-                    this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important = false
+                if (this.lists[this.listId].tasks[this.index].important) {
+                    this.lists[this.listId].tasks[this.index].important = false
                     if (!!event.target.getAttribute('src')) {
                         event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
                     }
-                    this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
-                    this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id') || this.taskElementId, 1)
+                    this.importantTask = this.lists[this.listId].tasks[this.index]
+                    this.lists[this.listId].tasks.splice(this.index, 1)
                     this.lists[this.listId].tasks.push(this.importantTask)
                     this.importantTask = {}
                 } else {
                     if (!!event.target.getAttribute('src')) {
                         event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                     }
-                    this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId].important = true
-                    this.importantTask = this.lists[this.listId].tasks[event.target.getAttribute('data-id') || this.taskElementId]
-                    this.lists[this.listId].tasks.splice(event.target.getAttribute('data-id') || this.taskElementId, 1)
+                    this.lists[this.listId].tasks[this.index].important = true
+                    this.importantTask = this.lists[this.listId].tasks[this.index]
+                    this.lists[this.listId].tasks.splice(this.index, 1)
                     this.lists[this.listId].tasks.unshift(this.importantTask)
                     this.importantTask = {}
                 }

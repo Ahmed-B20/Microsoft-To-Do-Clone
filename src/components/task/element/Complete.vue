@@ -10,7 +10,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'Complete',
-    props: ['listId', 'childId', 'index', 'task', 'index',],
+    props: ['listId', 'childId', 'index', 'task'],
     data() {
         return {
             taskElement: '',
@@ -94,15 +94,13 @@ export default {
         calcDueDate(childList) {
             if (childList) {
                 this.oldObj = this.lists[this.listId].listsArray[this.childId].tasks[this.index]
+                this.transferObj()
                 this.repeatedTaskObject.id = this.lists[this.listId].listsArray[this.childId].tasks.length
             } else {
                 this.oldObj = this.lists[this.listId].tasks[this.index]
+                this.transferObj()
                 this.repeatedTaskObject.id = this.lists[this.listId].tasks.length
             }
-
-            Object.keys(this.oldObj).forEach((key) => {
-                this.repeatedTaskObject[`${key}`] = this.oldObj[`${key}`]
-            })
 
             if (this.repeatedTaskObject.realRepeatDueDateName === 'Daily') {
                 this.calcDate(1, "ToDay")
@@ -133,6 +131,9 @@ export default {
                 this.lists[this.listId].tasks[this.index].complete = true
                 this.lists[this.listId].tasks[this.index].repeatedTask = false
             }
+
+            this.repeatedTaskObject = {}
+            this.name = ''
         },
         calcDate(time, timeName) {
             this.repeatedTaskObject.repeatDueDate = new Date(new Date(this.oldObj.repeatDueDate).setDate(new Date(this.oldObj.repeatDueDate).getDate() + time))
@@ -143,6 +144,11 @@ export default {
             this.repeatedTaskObject.dueTime = new Date(new Date(this.oldObj.repeatDueDate).setDate(new Date(this.oldObj.repeatDueDate).getDate() + time))
             this.repeatedTaskObject.dueDateName = this.name.slice(0, 4).join(' ')
             this.repeatedTaskObject.realDueDateName = timeName
+        },
+        transferObj() {
+            Object.keys(this.oldObj).forEach((key) => {
+                this.repeatedTaskObject[`${key}`] = this.oldObj[`${key}`]
+            })
         }
     }
 }
