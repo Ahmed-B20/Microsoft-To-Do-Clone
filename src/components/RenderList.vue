@@ -146,7 +146,8 @@ export default {
             oldListId: null,
             result: '',
             characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
-            charactersLength: 0
+            charactersLength: 0,
+            listElement: ''
         }
     },
     beforeMount() {
@@ -184,10 +185,13 @@ export default {
 
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG') {
                 this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
+                this.listElement = event.target.parentElement.parentElement
             } else if (event.target.tagName === 'P') {
                 this.elementDomRect = event.target.parentElement.getBoundingClientRect()
+                this.listElement = event.target.parentElement
             } else {
                 this.elementDomRect = event.target.getBoundingClientRect()
+                this.listElement = event.target
             }
             event.preventDefault()
             this.toggleDropDown = !this.toggleDropDown
@@ -198,6 +202,8 @@ export default {
             } else {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
             }
+
+            this.listElement.scrollIntoView()
 
             this.left = 38.5
 

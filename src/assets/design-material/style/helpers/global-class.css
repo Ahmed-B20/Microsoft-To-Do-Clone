@@ -122,7 +122,8 @@
 
 .dashboard-content-container .task-description .task-info-and-steps .task-steps-container .steps-container {
     padding: 2px;
-    max-height: 72px;
+    max-height: 37px;
+    /* max-height: 72px; */
     overflow: auto;
     padding-right: 0;
 }
