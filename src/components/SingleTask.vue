@@ -206,6 +206,7 @@ export default {
                         return this.returnLists[this.listId].listsArray[this.childId].tasks
                     }
                 } else {
+                    console.log(this.listId);
                     if (this.returnLists[this.listId].tasks.length > 0) {
                         return this.returnLists[this.listId].tasks
                     }

@@ -170,7 +170,7 @@ import PopUp from '@/components/PopUp.vue'
 
 export default {
     name: 'List',
-    props: ['listId', 'childId', 'closeDescription'],
+    props: ['listId', 'childId', 'closeDescription','name','currentListName'],
     components: {
         ContentView,
         SingleTask,
@@ -186,6 +186,8 @@ export default {
         }
     },
     beforeMount: function () {
+        console.log(this.$route.params);
+
         this.lists.forEach((list) => {
             if (list.listChildren) {
                 if (list.listChildren) {
@@ -310,6 +312,21 @@ export default {
                 })
             },
             deep: true
+        },
+        'this.$route': {
+            handler: function () {
+                console.log(this.$route);
+                console.log(this.currentListName);
+                if (this.$route.params.name) {
+                    console.log(this.$route.params.currentListName);
+
+                    // this.listName = this.$route.params.currentListName
+
+                    this.$forceUpdate()
+                }
+            },
+            deep: true,
+            immediate: true
         }
     },
     methods: {

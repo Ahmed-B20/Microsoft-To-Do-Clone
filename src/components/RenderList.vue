@@ -13,7 +13,7 @@
                                 :parentId="list.id" />
                         </template>
 
-                        <p @click="showListTasks(list, index)" @contextmenu="openDropDown" v-else>
+                        <p @click="showListTasks(list, index)" @contextmenu="openDropDown(list, index)" v-else>
                             <img src="@/assets/design-material/icons/menu.png" alt="single-list">
                             <span>{{ list.listName }}</span>
 
@@ -159,7 +159,10 @@ export default {
             ReturnGroupOfListsArray: [],
             moveGroupListToggle: false,
             target: '',
-            oldListId: null
+            oldListId: null,
+            result: '',
+            characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+            charactersLength: 0
         }
     },
     beforeMount() {
@@ -206,21 +209,20 @@ export default {
             this.toggleDropDown = !this.toggleDropDown
             if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
-            } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
-                this.top = this.elementDomRect.top - this.parentElementDomRect.top - 160
+            } else if (this.elementDomRect.top - this.parentElementDomRect.top > 200) {
+                this.top = this.elementDomRect.top - this.parentElementDomRect.top - 120
             } else {
-                this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
+                this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
             }
 
             this.left = 38.5
 
             if (this.toggleDropDown) {
-                this.oldListId = this.listId
+                this.oldListId = index
             } else {
-                if (+this.oldListId != +this.listId) {
+                if (+this.oldListId !== index) {
                     this.toggleDropDown = false
-
-                    this.oldListId = this.listId
+                    this.oldListId = index
                     this.showRename = false
 
                     setTimeout(() => {
@@ -228,6 +230,7 @@ export default {
                     }, 0)
                 }
             }
+
         },
         closeDropDown() {
             this.toggleDropDown = false
@@ -252,6 +255,12 @@ export default {
             this.target = ''
         },
         deleteList() {
+            if (this.lists.length === 1) {
+                this.$router.push({ name: 'my-day' })
+            }
+
+
+
             this.lists.splice(this.listId, 1)
             this.lists.forEach((list, index) => {
                 if (index >= this.listId) {
@@ -259,14 +268,30 @@ export default {
                 }
             })
 
+            if (this.lists.length > 0) {
+                if (+this.listId >= +this.$route.params.listId && +this.$route.params.listId !== 0) {
+                    this.$router.push({ name: 'list', params: { listId: +this.$route.params.listId}, props: { name: this.randomString(10), currentListName: this.listName } })
+                } else if (+this.$route.params.listId >= +this.listId && +this.$route.params.listId !== 0) {
+                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId - 1 }, props: { name: this.randomString(10), currentListName: this.listName } })
+                } else {
+                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId }, props: { name: this.randomString(10), currentListName: this.listName } })
+                }
+            }
+
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
             this.toggleDropDown = false
             this.showPopUp = !this.showPopUp
             this.listId = null
 
-            this.$router.push({ name: 'list', params: { listId: 0 } })
             // this.$router.push({ name: 'list', params: { listId: 0, closeDescription: false } })
+        },
+        randomString(length) {
+            this.charactersLength = this.characters.length
+            for (var i = 0; i < length; i++) {
+                this.result += this.characters.charAt(Math.floor(Math.random() * this.charactersLength));
+            }
+            return this.result
         },
         DuplicateList() {
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'

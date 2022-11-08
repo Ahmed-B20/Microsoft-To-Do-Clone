@@ -8,7 +8,7 @@ import Complete from "@/views/Complete.vue";
 
 const routes = [
   { path: "/", component: MyDay },
-  { path: "/my-day", component: MyDay },
+  { path: "/my-day", name:'my-day', component: MyDay },
   { path: "/important", component: Important },
   { path: "/planned", component: Planned },
   { path: "/tasks", component: Tasks },

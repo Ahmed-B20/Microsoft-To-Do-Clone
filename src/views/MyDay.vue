@@ -184,6 +184,7 @@ export default {
         }
     },
     beforeMount: function () {
+        console.log('fff');
 
         // this.lists.forEach((list) => {
         //     if (list.listChildren) {
