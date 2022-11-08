@@ -20,9 +20,6 @@ export default {
             oldObj: {}
         }
     },
-    beforeMount() {
-        console.log(this.taskIndex)
-    },
     computed: {
         ...mapState(allLists, ['returnLists', 'smartList']),
         ...mapWritableState(allLists, ['lists', 'smartList']),
