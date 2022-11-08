@@ -47,19 +47,14 @@
     padding: 5px;
     width: 100%;
     border-radius: 5px;
-    /* overflow: hidden; */
-    /* border: 1px solid var(--fourth-color); */
 }
 
 .user-info-parent .search::before {
     position: absolute;
     content: '';
-    /* width: 100%; */
     bottom: 0px;
     left: 0;
     right: 0;
-    /* left: 2.5px;
-    right: 2.5px; */
     background-color: #868686;
     height: 2px;
     border-bottom-left-radius: 5px;

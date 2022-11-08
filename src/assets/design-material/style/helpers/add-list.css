@@ -1,36 +1,15 @@
-/* .add-item-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 10px 0 40px 40px;
-    right: 50px;
-    background-image: linear-gradient(to right, var(--main-color), var(--main-color-transparent));
-    z-index: 1;
-} */
-
 .add-item-container {
     padding: 5px 15px;
     background-color: #f4f4f4;
     border-top: 1px solid #dfdfdf;
     display: flex;
     align-items: center;
-    /* box-shadow: #5f73c1 0px 1px 3px, #5f73c1 0px 1px 2px; */
 }
 
 .add-item {
     display: flex;
-    /* padding: 8px 10px;
-    background-color: #d6dcf4; */
     font-size: 14px;
     width: 100%;
-    /* overflow: hidden; */
-    /* position: relative; */
-    /* margin-top: auto; */
-    /* position: absolute;
-    top: 0;
-    left: 0;
-    right: 0; */
 }
 
 .add-item-container.error {
@@ -52,19 +31,6 @@
     }
 }
 
-/* .add-item-container.error input {
-    color: red;
-}
-
-.add-item-container.error span {
-    cursor: default;
-    color: red;
-} */
-
-/* .add-item:hover {
-    background-color: white;
-} */
-
 .add-item .single-list {
     display: flex;
     gap: 10px;
@@ -75,7 +41,6 @@
 .add-item .single-list img {
     width: 20px;
     height: 20px;
-    /* cursor: pointer; */
 }
 
 .add-item .single-list img.active,
@@ -91,25 +56,7 @@
     caret-color: #5f73c1;
 }
 
-/* .add-item .single-list:hover {
-    background-color: #e9e9e9;
-} */
-
-/* .add-item .single-list input:hover {
-    background-color: #e9e9e9;
-}
-
-.add-item .single-list input:focus {
-    background-color: #e9e9e9;
-} */
-
 .add-item span {
-    /* position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 10px; */
-    /* font-weight: bolder;
-    cursor: pointer; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -162,7 +109,6 @@
     padding: 10px 15px;
     cursor: pointer;
     transform-origin: top center;
-    /* z-index: 5; */
 }
 
 .lists-container li:not(.group-of-lists).active,
@@ -176,7 +122,6 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    /* cursor: pointer; */
 }
 
 .lists-container li.single-list p .tasks-count,
@@ -184,7 +129,6 @@
     margin-left: auto;
     font-size: 12px;
     background-color: #dfdfdf;
-    /* padding: 6px; */
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -205,7 +149,6 @@
 
 .lists-container li.group-of-lists .group-of-lists-controller {
     display: flex;
-    /* gap: 8px; */
     justify-content: space-between;
     align-items: center;
     flex-basis: 100%;
@@ -227,20 +170,12 @@
 .lists-container li.group-of-lists ul {
     flex-basis: 100%;
     margin-right: 6px;
-    /* transform-origin: top;
-    transition: all 0.3s linear;
-    transform: translateY(-100%);
-    opacity: 0; */
     transform-origin: top center;
-    /* max-height: 0; */
-    /* height: 0; */
     z-index: 1;
 }
 
 .toggle-group-of-list-enter-active {
     transition: all 0.2s linear;
-    /* transform: translateY(0); */
-    /* margin-top: 0; */
 }
 
 .toggle-group-of-list-leave-active {
@@ -249,61 +184,12 @@
 
 .toggle-group-of-list-enter-from,
 .toggle-group-of-list-leave-to {
-    /* transform: translateY(0); */
     margin-top: -100%;
     opacity: 0;
 }
 
-/* .toggle-group-of-list-enter-active {
-    animation: bounce-in 0.5s;
-}
-
-.toggle-group-of-list-leave-active {
-    animation: bounce-in 0.2s reverse;
-} */
-
-/* @keyframes bounce-in {
-    0% {
-        max-height: 0;
-    }
-
-    50% {
-        max-height: 42px;
-    }
-
-    100% {
-        max-height: fit-content;
-    }
-} */
-
-/* .lists-container li.group-of-lists ul.hide {
-    transition: all 0.3s linear;
-    height: 0;
-    display: none;
-} */
-
-/* .lists-container li.group-of-lists ul.active {
-    animation: toggleChildLists 0.3s linear forwards;
-}
-
-@keyframes toggleChildLists {
-    0%{
-        transform: translateY(-100%);
-    }
-
-    50%{
-        transform: translateY(-50%);
-    }
-
-    100% {
-        transform: translateY(0);
-    }
-} */
-
 .lists-container li.group-of-lists ul li {
     padding: 10px 30px;
-    /* padding: 10px 30px; */
-    /* height: 42px; */
     height: 35px;
 }
 
@@ -326,15 +212,12 @@
     transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
-/* 2. declare enter from and leave to state */
 .render-list-enter-from,
 .render-list-leave-to {
     opacity: 0;
     transform: scaleY(0.01);
 }
 
-/* 3. ensure leaving items are taken out of layout flow so that moving
-      animations can be calculated correctly. */
 .render-list-leave-active {
     position: absolute;
 }
@@ -356,8 +239,6 @@
     animation: to-hide linear forwards;
 }
 
-/* 3. ensure leaving items are taken out of layout flow so that moving
-      animations can be calculated correctly. */
 .toggle-group-of-list-leave-active {
     position: absolute;
 }

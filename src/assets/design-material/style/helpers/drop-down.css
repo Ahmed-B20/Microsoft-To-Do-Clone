@@ -3,10 +3,6 @@
     background-color: white;
     height: fit-content;
     width: 200px;
-    /* top: 70px;
-    right: 45px; */
-    /* right: 0;
-    top: 0; */
     border-radius: 5px;
     z-index: 15;
     overflow: hidden;
@@ -28,8 +24,7 @@
 }
 
 .drop-down ul li .renameList {
-    /* height: 39px; */
-    height: 30px;
+    height: 35px;
 }
 
 .drop-down ul li input {
@@ -66,8 +61,7 @@
 }
 
 .drop-down ul li>div {
-    /* padding: 10px !important; */
-    padding: 7px !important;
+    padding: 5px !important;
     width: 100%;
     font-size: 14px;
     display: flex;
@@ -80,10 +74,6 @@
 .drop-down ul li>div img {
     height: 15px;
 }
-
-/* .drop-down ul li>div img.custom-image {
-    margin-left: auto;
-} */
 
 .drop-down ul li:last-of-type {
     border-top: 1px solid #dfdfdf;

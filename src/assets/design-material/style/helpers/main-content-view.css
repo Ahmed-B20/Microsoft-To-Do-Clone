@@ -72,10 +72,6 @@
     left: 40px;
     right: 45px;
     background-color: #5f73c1f0;
-    /* height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; */
     color: white;
     font-weight: bolder;
     padding: 30px 0 5px;
@@ -153,7 +149,6 @@
     transition: all 0.4s ease-in-out;
 }
 
-/* 2. declare enter from and leave to state */
 .sort-by-animation-enter-from,
 .sort-by-animation-leave-to {
     opacity: 0;
@@ -162,7 +157,6 @@
 .view-content-container .tasks {
     margin-right: 5px;
     overflow-y: auto;
-    /* padding: 103px 40px 105px; */
     padding: 120px 40px 105px;
     height: 100%;
     display: flex;
@@ -198,15 +192,11 @@
     transform-origin: center center;
     position: relative;
     overflow: hidden;
-    /* z-index: 6; */
 }
 
 .view-content-container .tasks li.delete:not(.drop-down ul li)::before {
     content: '';
     position: absolute;
-    /* bottom: 0;
-    left: 0;
-    right: 0; */
     transform: rotate(-45deg) translateY(-50%);
     left: -60px;
     width: 100px;
@@ -219,10 +209,6 @@
 .view-content-container .tasks li.remind:not(.drop-down ul li)::after {
     content: '';
     position: absolute;
-    /* top: 0;
-    left: 0;
-    right: 0; */
-
     transform: rotate(-45deg) translateY(-50%);
     left: -50px;
     width: 100px;
@@ -316,7 +302,6 @@
     width: 10px;
 }
 
-/* .view-content-container .tasks li .check:hover img, */
 .view-content-container .tasks li.complete .check img {
     visibility: visible;
 }
@@ -330,7 +315,6 @@
     font-size: 12px;
     display: flex;
     align-items: center;
-    /* gap: 10px; */
 }
 
 .view-content-container .tasks li .task-main-info .info-icons .steps {
@@ -338,13 +322,6 @@
     align-items: center;
     gap: 3px;
 }
-
-/* .view-content-container .tasks li .task-main-info .info-icons .border {
-    margin: 0 5px;
-    width: 1px;
-    background-color: #dfdfdf;
-    height: 17px;
-} */
 
 .view-content-container .tasks li .task-main-info .info-icons .note {
     display: flex;
@@ -398,7 +375,6 @@
     right: 45px;
     padding: 10px 0 45px 0;
     background-color: #5f73c1f0;
-    /* position: relative; */
 }
 
 .view-content-container .add-task .add-task-container {
@@ -461,15 +437,12 @@
     transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
-/* 2. declare enter from and leave to state */
 .tasks-transition-enter-from,
 .tasks-transition-leave-to {
     opacity: 0;
     transform: scaleY(0.01) translate(30px, 0);
 }
 
-/* 3. ensure leaving items are taken out of layout flow so that moving
-      animations can be calculated correctly. */
 .tasks-transition-leave-active {
     position: absolute;
 }

@@ -11,8 +11,6 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* position: relative; */
-    /* padding: 15px; */
 }
 
 .main-content aside .toggle-aside {
@@ -43,7 +41,6 @@
         bottom: 0;
         z-index: 3;
         box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
-        /* transform: translateX(-280px); */
     }
 
     .main-content aside .toggle-aside {
@@ -67,7 +64,6 @@
     transition: all 0.2s ease-in-out;
 }
 
-/* 2. declare enter from and leave to state */
 .to-right-enter-from,
 .to-right-leave-to {
     opacity: 1;
