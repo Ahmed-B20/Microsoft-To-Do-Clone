@@ -266,7 +266,7 @@ export default {
                 }
             })
 
-            if (this.lists.length > 0) {
+            if (this.lists.length > 1 && !this.lists.at(0).listChildren) {
                 console.log(this.$route.params);
                 if (+this.listId > +this.$route.params.listId && +this.$route.params.listId !== 0) {
                     if (!!this.$route.params.childId) {
@@ -287,6 +287,8 @@ export default {
                         this.$router.push({ name: 'list', params: { listId: this.$route.params.listId }, props: { name: this.randomString(10), currentListName: this.listName } })
                     }
                 }
+            } else {
+                this.$router.push({ name: 'my-day' })
             }
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
