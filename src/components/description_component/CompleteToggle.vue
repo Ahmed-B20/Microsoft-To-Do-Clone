@@ -30,7 +30,6 @@ export default {
     methods: {
         completeAsideTask() {
             if (!!this.descriptionTaskChildList) {
-                // this.thisTask = this.taskIndex
                 this.taskElement = event.target.parentElement
 
                 if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete) {
@@ -56,9 +55,6 @@ export default {
             } else {
                 this.taskElement = event.target.parentElement
 
-                console.log(this.thisTask);
-                console.log(this.taskIndex);
-
                 if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
                 } else {
@@ -69,8 +65,6 @@ export default {
                         this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = true
                     }
                 }
-                // this.thisTask = this.taskIndex
-
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps.forEach((step) => {
                     if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
                         step.complete = true
@@ -83,8 +77,6 @@ export default {
             this.repeatedTaskObject = {}
             this.completeTaskStatus = !this.completeTaskStatus
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
-            this.$emit('componentEvent')
 
             if (this.taskElement.classList.contains('add-animation-x')) {
                 this.taskElement.classList.remove('add-animation-x')

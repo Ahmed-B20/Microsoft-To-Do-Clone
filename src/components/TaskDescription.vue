@@ -20,7 +20,7 @@
                     <h2 :class="{ complete: task.complete }">
                         <CompleteToggle :element='element' :task='task' :taskIndex='taskIndex'
                             :descriptionTaskList='descriptionTaskList'
-                            :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId' />
+                            :descriptionTaskChildList='descriptionTaskChildList' />
 
                         <span class="task-name" :class="{ complete: task.complete }">
                             {{ task.name }}
