@@ -302,7 +302,9 @@
 
 .lists-container li.group-of-lists ul li {
     padding: 10px 30px;
-    height: 42px;
+    /* padding: 10px 30px; */
+    /* height: 42px; */
+    height: 35px;
 }
 
 .lists-container li.group-of-lists ul li p {

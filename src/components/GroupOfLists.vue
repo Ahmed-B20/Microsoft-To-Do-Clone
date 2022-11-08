@@ -228,7 +228,8 @@ export default {
             oldChildListId: null,
             result: '',
             characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
-            charactersLength: 0
+            charactersLength: 0,
+            listElement: ''
         }
     },
     computed: {
@@ -295,15 +296,19 @@ export default {
                     this.groupOfListId = childrenList.id
                     this.groupOfListName = childrenList.listName
                     this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
+                    this.listElement = event.target.parentElement.parentElement.parentElement
                 } else if (target === 'childList') {
                     if (event.target.tagName === 'P') {
                         this.selectedChildListId = childrenList.id
                         this.selectedChildListName = childrenList.listName
                         this.elementDomRect = event.target.parentElement.getBoundingClientRect()
+                        this.listElement = event.target.parentElement
                     } else {
                         this.selectedChildListId = childrenList.id
                         this.selectedChildListName = childrenList.listName
                         this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
+                        this.listElement = event.target.parentElement.parentElement
+
                     }
                 }
 
@@ -312,20 +317,26 @@ export default {
                     this.groupOfListId = childrenList.id
                     this.groupOfListName = childrenList.listName
                     this.elementDomRect = event.target.parentElement.parentElement.parentElement.getBoundingClientRect()
+                    this.listElement = event.target.parentElement.parentElement.parentElement
+
                 } else if (target === 'childList') {
                     this.selectedChildListId = childrenList.id
                     this.selectedChildListName = childrenList.listName
                     this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
+                    this.listElement = event.target.parentElement.parentElement
+
                 }
             } else {
                 if (target === 'parentList') {
                     this.groupOfListId = childrenList.id
                     this.groupOfListName = childrenList.listName
                     this.elementDomRect = event.target.parentElement.getBoundingClientRect()
+                    this.listElement = event.target.parentElement
                 } else if (target === 'childList') {
                     this.selectedChildListId = childrenList.id
                     this.selectedChildListName = childrenList.listName
                     this.elementDomRect = event.target.getBoundingClientRect()
+                    this.listElement = event.target
                 }
             }
 
@@ -333,14 +344,15 @@ export default {
                 this.theColor = target
                 this.parentElementDomRect = this.$refs.groupOfLists.parentElement.parentElement.getBoundingClientRect()
 
-                this.toggleDropDown = !this.toggleDropDown
-                if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
-                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
-                } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
-                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 127
+                this.toggleDropDown = !this.toggleDropDown                
+                if (this.elementDomRect.top - this.parentElementDomRect.top < 200) {
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
                 } else {
-                    this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
                 }
+                
+                this.listElement.scrollIntoView()
+                
                 this.left = 38.5
 
                 if (this.toggleDropDown) {
@@ -363,14 +375,22 @@ export default {
                 this.theColor = target
                 this.toggleDropDown = !this.toggleDropDown
                 this.left = 38.5
-                this.top = 200
-                if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
-                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
-                } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
-                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 210
+                // this.top = 200
+                // if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
+                //     this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
+                // } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
+                //     this.top = this.elementDomRect.top - this.parentElementDomRect.top - 210
+                // } else {
+                //     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 45
+                // }
+
+                if (this.elementDomRect.top - this.parentElementDomRect.top < 200) {
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
                 } else {
-                    this.top = this.elementDomRect.top - this.parentElementDomRect.top + 45
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
                 }
+                
+                this.listElement.scrollIntoView()
 
                 if (this.toggleDropDown) {
                     this.oldChildListId = this.selectedChildListId

@@ -147,7 +147,8 @@ export default {
             result: '',
             characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
             charactersLength: 0,
-            listElement: ''
+            listElement: '',
+            top: 0
         }
     },
     beforeMount() {
@@ -195,10 +196,10 @@ export default {
             }
             event.preventDefault()
             this.toggleDropDown = !this.toggleDropDown
-            if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
-                this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
-            } else if (this.elementDomRect.top - this.parentElementDomRect.top > 200) {
-                this.top = this.elementDomRect.top - this.parentElementDomRect.top - 120
+
+            if (this.elementDomRect.top - this.parentElementDomRect.top < 200) {
+                console.log(1);
+                this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
             } else {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
             }

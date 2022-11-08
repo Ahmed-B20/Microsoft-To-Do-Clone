@@ -28,7 +28,8 @@
 }
 
 .drop-down ul li .renameList {
-    height: 39px;
+    /* height: 39px; */
+    height: 30px;
 }
 
 .drop-down ul li input {
@@ -65,7 +66,8 @@
 }
 
 .drop-down ul li>div {
-    padding: 10px !important;
+    /* padding: 10px !important; */
+    padding: 7px !important;
     width: 100%;
     font-size: 14px;
     display: flex;
