@@ -294,6 +294,15 @@ export default {
             this.listNameRoute = childrenList.listName
             this.listIndex = childrenList.id
             this.teleportToggle = true
+
+            // this.toggleDropDown = false
+            // =================================================================
+            // console.log('f');
+
+            // this.$forceUpdate()
+
+            console.log(this.parentId, this.listIndex);
+
             this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex } })
             // this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex, closeDescription: false } })
         },

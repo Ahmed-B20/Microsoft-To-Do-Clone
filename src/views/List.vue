@@ -1,6 +1,6 @@
 <template>
-    <keep-alive>
-        <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :key="listId">
+    <!-- <keep-alive> -->
+        <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :key="childId ? childId : listId">
             <template #toggle-sidebar>
                 <button @click="openSideBarDescription">
                     <img src="@/assets/design-material/icons/menu.png" alt="open-sidebar">
@@ -39,7 +39,7 @@
                     :childId="childId" />
             </template>
         </content-view>
-    </keep-alive>
+    <!-- </keep-alive> -->
 
     <transition name="to-left" :css="animated">
         <TaskDescription :key="descriptionTaskIndex" :toggleShrink="toggleShrink"
