@@ -3,8 +3,8 @@
         <div class="lists-parent">
             <ul ref="listParent" class="lists-container">
                 <transition-group name="render-list">
-                    <li @contextmenu.self="openDropDown" @click.self="showListTasks" v-for="(list,index) in lists"
-                        :data-name="list.listName" :data-id="index" :key="list.id"
+                    <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index)"
+                        v-for="(list,index) in lists" :key="list.id"
                         :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
 
 
@@ -13,7 +13,7 @@
                                 :parentId="list.id" />
                         </template>
 
-                        <p @click="showListTasks" @contextmenu="openDropDown" v-else>
+                        <p @click="showListTasks(list, index)" @contextmenu="openDropDown" v-else>
                             <img src="@/assets/design-material/icons/menu.png" alt="single-list">
                             <span>{{ list.listName }}</span>
 
@@ -190,22 +190,16 @@ export default {
         }
     },
     methods: {
-        openDropDown() {
+        openDropDown(list, index) {
             this.parentElementDomRect = this.$refs.listParent.getBoundingClientRect()
-            if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG') {
-                this.listId = event.target.parentElement.parentElement.getAttribute('data-id')
-                this.listName = event.target.parentElement.parentElement.getAttribute('data-name')
+            this.listId = index
+            this.listName = list.listName
 
+            if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG') {
                 this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
             } else if (event.target.tagName === 'P') {
-                this.listId = event.target.parentElement.getAttribute('data-id')
-                this.listName = event.target.parentElement.getAttribute('data-name')
-
                 this.elementDomRect = event.target.parentElement.getBoundingClientRect()
             } else {
-                this.listId = event.target.getAttribute('data-id')
-                this.listName = event.target.getAttribute('data-name')
-
                 this.elementDomRect = event.target.getBoundingClientRect()
             }
             event.preventDefault()
@@ -293,24 +287,13 @@ export default {
             this.toggleDropDown = false
             this.DuplicatedList = {}
         },
-        showListTasks() {
+        showListTasks(list, index) {
             this.toggleDropDown = false
-            if (event.target.tagName === 'LI' && event.target.classList.contains("single-list")) {
-                this.listName = event.target.getAttribute('data-name')
-                this.listIndex = event.target.getAttribute('data-id')
-                // this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
-                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
-            } else if (event.target.tagName === 'P' && event.target.parentElement.classList.contains("single-list")) {
-                this.listName = event.target.parentElement.getAttribute('data-name')
-                this.listIndex = event.target.parentElement.getAttribute('data-id')
-                // this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
-                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
-            } else if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG' || event.target.parentElement.parentElement.classList.contains("single-list")) {
-                this.listName = event.target.parentElement.parentElement.getAttribute('data-name')
-                this.listIndex = event.target.parentElement.parentElement.getAttribute('data-id')
-                // this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
-                this.$router.push({ name: 'list', params: { listId: this.listIndex } })
-            }
+
+            this.listName = list.listName
+            this.listIndex = index
+            // this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
+            this.$router.push({ name: 'list', params: { listId: this.listIndex } })
         },
         closeRename() {
             this.showRename = !this.showRename

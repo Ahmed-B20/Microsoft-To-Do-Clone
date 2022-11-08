@@ -104,7 +104,7 @@
     </PopUp>
 </template>
 
-<script>
+<script lang="js">
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 import PopUp from './PopUp.vue'
