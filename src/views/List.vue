@@ -1,40 +1,40 @@
 <template>
     <!-- <keep-alive> -->
-        <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :key="childId ? childId : listId">
-            <template #toggle-sidebar>
-                <button @click="openSideBarDescription">
-                    <img src="@/assets/design-material/icons/menu.png" alt="open-sidebar">
+    <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :key="childId ? childId : listId">
+        <template #toggle-sidebar>
+            <button @click="openSideBarDescription">
+                <img src="@/assets/design-material/icons/menu.png" alt="open-sidebar">
+            </button>
+        </template>
+
+        <template v-slot:title>
+            {{ returnListName }}
+        </template>
+
+        <template #toggle-description>
+            <button ref="openListDropDownElement" class="toggle-list-nav" @click="openListDropDown">
+                <img src="@/assets/design-material/icons/ellipsis.png" alt="open list navbar">
+            </button>
+        </template>
+
+        <template v-if="showSortBy" #sort-by>
+            <div class="sort-by-container">
+                <button @click="reverseResults" class="button-sort sorted-by">
+                    <img v-if="reverseState" src="@/assets/design-material/icons/up-arrow.png" alt="close sort" />
+                    <img v-else src="@/assets/design-material/icons/down-arrow.png" alt="close sort" />
+                    sorted by {{ sortMethodTarget }}
                 </button>
-            </template>
-
-            <template v-slot:title>
-                {{ returnListName }}
-            </template>
-
-            <template #toggle-description>
-                <button ref="openListDropDownElement" class="toggle-list-nav" @click="openListDropDown">
-                    <img src="@/assets/design-material/icons/ellipsis.png" alt="open list navbar">
+                <button @click="closeSort" class="button-sort close">
+                    <img src="@/assets/design-material/icons/close.png" alt="close sort" />
                 </button>
-            </template>
+            </div>
+        </template>
 
-            <template v-if="showSortBy" #sort-by>
-                <div class="sort-by-container">
-                    <button @click="reverseResults" class="button-sort sorted-by">
-                        <img v-if="reverseState" src="@/assets/design-material/icons/up-arrow.png" alt="close sort" />
-                        <img v-else src="@/assets/design-material/icons/down-arrow.png" alt="close sort" />
-                        sorted by {{ sortMethodTarget }}
-                    </button>
-                    <button @click="closeSort" class="button-sort close">
-                        <img src="@/assets/design-material/icons/close.png" alt="close sort" />
-                    </button>
-                </div>
-            </template>
-
-            <template #allTaskSlot>
-                <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId"
-                    :childId="childId" />
-            </template>
-        </content-view>
+        <template #allTaskSlot>
+            <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId"
+                :childId="childId" />
+        </template>
+    </content-view>
     <!-- </keep-alive> -->
 
     <transition name="to-left" :css="animated">
@@ -70,7 +70,7 @@
                 </div>
             </template>
 
-            <template #SortBy>
+            <template v-if="hasTasks" #SortBy>
                 <div @click="togglePopUp('sort')">
                     <img src="@/assets/design-material/icons/sort.png" alt="">
                     <span>Sort By</span>
@@ -245,6 +245,22 @@ export default {
             } else {
                 return this.lists[this.$route.params.listId].listName
             }
+        },
+        hasTasks() {
+            if (!!this.$route.params.childId) {
+                if (this.lists[this.$route.params.listId].listsArray[this.$route.params.childId].tasks.length > 0) {
+                    return true
+                } else {
+                    return false
+                }
+            } else if (!!this.lists[this.$route.params.listId]) {
+                if (this.lists[this.$route.params.listId].tasks.length > 0) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+
         }
     },
     watch: {
