@@ -375,15 +375,7 @@ export default {
                 this.theColor = target
                 this.toggleDropDown = !this.toggleDropDown
                 this.left = 38.5
-                // this.top = 200
-                // if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
-                //     this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
-                // } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
-                //     this.top = this.elementDomRect.top - this.parentElementDomRect.top - 210
-                // } else {
-                //     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 45
-                // }
-
+                
                 if (this.elementDomRect.top - this.parentElementDomRect.top < 200) {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
                 } else {

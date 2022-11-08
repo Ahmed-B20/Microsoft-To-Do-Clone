@@ -14,7 +14,7 @@
             <slot name="sort-by"></slot>
         </div>
 
-        <ul class="tasks">
+        <ul class="tasks" ref="tasksList" :class="{ 'fix-width': checkHeight }">
             <slot name="allTaskSlot"></slot>
         </ul>
         <AddTask :chosenSmartList="chosenSmartList" />
@@ -24,6 +24,7 @@
 <script>
 import AddTask from './AddTask.vue'
 import { toggleAside } from '@/stores/toggleAside.js'
+import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 
 export default {
@@ -32,13 +33,36 @@ export default {
     components: {
         AddTask
     },
+    data() {
+        return {
+            checkHeight: false
+        }
+    },
     computed: {
         ...mapWritableState(toggleAside, ['toggleState']),
+        ...mapWritableState(allLists, ['lists']),
     },
     methods: {
         toggleAside() {
             this.toggleState = !this.toggleState
         }
+    },
+    watch: {
+        lists: {
+            handler() {
+
+                console.log((this.$refs.tasksList.querySelectorAll('li').length + 3) * 55);
+
+                if (window.innerHeight - 250 >= (this.$refs.tasksList.querySelectorAll('li').length + 2.5) * 55) {
+                    this.checkHeight = false
+                } else {
+                    this.checkHeight = true
+                }
+
+                console.log(this.checkHeight);
+            },
+            deep: true
+        },
     }
 }
 </script>

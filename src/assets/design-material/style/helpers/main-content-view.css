@@ -157,11 +157,15 @@
 .view-content-container .tasks {
     margin-right: 5px;
     overflow-y: auto;
-    padding: 120px 40px 105px;
+    padding: 120px 40px 105px 40px;
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.view-content-container .tasks.fix-width {
+    padding: 120px 35px 105px;
 }
 
 @media (max-width: 768px) {
@@ -373,6 +377,7 @@
     bottom: 0;
     left: 40px;
     right: 45px;
+    /* right: 49px; */
     padding: 10px 0 45px 0;
     background-color: #5f73c1f0;
 }
