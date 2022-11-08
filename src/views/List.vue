@@ -8,7 +8,8 @@
             </template>
 
             <template v-slot:title>
-                {{ listName }}
+                <!-- {{ listName }} -->
+                {{ returnListName }}
             </template>
 
             <template #toggle-description>
@@ -170,7 +171,7 @@ import PopUp from '@/components/PopUp.vue'
 
 export default {
     name: 'List',
-    props: ['listId', 'childId', 'closeDescription','name','currentListName'],
+    props: ['listId', 'childId', 'closeDescription', 'name', 'currentListName'],
     components: {
         ContentView,
         SingleTask,
@@ -186,8 +187,6 @@ export default {
         }
     },
     beforeMount: function () {
-        console.log(this.$route.params);
-
         this.lists.forEach((list) => {
             if (list.listChildren) {
                 if (list.listChildren) {
@@ -266,6 +265,13 @@ export default {
             } else {
                 return false;
             }
+        },
+        returnListName() {
+            if (!!this.descriptionTaskChildList) {
+                return this.lists[this.descriptionTaskList].listsArray[this.$route.params.listId].listName
+            } else {
+                return this.lists[this.$route.params.listId].listName
+            }
         }
     },
     watch: {
@@ -315,13 +321,7 @@ export default {
         },
         'this.$route': {
             handler: function () {
-                console.log(this.$route);
-                console.log(this.currentListName);
                 if (this.$route.params.name) {
-                    console.log(this.$route.params.currentListName);
-
-                    // this.listName = this.$route.params.currentListName
-
                     this.$forceUpdate()
                 }
             },

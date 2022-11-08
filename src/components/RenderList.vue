@@ -259,8 +259,6 @@ export default {
                 this.$router.push({ name: 'my-day' })
             }
 
-
-
             this.lists.splice(this.listId, 1)
             this.lists.forEach((list, index) => {
                 if (index >= this.listId) {
@@ -269,7 +267,7 @@ export default {
             })
 
             if (this.lists.length > 0) {
-                if (+this.listId >= +this.$route.params.listId && +this.$route.params.listId !== 0) {
+                if (+this.listId > +this.$route.params.listId && +this.$route.params.listId !== 0) {
                     this.$router.push({ name: 'list', params: { listId: +this.$route.params.listId}, props: { name: this.randomString(10), currentListName: this.listName } })
                 } else if (+this.$route.params.listId >= +this.listId && +this.$route.params.listId !== 0) {
                     this.$router.push({ name: 'list', params: { listId: this.$route.params.listId - 1 }, props: { name: this.randomString(10), currentListName: this.listName } })
