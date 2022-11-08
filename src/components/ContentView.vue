@@ -34,20 +34,7 @@ export default {
         AddTask
     },
     beforeMount() {
-        if (!!this.childId) {
-            if (window.innerHeight - 250 <= (+this.lists[this.listId].listsArray[this.childId].tasks.length + 2.6) * 55) {
-                this.checkHeight = true
-            } else {
-                this.checkHeight = false
-            }
-        } else if(!!this.listId) {
-            console.log(window.innerHeight - 250, (+this.lists[this.listId].tasks.length + 2.6) * 55);
-            if (window.innerHeight - 250 <= (+this.lists[this.listId].length + 2.5) * 55) {
-                this.checkHeight = true
-            } else {
-                this.checkHeight = false
-            }
-        }
+        this.checkHeightFun()
     },
     props: ['listId', 'childId'],
     data() {
@@ -62,27 +49,27 @@ export default {
     methods: {
         toggleAside() {
             this.toggleState = !this.toggleState
+        },
+        checkHeightFun() {
+            if (!!this.childId) {
+                if (window.innerHeight - 250 <= (+this.lists[this.listId].listsArray[this.childId].tasks.length + 1) * 55) {
+                    this.checkHeight = true
+                } else {
+                    this.checkHeight = false
+                }
+            } else if (!!this.listId) {
+                if (window.innerHeight - 250 <= (+this.lists[this.listId].tasks.length + 1) * 55) {
+                    this.checkHeight = true
+                } else {
+                    this.checkHeight = false
+                }
+            }
         }
     },
     watch: {
         lists: {
             handler() {
-                if (!!this.childId) {
-                    if (window.innerHeight - 250 <= (+this.lists[this.listId].listsArray[this.childId].tasks.length + 2.6) * 55) {
-                        this.checkHeight = true
-                    } else {
-                        this.checkHeight = false
-                    }
-                } else if(!!this.listId) {
-                    console.log(window.innerHeight - 250, (+this.lists[this.listId].tasks.length + 2.6) * 55);
-                    if (window.innerHeight - 250 <= (+this.lists[this.listId].length + 2.5) * 55) {
-                        this.checkHeight = true
-                    } else {
-                        this.checkHeight = false
-                    }
-                }
-
-                console.log(this.checkHeight);
+                this.checkHeightFun()
             },
             deep: true
         },
