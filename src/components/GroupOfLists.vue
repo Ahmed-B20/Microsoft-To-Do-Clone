@@ -377,7 +377,7 @@ export default {
                 if (this.elementDomRect.top - this.parentElementDomRect.top > 150 && this.elementDomRect.top - this.parentElementDomRect.top < 160) {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top - 200
                 } else if (this.elementDomRect.top - this.parentElementDomRect.top > 160) {
-                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 170
+                    this.top = this.elementDomRect.top - this.parentElementDomRect.top - 210
                 } else {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 45
                 }
