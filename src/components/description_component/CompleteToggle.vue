@@ -20,6 +20,9 @@ export default {
             oldObj: {}
         }
     },
+    beforeMount() {
+        console.log(this.taskIndex)
+    },
     computed: {
         ...mapState(allLists, ['returnLists', 'smartList']),
         ...mapWritableState(allLists, ['lists', 'smartList']),
@@ -27,7 +30,7 @@ export default {
     methods: {
         completeAsideTask() {
             if (!!this.descriptionTaskChildList) {
-                this.thisTask = this.taskIndex
+                // this.thisTask = this.taskIndex
                 this.taskElement = event.target.parentElement
 
                 if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete) {
@@ -41,9 +44,9 @@ export default {
                     }
                 }
 
-                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.thisTask].steps.length > 0) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.thisTask].steps.forEach((step) => {
-                        if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.thisTask].complete) {
+                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps.length > 0) {
+                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].steps.forEach((step) => {
+                        if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete) {
                             step.complete = true
                         } else {
                             step.complete = false
@@ -66,10 +69,10 @@ export default {
                         this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = true
                     }
                 }
-                this.thisTask = this.taskIndex
+                // this.thisTask = this.taskIndex
 
-                this.lists[this.descriptionTaskList].tasks[this.thisTask].steps.forEach((step) => {
-                    if (this.lists[this.descriptionTaskList].tasks[this.thisTask].complete) {
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].steps.forEach((step) => {
+                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
                         step.complete = true
                     } else {
                         step.complete = false

@@ -36,8 +36,8 @@ export default {
     methods: {
         addToMyDay() {
             if (!!this.childId) {
-                this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex].addToMyDay = true
-                this.smartList.myDay.tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex])
+                this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].addToMyDay = true
+                this.smartList.myDay.tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
             } else {
                 this.lists[this.listId].tasks[this.taskElementId].addToMyDay = true
                 this.smartList.myDay.tasks.push(this.lists[this.listId].tasks[this.taskElementId])
@@ -48,8 +48,8 @@ export default {
         },
         closeToMyDay() {
             if (!!this.childId) {
-                this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex].addToMyDay = false
-                this.smartList.myDay.tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskIndex])
+                this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].addToMyDay = false
+                this.smartList.myDay.tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
             } else {
                 this.lists[this.listId].tasks[this.taskElementId].addToMyDay = false
                 this.smartList.myDay.tasks.push(this.lists[this.listId].tasks[this.taskElementId])

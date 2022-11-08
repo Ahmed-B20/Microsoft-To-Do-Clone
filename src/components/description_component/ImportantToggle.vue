@@ -52,6 +52,7 @@ export default {
                     }
                 })
             } else {
+                console.log(this.taskIndex);
                 if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
                     event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
