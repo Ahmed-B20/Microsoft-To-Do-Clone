@@ -33,6 +33,23 @@ export default {
     components: {
         AddTask
     },
+    beforeMount() {
+        if (!!this.childId) {
+            if (window.innerHeight - 250 <= (+this.lists[this.listId].listsArray[this.childId].tasks.length + 2.6) * 55) {
+                this.checkHeight = true
+            } else {
+                this.checkHeight = false
+            }
+        } else if(!!this.listId) {
+            console.log(window.innerHeight - 250, (+this.lists[this.listId].tasks.length + 2.6) * 55);
+            if (window.innerHeight - 250 <= (+this.lists[this.listId].length + 2.5) * 55) {
+                this.checkHeight = true
+            } else {
+                this.checkHeight = false
+            }
+        }
+    },
+    props: ['listId', 'childId'],
     data() {
         return {
             checkHeight: false
@@ -50,13 +67,19 @@ export default {
     watch: {
         lists: {
             handler() {
-
-                console.log((this.$refs.tasksList.querySelectorAll('li').length + 3) * 55);
-
-                if (window.innerHeight - 250 >= (this.$refs.tasksList.querySelectorAll('li').length + 2.5) * 55) {
-                    this.checkHeight = false
-                } else {
-                    this.checkHeight = true
+                if (!!this.childId) {
+                    if (window.innerHeight - 250 <= (+this.lists[this.listId].listsArray[this.childId].tasks.length + 2.6) * 55) {
+                        this.checkHeight = true
+                    } else {
+                        this.checkHeight = false
+                    }
+                } else if(!!this.listId) {
+                    console.log(window.innerHeight - 250, (+this.lists[this.listId].tasks.length + 2.6) * 55);
+                    if (window.innerHeight - 250 <= (+this.lists[this.listId].length + 2.5) * 55) {
+                        this.checkHeight = true
+                    } else {
+                        this.checkHeight = false
+                    }
                 }
 
                 console.log(this.checkHeight);
