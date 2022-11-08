@@ -267,12 +267,25 @@ export default {
             })
 
             if (this.lists.length > 0) {
+                console.log(this.$route.params);
                 if (+this.listId > +this.$route.params.listId && +this.$route.params.listId !== 0) {
-                    this.$router.push({ name: 'list', params: { listId: +this.$route.params.listId}, props: { name: this.randomString(10), currentListName: this.listName } })
+                    if (!!this.$route.params.childId) {
+                        this.$router.push({ name: 'child-list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
+                    } else {
+                        this.$router.push({ name: 'list', params: { listId: +this.$route.params.listId }, props: { name: this.randomString(10), currentListName: this.listName } })
+                    }
                 } else if (+this.$route.params.listId >= +this.listId && +this.$route.params.listId !== 0) {
-                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId - 1 }, props: { name: this.randomString(10), currentListName: this.listName } })
+                    if (!!this.$route.params.childId) {
+                        this.$router.push({ name: 'child-list', params: { listId: this.$route.params.listId - 1, childId: this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
+                    } else {
+                        this.$router.push({ name: 'list', params: { listId: this.$route.params.listId - 1 }, props: { name: this.randomString(10), currentListName: this.listName } })
+                    }
                 } else {
-                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId }, props: { name: this.randomString(10), currentListName: this.listName } })
+                    if (!!this.$route.params.childId) {
+                        this.$router.push({ name: 'child-list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
+                    } else {
+                        this.$router.push({ name: 'list', params: { listId: this.$route.params.listId }, props: { name: this.randomString(10), currentListName: this.listName } })
+                    }
                 }
             }
 
