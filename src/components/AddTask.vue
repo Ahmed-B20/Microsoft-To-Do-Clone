@@ -17,7 +17,6 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'MainContent',
-    // props: ['chosenListIdProp'],
     props: ['chosenSmartList'],
     inject: ['chosenListId', 'chosenChildIdListId'],
     data() {

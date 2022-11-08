@@ -8,7 +8,6 @@
             </template>
 
             <template v-slot:title>
-                <!-- {{ listName }} -->
                 {{ returnListName }}
             </template>
 
@@ -18,7 +17,6 @@
                 </button>
             </template>
 
-            <!-- <transition name="sort-by-animation"> -->
             <template v-if="showSortBy" #sort-by>
                 <div class="sort-by-container">
                     <button @click="reverseResults" class="button-sort sorted-by">
@@ -31,10 +29,8 @@
                     </button>
                 </div>
             </template>
-            <!-- </transition> -->
 
             <template #allTaskSlot>
-                <!-- <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId" /> -->
                 <SingleTask :toggleShrink="toggleShrink" @openDescriptionEvent="openDescription" :listId="listId"
                     :childId="childId" />
             </template>
@@ -131,26 +127,6 @@
             <button class="close" @click="closePopUp">Cancel</button>
         </template>
     </PopUp>
-
-    <!-- <transition name="to-bottom">
-        <DropDown>
-            <template #rename>
-                <span>rename list</span>
-            </template>
-
-            <template #move-list>
-                <span>move list</span>
-            </template>
-
-            <template #sort-by>
-                <span>sort by</span>
-            </template>
-
-            <template #delete-list>
-                <span>delete list</span>
-            </template>
-        </DropDown>
-    </transition> -->
 </template>
 
 <script>
@@ -165,7 +141,6 @@ import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 
 import { toggleAside } from '@/stores/toggleAside.js'
-// import { computed } from "vue";
 
 import PopUp from '@/components/PopUp.vue'
 
@@ -181,7 +156,6 @@ export default {
     },
     provide() {
         return {
-            // explicitly provide a computed property
             chosenListId: () => this.comListId,
             chosenChildIdListId: () => this.comChildId
         }
@@ -238,7 +212,6 @@ export default {
             reverseState: false,
             oldTaskIndex: null,
             animated: true,
-            // sendedArray: []
         }
     },
     computed: {
@@ -343,9 +316,6 @@ export default {
             this.descriptionTaskList = listId
             this.descriptionTaskIndex = index
 
-            // this.toggleOpenDescription = !this.toggleOpenDescription
-
-
             if (shrink) {
                 if (+this.oldTaskIndex !== +index && this.oldTaskIndex !== null) {
 
@@ -371,12 +341,7 @@ export default {
         },
         openListDropDown() {
             this.parentElementDomRect = this.$refs.openListDropDownElement.getBoundingClientRect()
-
-            // this.top = this.parentElementDomRect.top + 20
             this.top = 82.5
-
-            // this.top = this.elementDomRect.top - this.parentElementDomRect.top + 41
-
             if (!!this.toggleShrink) {
                 this.right = 45 + 360
             } else {
@@ -423,12 +388,10 @@ export default {
         },
         DuplicateList() {
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
-            // this.DuplicatedList.id = this.lists[this.listId].id + 1
             this.DuplicatedList.id = +this.listId + 1
             this.DuplicatedList.listChildren = this.lists[this.listId].listChildren
             this.DuplicatedList.tasks = this.lists[this.listId].tasks
             this.lists.splice(+this.listId + 1, 0, this.DuplicatedList)
-            // this.lists.push(this.DuplicatedList)
             this.lists.forEach(((list, index) => {
                 if (+this.listId + 1 <= index) {
                     list.id = index

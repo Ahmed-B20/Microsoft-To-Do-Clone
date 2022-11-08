@@ -1,5 +1,5 @@
 <template>
-    <span :data-id="taskIndex" @click="completeAsideTask" class="check">
+    <span @click="completeAsideTask" class="check">
         <img src="@/assets/design-material/icons/check.png" alt="check" />
     </span>
 </template>
@@ -52,6 +52,10 @@ export default {
                 }
             } else {
                 this.taskElement = event.target.parentElement
+
+                console.log(this.thisTask);
+                console.log(this.taskIndex);
+
                 if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
                 } else {

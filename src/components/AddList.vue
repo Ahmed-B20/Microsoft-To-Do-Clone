@@ -63,7 +63,6 @@ export default {
             toggleError: false,
             showPopUp: false,
             groupOfListsName: '',
-            // childListId: 0
             childId: 0
         };
     },
@@ -90,14 +89,12 @@ export default {
                     this.listObj.tasks = [];
 
                     this.childListObj.listName = this.itemValue
-                    // this.childListObj.id = this.childListId  
                     this.childListObj.id = this.childId
                     this.childListObj.listChildren = false
                     this.childListObj.tasks = [];
 
                     this.childListsArray.push(this.childListObj)
                     this.listObj.listsArray = this.childListsArray
-                    // this.childListId++
                     this.childId++
 
                     this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
@@ -143,14 +140,12 @@ export default {
             this.toggleError = false
         },
         addGroupOfList() {
-            // this.childListId = 0
             if (!this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
                 this.groupOfListsName = this.itemValue
             }
             if (this.itemValue.length > 0 && !this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
                 this.listObj.listName = this.itemValue;
                 this.listObj.id = this.taskNumber;
-                // this.listObj.id = this.childListId;
                 this.listObj.listsArray = []
                 this.listObj.listChildren = true;
                 this.listObj.toggleChildList = true;
@@ -171,7 +166,6 @@ export default {
                 this.itemValue = "";
                 this.listObj = {};
                 this.taskNumber++;
-                // this.childListId++;
             } else {
                 if (this.toggleListChildren === false) {
                     if (!!this.toggleError) {
@@ -197,23 +191,10 @@ export default {
                 }
             }
         },
-        // closeAddGroup() {
-        //     if (this.$refs.addGroupOfList.getAttribute('src').includes('close')) {
-        //         if (this.childListsArray.length > 0) {
-        //             this.$refs.addGroupOfList.setAttribute('src', this.$refs.addGroupOfList.getAttribute('src').replace('close', 'add'))
-        //             this.toggleListChildren = false
-        //             this.childListsArray = []
-        //             this.lists[this.lists.length - 1].toggleChildList = false;
-        //         } else {
-        //             this.showPopUp = true
-        //         }
-        //     }
-        // }
     },
     watch: {
         lists: {
             handler(newValue, oldValue) {
-                // this.childListId = this.lists.length
                 this.taskNumber = this.lists.length
             },
             deep: true

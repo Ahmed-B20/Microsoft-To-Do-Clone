@@ -38,11 +38,9 @@ export default {
             if (!!this.descriptionTaskChildList) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = true
                 this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
-                // this.smartList.myDay.tasks[this.smartList.myDay.tasks.length] = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = true
                 this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
-                // this.smartList.myDay.tasks[this.smartList.myDay.tasks.length] = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
             }
             localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))

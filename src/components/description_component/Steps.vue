@@ -224,7 +224,6 @@ export default {
                     }
                 })
             }
-            // this.dropDownStepId = null
             this.completeTaskStatus = !this.completeTaskStatus
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             if (this.stepElement.classList.contains('add-animation-x')) {
@@ -297,7 +296,7 @@ export default {
         PromoteToTask() {
             let today = new Date();
             let dd = String(today.getDate()).padStart(2, '0');
-            let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
             let yyyy = today.getFullYear();
             today = mm + '/' + dd + '/' + yyyy;
 
@@ -305,7 +304,6 @@ export default {
                 let step = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.descriptionTaskIndex].steps[this.dropDownStepId]
                 this.promoteTask.name = step.name
                 this.promoteTask.id = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.length
-                // this.promoteTask.id = 0
                 this.promoteTask.complete = false
                 this.promoteTask.important = false
 
@@ -335,14 +333,6 @@ export default {
                     }
                 });
 
-                // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.promoteTask)
-
-                // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((task, index) => {
-                //     if (index > 0) {
-                //         task.id += 1
-                //     }
-                // })
-
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.promoteTask)
 
 
@@ -352,7 +342,6 @@ export default {
 
                 this.promoteTask.name = step.name
                 this.promoteTask.id = this.lists[this.descriptionTaskList].tasks.length
-                // this.promoteTask.id = 0
                 this.promoteTask.complete = false
                 this.promoteTask.important = false
 
@@ -381,14 +370,6 @@ export default {
                         step.id -= 1
                     }
                 });
-
-                // this.lists[this.descriptionTaskList].tasks.unshift(this.promoteTask)
-
-                // this.lists[this.descriptionTaskList].tasks.forEach((task, index) => {
-                //     if (index > 0) {
-                //         task.id += 1
-                //     }
-                // })
 
                 this.lists[this.descriptionTaskList].tasks.push(this.promoteTask)
 

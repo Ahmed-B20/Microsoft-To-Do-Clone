@@ -5,7 +5,6 @@ import App from "./App.vue";
 import router from "./router/router";
 
 import "@/assets/design-material/style/style.css";
-// import "./worker.js";
 
 const app = createApp(App);
 const pinia = createPinia();

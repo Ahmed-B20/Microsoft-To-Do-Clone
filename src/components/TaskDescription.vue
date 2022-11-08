@@ -184,11 +184,6 @@
                                     <span>Pick a date and time</span>
                                 </template>
                             </div>
-
-                            <!-- <RemindDueDate @workerResponse="showRemind" @componentEvent='resetRemindDueDate'
-                                :descriptionTaskList='descriptionTaskList'
-                                :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
-                                :descriptionTaskIndex='descriptionTaskIndex' date="customDate" /> -->
                         </template>
                     </DropDown>
                 </transition>

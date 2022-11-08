@@ -6,8 +6,6 @@ export const toggleAside = defineStore('toggleAside', {
         toggleState: true
     }
   },
-  // could also be defined as
-  // state: () => ({ count: 0 })
   getters: {
     returnState(state) {
      return state.toggleState

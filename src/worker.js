@@ -5,7 +5,6 @@ self.onmessage = (taskDate)=>{
     let myInterval = setInterval(()=>{
         if (new Date() >= new Date(taskDate.data)) {
             postMessage(true)
-            console.log('work');
             clearInterval(myInterval)
         }
     },timeChunk)

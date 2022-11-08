@@ -29,9 +29,6 @@
                         <template #RenameList>
                             <div class="renameList" @click.self="renameList">
                                 <template v-if="showRename">
-                                    <!-- <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
-                                        src="@/assets/design-material/icons/plus.png" alt="add-item" /> -->
-
                                     <img @click="newListName" class="renameTask"
                                         src="@/assets/design-material/icons/plus.png" alt="add-item" />
 
@@ -101,19 +98,6 @@
             <button class="close" @click="closePopUp">Cancel</button>
         </template>
     </PopUp>
-
-    <!-- <teleport v-if="teleportToggle" to='.view-content-container'>
-        <content-view>
-            <template v-slot:title>
-                {{listName}}
-            </template>
-
-            <template v-slot:allTask>
-                <li v-for="(index, task) in allTasks" :key="index">{{task}}</li>
-            </template>
-        </content-view>
-    </teleport> -->
-
 </template>
 
 <script>
@@ -296,8 +280,6 @@ export default {
             this.toggleDropDown = false
             this.showPopUp = !this.showPopUp
             this.listId = null
-
-            // this.$router.push({ name: 'list', params: { listId: 0, closeDescription: false } })
         },
         randomString(length) {
             this.charactersLength = this.characters.length
@@ -308,12 +290,10 @@ export default {
         },
         DuplicateList() {
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
-            // this.DuplicatedList.id = this.lists[this.listId].id + 1
             this.DuplicatedList.id = +this.listId + 1
             this.DuplicatedList.listChildren = this.lists[this.listId].listChildren
             this.DuplicatedList.tasks = this.lists[this.listId].tasks
             this.lists.splice(+this.listId + 1, 0, this.DuplicatedList)
-            // this.lists.push(this.DuplicatedList)
             this.lists.forEach(((list, index) => {
                 if (+this.listId + 1 <= index) {
                     list.id = index
@@ -330,7 +310,6 @@ export default {
 
             this.listName = list.listName
             this.listIndex = index
-            // this.$router.push({ name: 'list', params: { listId: this.listIndex, closeDescription: false } })
             this.$router.push({ name: 'list', params: { listId: this.listIndex } })
         },
         closeRename() {

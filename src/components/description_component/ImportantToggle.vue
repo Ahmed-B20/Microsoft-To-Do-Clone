@@ -25,7 +25,6 @@ export default {
     },
     methods: {
         importantAsideToggle() {
-            // this.lists[this.descriptionTaskList].tasks[this.descriptionTaskIndex]
             this.element.classList.remove('add-animation-x')
             this.element.classList.remove('add-animation')
 
@@ -49,16 +48,9 @@ export default {
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((singleTask, index) => {
                     if (singleTask.id == this.task.id) {
-                        // this.taskIndex = index
                         this.$emit('componentEvent', index)
                     }
                 })
-
-                // if (this.chosenSmartList) {
-                //     this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].important = true
-                // }
-
-                // localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             } else {
                 if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
@@ -76,17 +68,9 @@ export default {
                     this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
                     this.importantTask = {}
                 }
-
-                // if (this.chosenSmartList) {
-                //     this.smartList[this.chosenSmartList].tasks[this.smartListTaskId].important = true
-                // }
-
-                // localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
                     if (singleTask.id == this.task.id) {
-                        // this.taskIndex = index
                         this.$emit('componentEvent', index)
                     }
                 })

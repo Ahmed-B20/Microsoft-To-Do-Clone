@@ -1,5 +1,4 @@
 <template>
-    <!-- tabindex="0" @blur="closeDropDown" -->
     <div ref="groupOfLists" @contextmenu="openDropDown('parentList', lists[parentId])" @click="toggleGroup"
         class="group-of-lists-controller">
         <p>
@@ -117,8 +116,7 @@
         </DropDown>
     </transition>
 
-    <!-- <transition name="toggle-group-of-list"> -->
-    <!-- <ul :class="{active:groupOfListsToggle}"> -->
+
     <transition name="toggle-group-of-list">
         <ul v-if="groupOfListsToggle || lists[parentId].toggleChildList">
             <transition-group name="render-list">
@@ -138,7 +136,6 @@
             </transition-group>
         </ul>
     </transition>
-    <!-- </transition> -->
 
     <PopUp :showPopUp="showPopUp">
         <template #title>
@@ -232,23 +229,16 @@ export default {
             result: '',
             characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
             charactersLength: 0
-            // dropDownSlotsWatcher: false
         }
     },
     computed: {
         ...mapWritableState(allLists, ['lists']),
         showSlotForGroupOfList() {
             if (this.lists[this.groupOfListId].listsArray.length > 0) {
-                // this.dropDownSlots.splice(3, 1)
                 this.dropDownSlots = ['RenameGroup', 'NewList', 'UngroupLists']
-
-                // this.dropDownSlotsWatcher = true
                 return true
             } else {
-                // this.dropDownSlots.splice(2, 1)
                 this.dropDownSlots = ['RenameGroup', 'NewList', 'DeleteGroup']
-
-                // this.dropDownSlotsWatcher = false
                 return false
             }
         },
@@ -295,16 +285,7 @@ export default {
             this.listIndex = childrenList.id
             this.teleportToggle = true
 
-            // this.toggleDropDown = false
-            // =================================================================
-            // console.log('f');
-
-            // this.$forceUpdate()
-
-            console.log(this.parentId, this.listIndex);
-
             this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex } })
-            // this.$router.push({ name: 'child-list', params: { listId: this.parentId, childId: this.listIndex, closeDescription: false } })
         },
         openDropDown(target, childrenList) {
             event.preventDefault()
@@ -449,15 +430,12 @@ export default {
             })
         },
         renameGroup() {
-            // this.showRename = !this.showRename
             this.showRename = true
             this.showAddNewList = false
 
             this.newName = this.listName
-            // this.$refs.inputFiled.focus()
         },
         addNewList() {
-            // this.showAddNewList = !this.showAddNewList
             this.showAddNewList = true
             this.showRename = false
 
@@ -513,12 +491,10 @@ export default {
             }
         },
         closeRename() {
-            // this.showRename = !this.showRename
             this.showRename = false
             this.newName = ''
         },
         closeNewList() {
-            // this.showAddNewList = !this.showAddNewList
             this.showAddNewList = false
             this.newName = ''
         },
@@ -666,15 +642,6 @@ export default {
             },
             deep: true
         },
-        // dropDownSlotsWatcher() {
-        //     console.log(this.dropDownSlotsWatcher);
-        //     if (this.dropDownSlotsWatcher) {
-        //         this.dropDownSlots.splice(3, 1)
-        //     } else {
-        //         this.dropDownSlots.splice(2, 1)
-        //     }
-        //     console.log(this.dropDownSlots);
-        // }
     }
 }
 </script>

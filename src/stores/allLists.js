@@ -26,8 +26,6 @@ export const allLists = defineStore('allLists', {
         }
     }
   },
-  // could also be defined as
-  // state: () => ({ count: 0 })
   getters: {
     returnLists(state) {
      return state.lists

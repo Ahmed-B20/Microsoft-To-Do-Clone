@@ -163,10 +163,6 @@ export default {
                 this.$emit('componentEvent', true)
             }
         },
-        workAround(time) {
-            // this.$emit('workerResponse', time.returnValue)
-
-        },
         addCustomRemindDate() {
             if (!!this.pickedCustomRemindDate) {
                 if (!!this.descriptionTaskChildList) {

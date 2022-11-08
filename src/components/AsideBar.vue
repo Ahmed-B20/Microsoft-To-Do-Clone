@@ -5,7 +5,6 @@
     </button>
     <UserInfo />
     <AsideLinks />
-    <!-- <AsideRenderLists /> -->
 
     <RenderList />
 
@@ -17,7 +16,6 @@
 import UserInfo from "./UserInfo.vue";
 import AsideLinks from "./AsideLinks.vue";
 
-// import AsideRenderLists from "./AsideRenderLists.vue";
 
 import RenderList from './RenderList.vue';
 import AddList from "./AddList.vue";
@@ -32,7 +30,6 @@ export default {
     RenderList,
     AddList,
     AsideLinks,
-    // AsideRenderLists,
   },
   computed: {
     ...mapWritableState(toggleAside, ['toggleState']),

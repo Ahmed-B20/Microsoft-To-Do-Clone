@@ -142,32 +142,7 @@ export default {
                 if (index != this.listId) {
                     this.ReturnAllListsArray.push(list)
                 }
-
-                // list.tasks.forEach((task) => {
-                //     if (!!task.remindMe) {
-                //         console.log('rr');
-                //         const worker = new Worker('../src/worker.js')
-                //         worker.postMessage(new Date(task.remindMeDate))
-                //         worker.onmessage = (time) => {
-                //             this.remindToggle = time.returnValue
-                //         }
-                //     }
-                // })
             }
-            // else {
-            //     list.listsArray.forEach((childList) => {
-            //         childList.tasks.forEach((task) => {
-            //             if (!!task.remindMe) {
-            //                 console.log('rr');
-            //                 const worker = new Worker('../src/worker.js')
-            //                 worker.postMessage(new Date(task.remindMeDate))
-            //                 worker.onmessage = (time) => {
-            //                     this.remindToggle = time.returnValue
-            //                 }
-            //             }
-            //         })
-            //     })
-            // }
         })
     },
 
