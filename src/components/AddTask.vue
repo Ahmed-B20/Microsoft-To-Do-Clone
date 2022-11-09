@@ -113,23 +113,6 @@ export default {
                     this.taskObj.realDueDateName = ''
                 }
 
-                // switch (this.chosenSmartList) {
-                //     case 'important':
-                //         this.taskObj.important = true
-                //         break;
-
-                //     case 'myDay':
-                //         this.taskObj.addToMyDay = true
-                //         break;
-
-                //     case 'planned':
-                //         this.taskObj.dueDate = new Date()
-                //         this.taskObj.dueDateName = 'ToDay'
-                //         this.taskObj.realDueDateName = 'ToDay'
-                //         break;
-                // }
-
-
                 this.taskObj.steps = []
                 this.chosenListTasks.push(this.taskObj)
                 this.$refs.taskInput.value = ''

@@ -39,12 +39,6 @@ export default {
     methods: {
         addDueDate(date) {
             if (!!this.childId) {
-                // this.lists[2].tasks.forEach((task, index) => {
-                //     if (+task.id === +this.taskElementId && +task.listId === +this.listId && +this.childId === +task.childListId) {
-                //         this.lists[2].tasks.splice(index, 1)
-                //     }
-                // })
-
                 if (date === 'today') {
                     this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].dueTime = new Date()
                     this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].dueDateName = 'ToDay'

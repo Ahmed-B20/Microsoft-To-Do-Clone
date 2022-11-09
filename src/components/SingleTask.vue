@@ -377,11 +377,6 @@ export default {
         deleteTask() {
             if (!!this.childId) {
                 this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
-                // this.lists[this.listId].listsArray[this.childId].tasks.forEach((list, index) => {
-                //     if (index >= this.taskElementId) {
-                //         list.id = list.id - 1
-                //     }
-                // })
 
                 this.lists[this.listId].listsArray[this.childId].tasks.forEach((list) => {
                     if (list.id >= this.taskElementId) {
@@ -390,11 +385,6 @@ export default {
                 })
             } else {
                 this.lists[this.listId].tasks.splice(this.taskElementId, 1)
-                // this.lists[this.listId].tasks.forEach((list, index) => {
-                //     if (index >= this.taskElementId) {
-                //         list.id = list.id - 1
-                //     }
-                // })
 
                 this.lists[this.listId].tasks.forEach((list) => {
                     if (list.id >= this.taskElementId) {
