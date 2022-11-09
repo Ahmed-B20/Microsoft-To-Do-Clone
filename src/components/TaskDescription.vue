@@ -28,7 +28,7 @@
 
                         <ImportantToggle :element='element' :task='task' :taskIndex='taskIndex'
                             :descriptionTaskList='descriptionTaskList'
-                            :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId' />
+                            :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId' @importantEvent="closeDescription" />
                     </h2>
 
                     <Steps :element='element' :taskIndex='taskIndex' :descriptionTaskList='descriptionTaskList'
@@ -41,7 +41,7 @@
 
                 <AddToMyDay :descriptionTaskList='descriptionTaskList'
                     :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
-                    :descriptionTaskIndex='descriptionTaskIndex' />
+                    :descriptionTaskIndex='descriptionTaskIndex' @importantEvent="closeDescription" />
 
                 <div ref="timeAndDate" class="task-box time-and-date">
                     <div @click.self="toggleRemind(53)" :class="{ delete: remindDueDateStateClass }">
@@ -714,6 +714,7 @@ export default {
 
                 if (+this.descriptionTaskList === 2) {
                     this.lists[2].tasks.splice(this.taskIndex, 1)
+                    this.closeDescription()
                 } else {
                     this.lists[0].tasks.forEach((task, index) => {
                         if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +this.childId === +task.descriptionTaskChildList) {
@@ -728,6 +729,7 @@ export default {
 
                 if (+this.descriptionTaskList === 2) {
                     this.lists[2].tasks.splice(this.taskIndex, 1)
+                    this.closeDescription()
                 } else {
                     this.lists[2].tasks.forEach((task, index) => {
                         if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {

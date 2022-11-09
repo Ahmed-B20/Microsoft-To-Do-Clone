@@ -49,8 +49,9 @@ export default {
             if (!!this.childId) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = false
 
-                if (+this.listId === 0) {
-                    this.lists[0].tasks.splice(taskIndex, 1)
+                if (+this.descriptionTaskList === 0) {
+                    this.lists[0].tasks.splice(this.taskIndex, 1)
+                    this.$emit('importantEvent')
                 } else {
                     this.lists[0].tasks.forEach((task, index) => {
                         if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +this.childId === +task.descriptionTaskChildList) {
@@ -61,8 +62,9 @@ export default {
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = false
 
-                if (+this.listId === 0) {
-                    this.lists[0].tasks.splice(taskIndex, 1)
+                if (+this.descriptionTaskList === 0) {
+                    this.lists[0].tasks.splice(this.taskIndex, 1)
+                    this.$emit('importantEvent')
                 } else {
                     this.lists[0].tasks.forEach((task, index) => {
                         if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {

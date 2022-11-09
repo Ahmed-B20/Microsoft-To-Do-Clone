@@ -12,7 +12,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'ImportantToggle',
-    props: ['taskIndex', 'task','descriptionTaskList','descriptionTaskChildList', 'element'],
+    props: ['taskIndex', 'task', 'descriptionTaskList', 'descriptionTaskChildList', 'element'],
     data() {
         return {
             taskElement: '',
@@ -29,20 +29,25 @@ export default {
             this.element.classList.remove('add-animation')
 
             if (!!this.descriptionTaskChildList) {
-                if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = false
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-                    this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.importantTask)
-                    this.importantTask = {}
+                if (+this.descriptionTaskList === 1) {
+                    this.lists[1].tasks.splice(this.taskIndex, 1)
+                    this.$emit('importantEvent')
                 } else {
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = true
-                    this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.importantTask)
-                    this.importantTask = {}
+                    if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important) {
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = false
+                        event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+                        this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.importantTask)
+                        this.importantTask = {}
+                    } else {
+                        event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = true
+                        this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
+                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.importantTask)
+                        this.importantTask = {}
+                    }
                 }
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
@@ -52,22 +57,27 @@ export default {
                     }
                 })
             } else {
-                if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-                    this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
-                    this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
-                    this.lists[this.descriptionTaskList].tasks.push(this.importantTask)
-                    this.importantTask = {}
-
+                if (+this.descriptionTaskList === 1) {
+                    this.lists[1].tasks.splice(this.taskIndex, 1)
+                    this.$emit('importantEvent')
                 } else {
-                    event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = true
-                    this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
-                    this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
-                    this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
-                    this.importantTask = {}
+                    if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
+                        event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
+                        this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
+                        this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
+                        this.lists[this.descriptionTaskList].tasks.push(this.importantTask)
+                        this.importantTask = {}
+                    } else {
+                        event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
+                        this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = true
+                        this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
+                        this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
+                        this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
+                        this.importantTask = {}
+                    }
                 }
+
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
                     if (singleTask.id == this.task.id) {
