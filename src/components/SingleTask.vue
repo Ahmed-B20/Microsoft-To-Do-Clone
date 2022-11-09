@@ -138,8 +138,8 @@ export default {
     },
     beforeMount() {
         this.lists.forEach((list, index) => {
-            if (list.listChildren === false  && index > 3) {
-                if (index != this.listId) {
+            if (list.listChildren === false) {
+                if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3) {
                     this.ReturnAllListsArray.push(list)
                 }
             }
@@ -148,7 +148,6 @@ export default {
         if (+this.listId === 1 || +this.listId === 2 || +this.listId === 3) {
             this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'DeleteTask']
         } else if (+this.listId === 0) {
-            console.log('h');
             this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DeleteTask']
         } else {
             this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
@@ -273,7 +272,7 @@ export default {
                 this.ReturnAllListsArray = []
                 this.lists.forEach((list, index) => {
                     if (list.listChildren === false) {
-                        if (index != this.listId) {
+                        if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3) {
                             this.ReturnAllListsArray.push(list)
                         }
                     }
@@ -343,8 +342,8 @@ export default {
             }
         },
         closePopUp() {
-            this.showPopUp = !this.showPopUp
-            this.toggleDropDown = !this.toggleDropDown
+            this.showPopUp = false
+            this.toggleDropDown = false
             this.moveTaskToggle = false
             this.target = ''
         },
