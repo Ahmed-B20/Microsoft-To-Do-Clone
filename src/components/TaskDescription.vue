@@ -741,7 +741,6 @@ export default {
 
             this.toggleDueDateDropDown = false
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-            // localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
         },
         closeRepeat() {
             if (!!this.descriptionTaskChildList) {
