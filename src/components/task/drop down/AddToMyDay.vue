@@ -25,8 +25,10 @@ export default {
     beforeMount() {
         if (!!this.childId) {
             this.taskName = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name
+            this.addToMyDayState = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].addToMyDay
         } else {
             this.taskName = this.lists[this.listId].tasks[this.taskElementId].name
+            this.addToMyDayState = this.lists[this.listId].tasks[this.taskElementId].addToMyDay
         }
     },
     computed: {
@@ -37,26 +39,48 @@ export default {
         addToMyDay() {
             if (!!this.childId) {
                 this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].addToMyDay = true
-                this.smartList.myDay.tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
+                this.lists[0].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
+
             } else {
                 this.lists[this.listId].tasks[this.taskElementId].addToMyDay = true
-                this.smartList.myDay.tasks.push(this.lists[this.listId].tasks[this.taskElementId])
+                this.lists[0].tasks.push(this.lists[this.listId].tasks[this.taskElementId])
             }
-            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.$emit('componentEvent')
+
+            this.addToMyDayState = true
         },
         closeToMyDay() {
             if (!!this.childId) {
                 this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].addToMyDay = false
-                this.smartList.myDay.tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
+
+
+                if (+this.listId === 0) {
+                    this.lists[0].tasks.splice(this.taskElementId, 1)
+                } else {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskElementId && +task.listId === +this.listId && +this.childId === +task.childListId) {
+                            this.lists[0].tasks.splice(index, 1)
+                        }
+                    })
+                }
             } else {
                 this.lists[this.listId].tasks[this.taskElementId].addToMyDay = false
-                this.smartList.myDay.tasks.push(this.lists[this.listId].tasks[this.taskElementId])
+
+                if (+this.listId === 0) {
+                    this.lists[0].tasks.splice(this.taskElementId, 1)
+                } else {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskElementId && +task.listId === +this.listId) {
+                            this.lists[0].tasks.splice(index, 1)
+                        }
+                    })
+                }
             }
-            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.$emit('componentEvent')
+
+            this.addToMyDayState = false
         }
     }
 }

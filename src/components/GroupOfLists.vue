@@ -291,7 +291,6 @@ export default {
         },
         openDropDown(target, childrenList) {
             event.preventDefault()
-            console.log(this.toggleDropDown);
             this.$emit('closeParentDropDown', this.toggleDropDown)
 
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'P') {

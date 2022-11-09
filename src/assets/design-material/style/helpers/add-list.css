@@ -111,6 +111,10 @@
     transform-origin: top center;
 }
 
+.lists-container hr.custom-hr {
+    border-bottom: 1px solid #dfdfdf;
+}
+
 .lists-container li:not(.group-of-lists).active,
 .lists-container li:not(.group-of-lists):hover,
 .lists-container li.group-of-lists .group-of-lists-controller:hover,
@@ -204,6 +208,11 @@
 .lists-container li.single-list img {
     width: 15px;
     height: 15px;
+}
+
+.lists-container li.single-list img.different-size {
+    width: 30px;
+    height: 30px;
 }
 
 .render-list-move,

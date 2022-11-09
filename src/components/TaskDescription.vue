@@ -28,7 +28,7 @@
 
                         <ImportantToggle :element='element' :task='task' :taskIndex='taskIndex'
                             :descriptionTaskList='descriptionTaskList'
-                            :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId' />
+                            :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId' @importantEvent="closeDescription" />
                     </h2>
 
                     <Steps :element='element' :taskIndex='taskIndex' :descriptionTaskList='descriptionTaskList'
@@ -41,7 +41,7 @@
 
                 <AddToMyDay :descriptionTaskList='descriptionTaskList'
                     :descriptionTaskChildList='descriptionTaskChildList' :taskIndex='taskIndex'
-                    :descriptionTaskIndex='descriptionTaskIndex' />
+                    :descriptionTaskIndex='descriptionTaskIndex' @importantEvent="closeDescription" />
 
                 <div ref="timeAndDate" class="task-box time-and-date">
                     <div @click.self="toggleRemind(53)" :class="{ delete: remindDueDateStateClass }">
@@ -53,9 +53,9 @@
                             src="@/assets/design-material/icons/close.png" alt="delete repeat">
                     </div>
 
-                    <div @click.self="toggleRepeat(85)">
-                        <img @click="toggleRepeat(85)" src="@/assets/design-material/icons/event.png" alt="repeat" />
-                        <span @click="toggleRepeat(85)">{{ repeatState }}</span>
+                    <div @click.self="toggleRepeat(145)">
+                        <img @click="toggleRepeat(145)" src="@/assets/design-material/icons/event.png" alt="repeat" />
+                        <span @click="toggleRepeat(145)">{{ repeatState }}</span>
 
                         <img class="delete-due-date" @click="closeRepeat" v-if="repeatState != 'Repeat'"
                             src="@/assets/design-material/icons/close.png" alt="delete repeat">
@@ -711,18 +711,37 @@ export default {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = ''
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = ''
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = ''
-                this.smartList.planned.tasks.splice(this.taskIndex, 1)
+
+                if (+this.descriptionTaskList === 2) {
+                    this.lists[2].tasks.splice(this.taskIndex, 1)
+                    this.closeDescription()
+                } else {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +this.childId === +task.descriptionTaskChildList) {
+                            this.lists[2].tasks.splice(index, 1)
+                        }
+                    })
+                }
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = ''
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = ''
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = ''
-                this.smartList.planned.tasks.splice(this.taskIndex, 1)
+
+                if (+this.descriptionTaskList === 2) {
+                    this.lists[2].tasks.splice(this.taskIndex, 1)
+                    this.closeDescription()
+                } else {
+                    this.lists[2].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
+                            this.lists[2].tasks.splice(index, 1)
+                        }
+                    })
+                }
             }
 
             this.toggleDueDateDropDown = false
-
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
+            // localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
         },
         closeRepeat() {
             if (!!this.descriptionTaskChildList) {

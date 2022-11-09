@@ -10,7 +10,7 @@
             <h1>
                 <slot name="title"></slot>
             </h1>
-            <slot name="toggle-description"></slot>
+            <slot v-if="checkSmartList" name="toggle-description"></slot>
             <slot name="sort-by"></slot>
         </div>
 
@@ -45,6 +45,14 @@ export default {
     computed: {
         ...mapWritableState(toggleAside, ['toggleState']),
         ...mapWritableState(allLists, ['lists']),
+
+        checkSmartList() {
+            if (+this.listId === 0 || +this.listId === 1 || +this.listId === 2 || +this.listId === 3) {
+                return false
+            } else {
+                return true
+            }
+        }
     },
     methods: {
         toggleAside() {

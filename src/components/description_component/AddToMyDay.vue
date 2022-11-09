@@ -37,24 +37,42 @@ export default {
         addToMyDay() {
             if (!!this.descriptionTaskChildList) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = true
-                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+                this.lists[0].tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = true
-                this.smartList.myDay.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+                this.lists[0].tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
             }
-            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.addToMyDayState = true
         },
         closeToMyDay() {
             if (!!this.childId) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = false
-                this.smartList.myDay.tasks.splice(this.taskIndex, 1)
+
+                if (+this.descriptionTaskList === 0) {
+                    this.lists[0].tasks.splice(this.taskIndex, 1)
+                    this.$emit('importantEvent')
+                } else {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +this.childId === +task.descriptionTaskChildList) {
+                            this.lists[0].tasks.splice(index, 1)
+                        }
+                    })
+                }
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = false
-                this.smartList.myDay.tasks.splice(this.taskIndex, 1)
+
+                if (+this.descriptionTaskList === 0) {
+                    this.lists[0].tasks.splice(this.taskIndex, 1)
+                    this.$emit('importantEvent')
+                } else {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
+                            this.lists[0].tasks.splice(index, 1)
+                        }
+                    })
+                }
             }
-            localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.addToMyDayState = false
         }

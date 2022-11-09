@@ -2,11 +2,33 @@
     <transition name="render-list">
         <div class="lists-parent">
             <ul ref="listParent" class="lists-container">
+                <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index)"
+                    v-for="(list,index) in lists.slice(0,4)" :key="list.id"
+                    :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
+                    <p @click="showListTasks(list, index)">
+                        <img class="different-size" v-if="index === 0" src="@/assets/design-material/icons/sun.png"
+                            alt="single-list">
+                        <img class="different-size" v-if="index === 1" src="@/assets/design-material/icons/star.png"
+                            alt="single-list">
+                        <img class="different-size" v-if="index === 2" src="@/assets/design-material/icons/plan.png"
+                            alt="single-list">
+                        <img class="different-size" v-if="index === 3" src="@/assets/design-material/icons/task.png"
+                            alt="single-list">
+
+                        <span>{{ list.listName }}</span>
+
+                        <span class="tasks-count" v-if="!list.listChildren && list.tasks.length > 0">
+                            {{ list.tasks.length }}
+                        </span>
+                    </p>
+                </li>
+
+                <hr class="custom-hr">
+
                 <transition-group name="render-list">
                     <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index)"
-                        v-for="(list,index) in lists" :key="list.id"
-                        :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
-
+                        v-for="(list, index) in lists.slice(4)" :key="list.id"
+                        :class='[list.listChildren ? "group-of-lists" : "single-list"]'>
 
                         <template v-if="list.listChildren">
                             <GroupOfLists :childrenListsArray='list.listsArray' :listName="list.listName"
@@ -326,7 +348,8 @@ export default {
             this.toggleDropDown = false
 
             this.listName = list.listName
-            this.listIndex = index
+            // this.listIndex = index
+            this.listIndex = list.id
             this.$router.push({ name: 'list', params: { listId: this.listIndex } })
         },
         closeRename() {

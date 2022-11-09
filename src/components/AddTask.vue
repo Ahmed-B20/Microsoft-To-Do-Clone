@@ -51,7 +51,6 @@ export default {
                     }
                 }
 
-
                 this.chosenListTasks = this.chosenList.tasks
 
                 this.taskId = this.chosenList.tasks.length
@@ -61,7 +60,13 @@ export default {
                 this.taskObj.listId = this.chosenListId()
                 this.taskObj.childListId = this.chosenChildIdListId()
                 this.taskObj.complete = false
-                this.taskObj.important = false
+
+                if (+this.chosenListId() === 1) {
+                    this.taskObj.important = true
+                } else {
+                    this.taskObj.important = false
+                }
+
 
                 // for now
                 let today = new Date();
@@ -73,9 +78,7 @@ export default {
 
                 this.taskObj.sortTime = new Date()
                 this.taskObj.addTime = today
-                this.taskObj.dueDate = ''
-                this.taskObj.dueDateName = ''
-                this.taskObj.realDueDateName = ''
+
 
                 this.taskObj.repeatDueDate = ''
                 this.taskObj.repeatDueDateName = ''
@@ -87,7 +90,11 @@ export default {
                 this.taskObj.remindMeDate = ''
                 this.taskObj.remindMeName = ''
 
-                this.taskObj.addToMyDay = false
+                if (+this.chosenListId() === 0) {
+                    this.taskObj.addToMyDay = true
+                } else {
+                    this.taskObj.addToMyDay = false
+                }
 
                 this.taskObj.note = ''
                 this.taskObj.noteDate = null
@@ -96,21 +103,31 @@ export default {
 
                 this.taskObj.snooze = false
 
-                switch (this.chosenSmartList) {
-                    case 'important':
-                        this.taskObj.important = true
-                        break;
-
-                    case 'myDay':
-                        this.taskObj.addToMyDay = true
-                        break;
-
-                    case 'planned':
-                        this.taskObj.dueDate = new Date()
-                        this.taskObj.dueDateName = 'ToDay'
-                        this.taskObj.realDueDateName = 'ToDay'
-                        break;
+                if (+this.chosenListId() === 2) {
+                    this.taskObj.dueDate = new Date()
+                    this.taskObj.dueDateName = 'ToDay'
+                    this.taskObj.realDueDateName = 'ToDay'
+                } else {
+                    this.taskObj.dueDate = ''
+                    this.taskObj.dueDateName = ''
+                    this.taskObj.realDueDateName = ''
                 }
+
+                // switch (this.chosenSmartList) {
+                //     case 'important':
+                //         this.taskObj.important = true
+                //         break;
+
+                //     case 'myDay':
+                //         this.taskObj.addToMyDay = true
+                //         break;
+
+                //     case 'planned':
+                //         this.taskObj.dueDate = new Date()
+                //         this.taskObj.dueDateName = 'ToDay'
+                //         this.taskObj.realDueDateName = 'ToDay'
+                //         break;
+                // }
 
 
                 this.taskObj.steps = []
