@@ -138,12 +138,21 @@ export default {
     },
     beforeMount() {
         this.lists.forEach((list, index) => {
-            if (list.listChildren === false) {
+            if (list.listChildren === false  && index > 3) {
                 if (index != this.listId) {
                     this.ReturnAllListsArray.push(list)
                 }
             }
         })
+
+        if (+this.listId === 1 || +this.listId === 2 || +this.listId === 3) {
+            this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'DeleteTask']
+        } else if (+this.listId === 0) {
+            console.log('h');
+            this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DeleteTask']
+        } else {
+            this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
+        }
     },
 
     data() {
@@ -209,35 +218,38 @@ export default {
             }
         },
         dueDateState() {
-            if (!!this.childId) {
-                if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].realDueDateName === 'Tomorrow') {
-                    this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
-                    return true
-                } else if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].realDueDateName === 'ToDay') {
-                    this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
-                    return true
-                } else if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].realDueDateName === 'NextWeek') {
-                    this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'PickADate', 'MoveTaskTo', 'DeleteTask']
-                    return true
+            if (+this.listId !== 0 && +this.listId !== 1 && +this.listId !== 2 && +this.listId !== 3) {
+                if (!!this.childId) {
+                    if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].realDueDateName === 'Tomorrow') {
+                        this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
+                        return true
+                    } else if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].realDueDateName === 'ToDay') {
+                        this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
+                        return true
+                    } else if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].realDueDateName === 'NextWeek') {
+                        this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'PickADate', 'MoveTaskTo', 'DeleteTask']
+                        return true
+                    } else {
+                        this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
+                        return true
+                    }
                 } else {
-                    this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
-                    return true
-                }
-            } else {
-                if (this.lists[this.listId].tasks[this.taskElementId].realDueDateName === 'Tomorrow') {
-                    this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
-                    return true
-                } else if (this.lists[this.listId].tasks[this.taskElementId].realDueDateName === 'ToDay') {
-                    this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
-                    return true
-                } else if (this.lists[this.listId].tasks[this.taskElementId].realDueDateName === 'NextWeek') {
-                    this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'PickADate', 'MoveTaskTo', 'DeleteTask']
-                    return true
-                } else {
-                    this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
-                    return true
+                    if (this.lists[this.listId].tasks[this.taskElementId].realDueDateName === 'Tomorrow') {
+                        this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
+                        return true
+                    } else if (this.lists[this.listId].tasks[this.taskElementId].realDueDateName === 'ToDay') {
+                        this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
+                        return true
+                    } else if (this.lists[this.listId].tasks[this.taskElementId].realDueDateName === 'NextWeek') {
+                        this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'PickADate', 'MoveTaskTo', 'DeleteTask']
+                        return true
+                    } else {
+                        this.dropDownSlots = ['RenameTask', 'MarkAsImportant', 'MarkAsComplete', 'AddToMyDay', 'DueToday', 'DueTomorrow', 'DueNextWeek', 'PickADate', 'MoveTaskTo', 'DeleteTask']
+                        return true
+                    }
                 }
             }
+
         }
     },
     watch: {
