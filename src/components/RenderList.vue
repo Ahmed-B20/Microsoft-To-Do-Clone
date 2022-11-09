@@ -26,7 +26,7 @@
                 <hr class="custom-hr">
 
                 <transition-group name="render-list">
-                    <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index)"
+                    <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index + 4)"
                         v-for="(list, index) in lists.slice(4)" :key="list.id"
                         :class='[list.listChildren ? "group-of-lists" : "single-list"]'>
 
@@ -36,7 +36,7 @@
                                 :childDropDown="childDropDown" />
                         </template>
 
-                        <p @click="showListTasks(list, index)" @contextmenu="openDropDown(list, index)" v-else>
+                        <p @click="showListTasks(list, index)" @contextmenu="openDropDown(list, index + 4)" v-else>
                             <img src="@/assets/design-material/icons/menu.png" alt="single-list">
                             <span>{{ list.listName }}</span>
 
