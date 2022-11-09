@@ -285,7 +285,7 @@ export default {
             }
             let x = this.$refs.taskElement[this.taskElementId].getBoundingClientRect()
             if (this.parentElementDomRect.top > 350) {
-                this.top = this.parentElementDomRect.top - 357
+                this.top = this.parentElementDomRect.top - 300
             } else {
                 this.top = this.parentElementDomRect.top + 60
             }
