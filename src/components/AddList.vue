@@ -1,5 +1,5 @@
 <template>
-    <div class="add-item-container" :class="{error: toggleError}">
+    <div class="add-item-container" :class="{ error: toggleError }">
         <div class="add-item">
             <div class="single-list">
                 <span @click="addList">
@@ -22,7 +22,7 @@
         </template>
 
         <template #content>
-            you must at list add one child list to {{groupOfListsName}}
+            you must at list add one child list to {{ groupOfListsName }}
         </template>
 
         <template #button>
@@ -97,7 +97,8 @@ export default {
                     this.listObj.listsArray = this.childListsArray
                     this.childId++
 
-                    this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
+                    // this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
+                    this.listArray = this.lists;
                     this.listArray.at(-1).listsArray = this.listObj.listsArray
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
                     this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
@@ -107,7 +108,8 @@ export default {
                     this.listObj.listChildren = false;
                     this.listObj.tasks = [];
 
-                    this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
+                    // this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
+                    this.listArray = this.lists;
                     this.listArray.push(this.listObj);
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
                     this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))

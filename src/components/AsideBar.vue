@@ -4,7 +4,7 @@
       <img src="@/assets/design-material/icons/menu.png" alt="close-sidebar">
     </button>
     <UserInfo />
-    <AsideLinks />
+    <!-- <AsideLinks /> -->
 
     <RenderList />
 
