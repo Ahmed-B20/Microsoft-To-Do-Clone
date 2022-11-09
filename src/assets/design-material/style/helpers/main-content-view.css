@@ -81,7 +81,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 10px;
-    z-index: 10;
+    z-index: 5;
 }
 
 .view-content-container .title .toggle-list-nav {

@@ -18,7 +18,7 @@
     flex-direction: column;
     min-width: 360px;
     height: 100%;
-    z-index: 11;
+    z-index: 12;
 }
 
 @media (max-width: 1024px) {
@@ -28,6 +28,7 @@
         right: 0;
         bottom: 0;
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        z-index: 12;
     }
 }
 
@@ -401,16 +402,19 @@
 .to-left-move,
 .to-left-enter-active {
     transition: all 0.4s ease-in-out;
+    z-index: 10;
 }
 
 .to-left-leave-active {
     transition: all 0.4s ease-in-out;
+    z-index: 10;
 }
 
 .to-left-enter-from,
 .to-left-leave-to {
     opacity: 0;
     transform: translateX(360px);
+    z-index: 10;
 }
 
 .dashboard-content-container .task-description .task-time-and-delete {
