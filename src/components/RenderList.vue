@@ -198,7 +198,6 @@ export default {
             this.toggleDropDown = !this.toggleDropDown
 
             if (this.elementDomRect.top - this.parentElementDomRect.top < 200) {
-                console.log(1);
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
             } else {
                 this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
@@ -258,7 +257,6 @@ export default {
             })
 
             if (this.lists.length > 1 && !this.lists.at(0).listChildren) {
-                console.log(this.$route.params);
                 if (+this.listId > +this.$route.params.listId && +this.$route.params.listId !== 0) {
                     if (!!this.$route.params.childId) {
                         this.$router.push({ name: 'child-list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })

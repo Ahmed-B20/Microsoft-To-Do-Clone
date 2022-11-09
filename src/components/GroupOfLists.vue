@@ -511,7 +511,6 @@ export default {
             this.newName = ''
         },
         deleteList() {
-            console.log(this.lists.length);
             if (+this.lists.length === 1 && this.lists.at(-1).listChildren) {
                 this.$router.push({ name: 'my-day' })
             }

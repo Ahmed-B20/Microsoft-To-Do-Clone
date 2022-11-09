@@ -26,10 +26,14 @@ export default {
     },
     methods: {
         completeTask() {
-            if (!!this.childId) {
-                this.thisTask = this.index
+            this.thisTask = this.index
+            if (event.target.parentElement.tagName === 'SPAN') {
+                this.taskElement = event.target.parentElement.parentElement
+            } else {
                 this.taskElement = event.target.parentElement
+            }
 
+            if (!!this.childId) {
                 if (this.lists[this.listId].listsArray[this.childId].tasks[this.index].complete) {
                     this.lists[this.listId].listsArray[this.childId].tasks[this.index].complete = false
                 } else {
@@ -51,7 +55,6 @@ export default {
                     })
                 }
             } else {
-                this.taskElement = event.target.parentElement
                 if (this.lists[this.listId].tasks[this.index].complete) {
                     this.lists[this.listId].tasks[this.index].complete = false
                 } else {
@@ -62,7 +65,6 @@ export default {
                         this.lists[this.listId].tasks[this.index].complete = true
                     }
                 }
-                this.thisTask = this.index
 
                 this.lists[this.listId].tasks[this.thisTask].steps.forEach((step) => {
                     if (this.lists[this.listId].tasks[this.thisTask].complete) {
@@ -76,8 +78,6 @@ export default {
             this.repeatedTaskObject = {}
             this.completeTaskStatus = !this.completeTaskStatus
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-
-            this.$emit('componentEvent')
 
             if (this.taskElement.classList.contains('add-animation-x')) {
                 this.taskElement.classList.remove('add-animation-x')

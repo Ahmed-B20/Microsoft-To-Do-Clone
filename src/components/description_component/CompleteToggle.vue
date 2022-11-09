@@ -13,7 +13,6 @@ export default {
     props: ['taskIndex', 'task', 'descriptionTaskList', 'descriptionTaskChildList', 'element'],
     data() {
         return {
-            taskElement: '',
             importantTask: {},
             repeatedTaskObject: {},
             name: '',
@@ -27,8 +26,6 @@ export default {
     methods: {
         completeAsideTask() {
             if (!!this.descriptionTaskChildList) {
-                this.taskElement = event.target.parentElement
-
                 if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete) {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].complete = false
                 } else {
@@ -50,8 +47,6 @@ export default {
                     })
                 }
             } else {
-                this.taskElement = event.target.parentElement
-
                 if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete) {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].complete = false
                 } else {
@@ -75,15 +70,15 @@ export default {
             this.completeTaskStatus = !this.completeTaskStatus
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
-            if (this.taskElement.classList.contains('add-animation-x')) {
-                this.taskElement.classList.remove('add-animation-x')
+            if (this.element.classList.contains('add-animation-x')) {
+                this.element.classList.remove('add-animation-x')
                 setTimeout(() => {
-                    this.taskElement.classList.add('add-animation-x')
+                    this.element.classList.add('add-animation-x')
                 }, 0)
             } else {
-                this.taskElement.classList.remove('add-animation-x')
+                this.element.classList.remove('add-animation-x')
                 setTimeout(() => {
-                    this.taskElement.classList.add('add-animation-x')
+                    this.element.classList.add('add-animation-x')
                 }, 0)
             }
         },
