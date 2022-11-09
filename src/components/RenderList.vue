@@ -348,7 +348,8 @@ export default {
             this.toggleDropDown = false
 
             this.listName = list.listName
-            this.listIndex = index
+            // this.listIndex = index
+            this.listIndex = list.id
             this.$router.push({ name: 'list', params: { listId: this.listIndex } })
         },
         closeRename() {

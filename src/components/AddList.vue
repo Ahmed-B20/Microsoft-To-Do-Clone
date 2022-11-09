@@ -97,7 +97,6 @@ export default {
                     this.listObj.listsArray = this.childListsArray
                     this.childId++
 
-                    // this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
                     this.listArray = this.lists;
                     this.listArray.at(-1).listsArray = this.listObj.listsArray
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
@@ -108,7 +107,6 @@ export default {
                     this.listObj.listChildren = false;
                     this.listObj.tasks = [];
 
-                    // this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
                     this.listArray = this.lists;
                     this.listArray.push(this.listObj);
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
