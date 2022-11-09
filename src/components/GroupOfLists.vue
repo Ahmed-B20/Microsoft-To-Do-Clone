@@ -230,7 +230,7 @@ export default {
             result: '',
             characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
             charactersLength: 0,
-            listElement: ''
+            listElement: '',
         }
     },
     computed: {
@@ -291,8 +291,8 @@ export default {
         },
         openDropDown(target, childrenList) {
             event.preventDefault()
-
-            this.$emit('closeParentDropDown')
+            console.log(this.toggleDropDown);
+            this.$emit('closeParentDropDown', this.toggleDropDown)
 
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'P') {
                 if (target === 'parentList') {

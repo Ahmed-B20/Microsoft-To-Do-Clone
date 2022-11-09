@@ -150,7 +150,8 @@ export default {
             charactersLength: 0,
             listElement: '',
             top: 0,
-            childDropDown: 'true'
+            childDropDown: 'true',
+            childDropDownValue: false
         }
     },
     beforeMount() {
@@ -182,7 +183,6 @@ export default {
     },
     methods: {
         openDropDown(list, index) {
-            this.childDropDown = false
             this.parentElementDomRect = this.$refs.listParent.getBoundingClientRect()
             this.listId = index
             this.listName = list.listName
@@ -212,7 +212,14 @@ export default {
 
             if (this.toggleDropDown) {
                 this.oldListId = index
+                this.childDropDown = false
             } else {
+                if (!this.childDropDownValue) {
+                    this.childDropDown = false
+                } else {
+                    this.childDropDown = true
+                }
+
                 if (+this.oldListId !== index) {
                     this.toggleDropDown = false
                     this.oldListId = index
@@ -225,7 +232,8 @@ export default {
             }
 
         },
-        closeDropDown() {
+        closeDropDown(value) {
+            this.childDropDownValue = value
             this.toggleDropDown = false
             this.moveGroupListToggle = false
             this.childDropDown = true
