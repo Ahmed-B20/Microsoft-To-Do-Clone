@@ -624,6 +624,9 @@ export default {
             }
 
             this.alertPopup = false
+
+            this.remindPopup = false
+            this.remindToggle = false
         },
         calcDueDate(childList) {
             if (childList) {
@@ -683,9 +686,7 @@ export default {
             Object.keys(this.oldObj).forEach((key) => {
                 this.repeatedTaskObject[`${key}`] = this.oldObj[`${key}`]
             })
-        }
-
-        ,
+        },
         toggleAddDueDate(height) {
             this.toggleRepeatDropDown = false
             this.toggleRemindDropDown = false
@@ -706,6 +707,8 @@ export default {
             this.toggleRemindDropDown = !this.toggleRemindDropDown
             this.top = this.$refs.timeAndDate.getBoundingClientRect().top + height
             this.right = 70
+
+            this.pickCustomRemindDate = false
         },
         deleteDueDate() {
             if (!!this.descriptionTaskChildList) {
@@ -903,6 +906,7 @@ export default {
             }
 
             this.remindPopup = !this.remindPopup
+            this.remindToggle = false
         },
         closeRemind() {
             if (!!this.descriptionTaskChildList) {
