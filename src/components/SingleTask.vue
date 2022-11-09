@@ -365,15 +365,27 @@ export default {
         deleteTask() {
             if (!!this.childId) {
                 this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
-                this.lists[this.listId].listsArray[this.childId].tasks.forEach((list, index) => {
-                    if (index >= this.taskElementId) {
+                // this.lists[this.listId].listsArray[this.childId].tasks.forEach((list, index) => {
+                //     if (index >= this.taskElementId) {
+                //         list.id = list.id - 1
+                //     }
+                // })
+
+                this.lists[this.listId].listsArray[this.childId].tasks.forEach((list) => {
+                    if (list.id >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
             } else {
                 this.lists[this.listId].tasks.splice(this.taskElementId, 1)
-                this.lists[this.listId].tasks.forEach((list, index) => {
-                    if (index >= this.taskElementId) {
+                // this.lists[this.listId].tasks.forEach((list, index) => {
+                //     if (index >= this.taskElementId) {
+                //         list.id = list.id - 1
+                //     }
+                // })
+
+                this.lists[this.listId].tasks.forEach((list) => {
+                    if (list.id >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
@@ -395,6 +407,12 @@ export default {
                     this.lists[this.$refs.selectedLists.value].listsArray[this.childId].tasks[0].id = 0
                 }
                 this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
+
+                this.lists[this.listId].listsArray[this.childId].tasks.forEach((list) => {
+                    if (list.id >= this.taskElementId) {
+                        list.id = list.id - 1
+                    }
+                })
             } else {
                 this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].tasks[this.taskElementId])
                 if (+this.lists[this.$refs.selectedLists.value].tasks.length > 0) {
@@ -404,6 +422,12 @@ export default {
                     this.lists[this.$refs.selectedLists.value].tasks[0].id = 0
                 }
                 this.lists[this.listId].tasks.splice(this.taskElementId, 1)
+
+                this.lists[this.listId].tasks.forEach((list) => {
+                    if (list.id >= this.taskElementId) {
+                        list.id = list.id - 1
+                    }
+                })
             }
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.toggleDropDown = false
