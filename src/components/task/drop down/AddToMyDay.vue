@@ -44,7 +44,6 @@ export default {
             } else {
                 this.lists[this.listId].tasks[this.taskElementId].addToMyDay = true
                 this.lists[0].tasks.push(this.lists[this.listId].tasks[this.taskElementId])
-
             }
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.$emit('componentEvent')
