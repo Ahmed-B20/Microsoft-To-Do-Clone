@@ -3,7 +3,7 @@
         <div class="task-description">
 
             <div class="close-container">
-                <img v-if="remindToggle || new Date() > new Date(task.remindMeDate) && !task.complete"
+                <img v-if="remindToggle || new Date() > new Date(task.remindMeDate) && !task.complete && !!task.remindMe"
                     @click="toggleRemindPopup" src="@/assets/design-material/icons/note.gif" alt="task reminder"
                     class="alert-message">
 
@@ -28,7 +28,8 @@
 
                         <ImportantToggle :element='element' :task='task' :taskIndex='taskIndex'
                             :descriptionTaskList='descriptionTaskList'
-                            :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId' @importantEvent="closeDescription" />
+                            :descriptionTaskChildList='descriptionTaskChildList' @componentEvent='changeId'
+                            @importantEvent="closeDescription" />
                     </h2>
 
                     <Steps :element='element' :taskIndex='taskIndex' :descriptionTaskList='descriptionTaskList'
@@ -915,6 +916,8 @@ export default {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].remindMeName = ''
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             }
+
+            this.remindToggle = false
         },
         toggleAlertPopup() {
             this.alertPopup = !this.alertPopup
