@@ -10,7 +10,8 @@
 
                         <template v-if="list.listChildren">
                             <GroupOfLists :childrenListsArray='list.listsArray' :listName="list.listName"
-                                :parentId="list.id" />
+                                :parentId="list.id" @closeParentDropDown="closeDropDown"
+                                :childDropDown="childDropDown" />
                         </template>
 
                         <p @click="showListTasks(list, index)" @contextmenu="openDropDown(list, index)" v-else>
@@ -148,7 +149,8 @@ export default {
             characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
             charactersLength: 0,
             listElement: '',
-            top: 0
+            top: 0,
+            childDropDown: 'true'
         }
     },
     beforeMount() {
@@ -180,6 +182,7 @@ export default {
     },
     methods: {
         openDropDown(list, index) {
+            this.childDropDown = false
             this.parentElementDomRect = this.$refs.listParent.getBoundingClientRect()
             this.listId = index
             this.listName = list.listName
@@ -225,6 +228,7 @@ export default {
         closeDropDown() {
             this.toggleDropDown = false
             this.moveGroupListToggle = false
+            this.childDropDown = true
         },
         togglePopUp(target) {
             if (target === 'move') {
@@ -239,8 +243,8 @@ export default {
         },
         closePopUp() {
             this.showRename = false
-            this.showPopUp = !this.showPopUp
-            this.toggleDropDown = !this.toggleDropDown
+            this.showPopUp = false
+            this.toggleDropDown = false
             this.moveGroupListToggle = false
             this.target = ''
         },

@@ -12,7 +12,7 @@
 
     <transition name="to-bottom">
         <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left"
-            v-if="toggleDropDown && theColor === 'parentList'">
+            v-if="toggleDropDown && theColor === 'parentList' && childDropDown">
             <template #RenameGroup>
                 <div class="renameList" @click.self="renameGroup">
                     <template v-if="showRename">
@@ -65,7 +65,7 @@
 
     <transition name="to-bottom">
         <DropDown :dropDownSlots="dropDownSlotsChildList" :bottom="bottom" :top="top" :left="left"
-            v-if="toggleDropDown && theColor === 'childList'">
+            v-if="toggleDropDown && theColor === 'childList' && childDropDown">
             <template #RenameList>
                 <div class="renameList" @click.self="renameChildList">
                     <template v-if="showChildRename">
@@ -179,7 +179,8 @@ import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 export default {
     name: 'group-of-list',
-    props: ['childrenListsArray', 'listName', 'parentId'],
+    props: ['childrenListsArray', 'listName', 'parentId', 'childDropDown'],
+    emits: ['closeParentDropDown'],
     components: {
         PopUp,
         DropDown
@@ -291,6 +292,8 @@ export default {
         openDropDown(target, childrenList) {
             event.preventDefault()
 
+            this.$emit('closeParentDropDown')
+
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'P') {
                 if (target === 'parentList') {
                     this.groupOfListId = childrenList.id
@@ -344,15 +347,15 @@ export default {
                 this.theColor = target
                 this.parentElementDomRect = this.$refs.groupOfLists.parentElement.parentElement.getBoundingClientRect()
 
-                this.toggleDropDown = !this.toggleDropDown                
+                this.toggleDropDown = !this.toggleDropDown
                 if (this.elementDomRect.top - this.parentElementDomRect.top < 200) {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
                 } else {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
                 }
-                
+
                 this.listElement.scrollIntoView()
-                
+
                 this.left = 38.5
 
                 if (this.toggleDropDown) {
@@ -375,13 +378,13 @@ export default {
                 this.theColor = target
                 this.toggleDropDown = !this.toggleDropDown
                 this.left = 38.5
-                
+
                 if (this.elementDomRect.top - this.parentElementDomRect.top < 200) {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
                 } else {
                     this.top = this.elementDomRect.top - this.parentElementDomRect.top + 42
                 }
-                
+
                 this.listElement.scrollIntoView()
 
                 if (this.toggleDropDown) {
