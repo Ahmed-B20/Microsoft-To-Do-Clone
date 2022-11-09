@@ -247,8 +247,9 @@ export default {
                         return true
                     }
                 }
+            } else {
+                return true
             }
-
         }
     },
     watch: {
