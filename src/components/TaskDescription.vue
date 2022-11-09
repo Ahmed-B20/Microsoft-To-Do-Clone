@@ -53,9 +53,9 @@
                             src="@/assets/design-material/icons/close.png" alt="delete repeat">
                     </div>
 
-                    <div @click.self="toggleRepeat(85)">
-                        <img @click="toggleRepeat(85)" src="@/assets/design-material/icons/event.png" alt="repeat" />
-                        <span @click="toggleRepeat(85)">{{ repeatState }}</span>
+                    <div @click.self="toggleRepeat(145)">
+                        <img @click="toggleRepeat(145)" src="@/assets/design-material/icons/event.png" alt="repeat" />
+                        <span @click="toggleRepeat(145)">{{ repeatState }}</span>
 
                         <img class="delete-due-date" @click="closeRepeat" v-if="repeatState != 'Repeat'"
                             src="@/assets/design-material/icons/close.png" alt="delete repeat">
