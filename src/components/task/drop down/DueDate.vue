@@ -38,7 +38,6 @@ export default {
     },
     methods: {
         addDueDate(date) {
-            console.log('fff');
             if (!!this.childId) {
                 // this.lists[2].tasks.forEach((task, index) => {
                 //     if (+task.id === +this.taskElementId && +task.listId === +this.listId && +this.childId === +task.childListId) {
