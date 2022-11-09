@@ -17,7 +17,6 @@ export default {
     props: ['listId', 'childId', 'taskElementId', 'taskElements'],
     data() {
         return {
-            taskElement: '',
             repeatedTaskObject: {},
             name: '',
             oldObj: {}
@@ -38,9 +37,6 @@ export default {
     methods: {
         completeTask() {
             if (!!this.childId) {
-                this.thisTask = this.taskElementId
-                this.taskElement = event.target.parentElement
-
                 if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete) {
                     this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete = false
                 } else {
@@ -52,9 +48,9 @@ export default {
                     }
                 }
 
-                if (this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].steps.length > 0) {
-                    this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].steps.forEach((step) => {
-                        if (this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].complete) {
+                if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].steps.length > 0) {
+                    this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].steps.forEach((step) => {
+                        if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete) {
                             step.complete = true
                         } else {
                             step.complete = false
@@ -62,7 +58,6 @@ export default {
                     })
                 }
             } else {
-                this.taskElement = event.target.parentElement
                 if (this.lists[this.listId].tasks[this.taskElementId].complete) {
                     this.lists[this.listId].tasks[this.taskElementId].complete = false
                 } else {
@@ -73,10 +68,8 @@ export default {
                         this.lists[this.listId].tasks[this.taskElementId].complete = true
                     }
                 }
-                this.thisTask = this.taskElementId
-
-                this.lists[this.listId].tasks[this.thisTask].steps.forEach((step) => {
-                    if (this.lists[this.listId].tasks[this.thisTask].complete) {
+                this.lists[this.listId].tasks[this.taskElementId].steps.forEach((step) => {
+                    if (this.lists[this.listId].tasks[this.taskElementId].complete) {
                         step.complete = true
                     } else {
                         step.complete = false
@@ -90,15 +83,15 @@ export default {
 
             this.$emit('componentEvent')
 
-            if (this.taskElement.classList.contains('add-animation-x')) {
-                this.taskElement.classList.remove('add-animation-x')
+            if (this.taskElements[this.taskElementId].classList.contains('add-animation-x')) {
+                this.taskElements[this.taskElementId].classList.remove('add-animation-x')
                 setTimeout(() => {
-                    this.taskElement.classList.add('add-animation-x')
+                    this.taskElements[this.taskElementId].classList.add('add-animation-x')
                 }, 0)
             } else {
-                this.taskElement.classList.remove('add-animation-x')
+                this.taskElements[this.taskElementId].classList.remove('add-animation-x')
                 setTimeout(() => {
-                    this.taskElement.classList.add('add-animation-x')
+                    this.taskElements[this.taskElementId].classList.add('add-animation-x')
                 }, 0)
             }
         },
