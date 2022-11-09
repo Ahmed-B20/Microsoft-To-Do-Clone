@@ -48,18 +48,28 @@ export default {
         closeToMyDay() {
             if (!!this.childId) {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].addToMyDay = false
-                this.lists[0].tasks.forEach((task, index) => {
-                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +this.childId === +task.descriptionTaskChildList) {
-                        this.lists[0].tasks.splice(index, 1)
-                    }
-                })
+
+                if (+this.listId === 0) {
+                    this.lists[0].tasks.splice(taskIndex, 1)
+                } else {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +this.childId === +task.descriptionTaskChildList) {
+                            this.lists[0].tasks.splice(index, 1)
+                        }
+                    })
+                }
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].addToMyDay = false
-                this.lists[0].tasks.forEach((task, index) => {
-                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
-                        this.lists[0].tasks.splice(index, 1)
-                    }
-                })
+
+                if (+this.listId === 0) {
+                    this.lists[0].tasks.splice(taskIndex, 1)
+                } else {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
+                            this.lists[0].tasks.splice(index, 1)
+                        }
+                    })
+                }
             }
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.addToMyDayState = false

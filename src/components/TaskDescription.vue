@@ -712,25 +712,32 @@ export default {
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = ''
                 this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = ''
 
-                this.lists[0].tasks.forEach((task, index) => {
-                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +this.childId === +task.descriptionTaskChildList) {
-                        this.lists[2].tasks.splice(index, 1)
-                    }
-                })
+                if (+this.descriptionTaskList === 2) {
+                    this.lists[2].tasks.splice(this.taskIndex, 1)
+                } else {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +this.childId === +task.descriptionTaskChildList) {
+                            this.lists[2].tasks.splice(index, 1)
+                        }
+                    })
+                }
             } else {
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = ''
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = ''
                 this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = ''
 
-                this.lists[2].tasks.forEach((task, index) => {
-                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
-                        this.lists[2].tasks.splice(index, 1)
-                    }
-                })
+                if (+this.descriptionTaskList === 2) {
+                    this.lists[2].tasks.splice(this.taskIndex, 1)
+                } else {
+                    this.lists[2].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
+                            this.lists[2].tasks.splice(index, 1)
+                        }
+                    })
+                }
             }
 
             this.toggleDueDateDropDown = false
-
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             // localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
         },
