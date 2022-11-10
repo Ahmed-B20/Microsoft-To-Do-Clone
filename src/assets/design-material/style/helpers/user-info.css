@@ -38,7 +38,7 @@
 .user-info-parent .search {
     width: 100%;
     position: relative;
-    border-radius: 5px;
+    border-radius: 3px;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     overflow: hidden;
     transition: all 0.3s linear;
@@ -48,7 +48,7 @@
     font-size: 14px;
     padding: 5px;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 .user-info-parent .search::before {

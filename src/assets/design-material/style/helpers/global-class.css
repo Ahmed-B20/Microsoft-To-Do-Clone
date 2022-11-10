@@ -58,7 +58,7 @@
 
 .dashboard-content-container .task-description .task-box {
     border: 1px solid #dfdfdf;
-    border-radius: 5px;
+    border-radius: 3px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     padding: 10px;
     cursor: pointer;
@@ -390,7 +390,7 @@
     background-color: #5f73c1;
     color: white;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 3px;
     padding: 3px 5px;
 }
 

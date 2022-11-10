@@ -123,7 +123,7 @@
 
 .view-content-container .title .sort-by-container .button-sort {
     padding: 5px 10px;
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: white;
     color: black;
     font-size: 15px;
@@ -179,7 +179,7 @@
     background-color: #dfdfdf;
     color: black;
     padding: 8px 15px;
-    border-radius: 5px;
+    border-radius: 3px;
     width: fit-content;
     margin: 5px 0;
 }
