@@ -46,9 +46,9 @@ export default {
                     }
                 }
 
-                if (this.lists[this.task.listId].listsArray[this.childId].tasks[this.thisTask].steps.length > 0) {
-                    this.lists[this.task.listId].listsArray[this.childId].tasks[this.thisTask].steps.forEach((step) => {
-                        if (this.lists[this.task.listId].listsArray[this.childId].tasks[this.thisTask].complete) {
+                if (this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].steps.length > 0) {
+                    this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].steps.forEach((step) => {
+                        if (this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].complete) {
                             step.complete = true
                         } else {
                             step.complete = false
@@ -67,8 +67,8 @@ export default {
                     }
                 }
 
-                this.lists[this.task.listId].tasks[this.thisTask].steps.forEach((step) => {
-                    if (this.lists[this.task.listId].tasks[this.thisTask].complete) {
+                this.lists[this.task.listId].tasks[this.task.id].steps.forEach((step) => {
+                    if (this.lists[this.task.listId].tasks[this.task.id].complete) {
                         step.complete = true
                     } else {
                         step.complete = false

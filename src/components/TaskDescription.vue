@@ -553,14 +553,25 @@ export default {
 
                 if (this.task.addToMyDay || !!this.task.dueDateName) {
                     if (this.task.addToMyDay && !!this.task.dueDateName) {
-                        this.lists[0].tasks.splice(this.descriptionTaskIndex, 1)
-                        this.lists[2].tasks.splice(this.descriptionTaskIndex, 1)
-
+                        this.lists[0].tasks.forEach((task, index) => {
+                            if (+task.id === +this.task.id && +task.listId === +this.task.listId || +task.listId === +this.task.childId) {
+                                this.lists[2].tasks.splice(index, 1)
+                                this.lists[0].tasks.splice(index, 1)
+                            }
+                        })
                     } else {
                         if (this.task.addToMyDay) {
-                            this.lists[0].tasks.splice(this.descriptionTaskIndex, 1)
+                            this.lists[0].tasks.forEach((task, index) => {
+                                if (+task.id === +this.task.id && +task.listId === +this.task.listId || +task.listId === +this.task.childId) {
+                                    this.lists[0].tasks.splice(index, 1)
+                                }
+                            })
                         } else {
-                            this.lists[2].tasks.splice(this.descriptionTaskIndex, 1)
+                            this.lists[0].tasks.forEach((task, index) => {
+                                if (+task.id === +this.task.id && +task.listId === +this.task.listId || +task.listId === +this.task.childId) {
+                                    this.lists[2].tasks.splice(index, 1)
+                                }
+                            })
                         }
                     }
                 }
