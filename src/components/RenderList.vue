@@ -2,8 +2,6 @@
     <transition name="render-list">
         <div class="lists-parent">
             <ul ref="listParent" class="lists-container">
-                <hr class="custom-hr">
-
                 <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index)"
                     v-for="(list,index) in lists.slice(0,5)" :key="list.id"
                     :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
