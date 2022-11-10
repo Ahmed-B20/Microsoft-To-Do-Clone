@@ -17,7 +17,7 @@
         <ul class="tasks" ref="tasksList" :class="{ 'fix-width': checkHeight }">
             <slot name="allTaskSlot"></slot>
         </ul>
-        <AddTask :chosenSmartList="chosenSmartList" />
+        <AddTask :listId="listId" :chosenSmartList="chosenSmartList" />
     </div>
 </template>
 
@@ -47,7 +47,7 @@ export default {
         ...mapWritableState(allLists, ['lists']),
 
         checkSmartList() {
-            if (+this.listId === 0 || +this.listId === 1 || +this.listId === 2 || +this.listId === 3) {
+            if (+this.listId === 0 || +this.listId === 1 || +this.listId === 2 || +this.listId === 3 || +this.listId === 4) {
                 return false
             } else {
                 return true

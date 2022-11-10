@@ -1,12 +1,23 @@
 <template>
     <div class="add-task">
         <div class="add-task-container" :class="{ error: errorToggle }">
-            <span :class="{ active: activeToggle }" ref="addTask" @click="addTaskToList">
-                <img src="@/assets/design-material/icons/plus.png" alt="add-task" />
-            </span>
+            <template v-if="+listId !== 4">
+                <span :class="{ active: activeToggle }" ref="addTask" @click="addTaskToList">
+                    <img src="@/assets/design-material/icons/plus.png" alt="add-task" />
+                </span>
 
-            <input @keyup.enter="addTaskToList" required placeholder="add task" v-model="inputValue" ref="taskInput"
-                type="text">
+                <input @keypress.enter="addTaskToList" required placeholder="add task" v-model="inputValue" ref="taskInput"
+                    type="text">
+            </template>
+
+            <template v-else>
+                <input @keypress.enter="SearchForTask" required placeholder="Search For Task" v-model="inputValue"
+                    ref="taskInput" type="text">
+
+                <span :class="{ active: activeToggle }" ref="addTask" @click="SearchForTask">
+                    <img src="@/assets/design-material/icons/search.png" alt="add-task" />
+                </span>
+            </template>
         </div>
     </div>
 </template>
@@ -17,7 +28,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'MainContent',
-    props: ['chosenSmartList'],
+    props: ['chosenSmartList', 'listId'],
     inject: ['chosenListId', 'chosenChildIdListId'],
     data() {
         return {
@@ -127,7 +138,32 @@ export default {
                 this.lists = this.allLists
 
             } else {
-                this.errorToggle = true
+                if (this.errorToggle) {
+                    this.errorToggle = false
+                    setTimeout(() => {
+                        this.errorToggle = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.errorToggle = true
+                    }, 0)
+                }
+            }
+        },
+        SearchForTask() {
+            if (this.inputValue.length > 0) {
+                console.log('f');
+            } else {
+                if (this.errorToggle) {
+                    this.errorToggle = false
+                    setTimeout(() => {
+                        this.errorToggle = true
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        this.errorToggle = true
+                    }, 0)
+                }
             }
         }
     },

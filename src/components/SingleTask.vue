@@ -104,7 +104,7 @@
     </PopUp>
 </template>
 
-<script lang="js">
+<script>
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 import PopUp from './PopUp.vue'
@@ -139,7 +139,7 @@ export default {
     beforeMount() {
         this.lists.forEach((list, index) => {
             if (list.listChildren === false) {
-                if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3) {
+                if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4) {
                     this.ReturnAllListsArray.push(list)
                 }
             }
@@ -273,7 +273,7 @@ export default {
                 this.ReturnAllListsArray = []
                 this.lists.forEach((list, index) => {
                     if (list.listChildren === false) {
-                        if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3) {
+                        if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4) {
                             this.ReturnAllListsArray.push(list)
                         }
                     }
