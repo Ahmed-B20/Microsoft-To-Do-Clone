@@ -421,6 +421,10 @@ export default {
                 }
             }
 
+            if (+this.listId === 4) {
+                this.lists[4].tasks.splice(this.taskElementId, 1)
+            }
+
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.toggleDropDown = false
             this.taskElementId = null

@@ -564,6 +564,10 @@ export default {
                         }
                     }
                 }
+
+                if (+this.descriptionTaskList === 4) {
+                    this.lists[4].tasks.splice(this.descriptionTaskIndex, 1)
+                }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.$emit('closeDescription', false)
                 this.showPopUp = !this.showPopUp
