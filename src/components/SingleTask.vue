@@ -139,7 +139,8 @@ export default {
     beforeMount() {
         this.lists.forEach((list, index) => {
             if (list.listChildren === false) {
-                if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4) {
+                console.log(this.listId);
+                if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4 && +this.selectTask.listId !== +list.id) {
                     this.ReturnAllListsArray.push(list)
                 }
             }
@@ -274,7 +275,7 @@ export default {
                 this.ReturnAllListsArray = []
                 this.lists.forEach((list, index) => {
                     if (list.listChildren === false) {
-                        if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4) {
+                        if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4 && +this.selectTask.listId !== +list.id) {
                             this.ReturnAllListsArray.push(list)
                         }
                     }
@@ -287,6 +288,15 @@ export default {
         openDropDown(task, index) {
             event.preventDefault()
             this.$emit('openDescriptionEvent', this.listId, index, false, this.taskElement)
+
+            this.ReturnAllListsArray = []
+            this.lists.forEach((list, index) => {
+                if (list.listChildren === false) {
+                    if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4 && +task.listId !== +list.id) {
+                        this.ReturnAllListsArray.push(list)
+                    }
+                }
+            })
 
             this.selectTask = task
 
