@@ -12,7 +12,7 @@
                     {{ task.name }}
                 </span>
 
-                <TaskInfoIcons :index='index' :task='task' />
+                <TaskInfoIcons :index='index' :task='task' :listId="listId" />
             </span>
 
             <Important :listId='listId' :childId='childId' :taskElementId='taskElementId' :task="task" :index="index"
