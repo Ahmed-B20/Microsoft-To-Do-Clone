@@ -153,7 +153,7 @@ export default {
         SearchForTask(event) {
             if (this.inputValue.length > 0) {
                 this.lists[4].tasks = []
-                this.lists.forEach((list) => {
+                this.lists.slice(5).forEach((list) => {
                     if (list.listChildren) {
                         list.listsArray.forEach((childList) => {
                             childList.tasks.forEach((task) => {

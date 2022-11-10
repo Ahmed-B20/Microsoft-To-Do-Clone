@@ -23,42 +23,42 @@
     <transition name="to-bottom">
         <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left" v-if="toggleDropDown">
             <template #RenameTask>
-                <RenameTask :listId='listId' :childId='childId' :taskElementId='taskElementId'
+                <RenameTask :selectTask="selectTask" :listId='listId' :childId='childId' :taskElementId='taskElementId'
                     @componentEvent='closeDropDown' />
             </template>
 
             <template #MarkAsImportant>
-                <MarkAsImportant :taskElements="this.$refs.taskElement" :listId='listId' :childId='childId'
+                <MarkAsImportant :selectTask="selectTask" :taskElements="this.$refs.taskElement" :listId='listId' :childId='childId'
                     :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
             </template>
 
             <template #MarkAsComplete>
-                <MarkAsComplete :taskElements="this.$refs.taskElement" :listId='listId' :childId='childId'
+                <MarkAsComplete :selectTask="selectTask" :taskElements="this.$refs.taskElement" :listId='listId' :childId='childId'
                     :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
             </template>
 
             <template v-if="dueDateState" #AddToMyDay>
-                <AddToMyDay :listId='listId' :childId='childId' :taskElementId='taskElementId'
+                <AddToMyDay :selectTask="selectTask" :listId='listId' :childId='childId' :taskElementId='taskElementId'
                     @componentEvent='resetChildComponent' />
             </template>
 
             <template v-if="dueDateState" #DueToday>
-                <DueDate date="today" :listId='listId' :childId='childId' :taskElementId='taskElementId'
+                <DueDate :selectTask="selectTask" date="today" :listId='listId' :childId='childId' :taskElementId='taskElementId'
                     @componentEvent='closeDropDown' />
             </template>
 
             <template v-if="dueDateState" #DueTomorrow>
-                <DueDate date="tomorrow" :listId='listId' :childId='childId' :taskElementId='taskElementId'
+                <DueDate :selectTask="selectTask" date="tomorrow" :listId='listId' :childId='childId' :taskElementId='taskElementId'
                     @componentEvent='closeDropDown' />
             </template>
 
             <template v-if="dueDateState" #DueNextWeek>
-                <DueDate date="nextWeek" :listId='listId' :childId='childId' :taskElementId='taskElementId'
+                <DueDate :selectTask="selectTask" date="nextWeek" :listId='listId' :childId='childId' :taskElementId='taskElementId'
                     @componentEvent='closeDropDown' />
             </template>
 
             <template #PickADate>
-                <DueDate date="customDate" :listId='listId' :childId='childId' :taskElementId='taskElementId'
+                <DueDate :selectTask="selectTask" date="customDate" :listId='listId' :childId='childId' :taskElementId='taskElementId'
                     @componentEvent='closeDropDown' />
             </template>
 
@@ -171,7 +171,8 @@ export default {
             oldTaskIdDrop: null,
             addToMyDayState: false,
             remindToggle: false,
-            moveTaskToggle: false
+            moveTaskToggle: false,
+            selectTask: {}
         }
     },
     computed: {
@@ -286,6 +287,8 @@ export default {
         openDropDown(task, index) {
             event.preventDefault()
             this.$emit('openDescriptionEvent', this.listId, index, false, this.taskElement)
+
+            this.selectTask = task
 
             this.taskElementId = index
             if (event.target.tagName === 'IMG' || (event.target.tagName === 'SPAN' && event.target.classList.contains('task-main-info') || event.target.classList.contains('check'))) {
