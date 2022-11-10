@@ -23,9 +23,9 @@ export default {
         }
     },
     beforeMount() {
-        if (!!this.selectTask.childId) {
-            this.taskName = this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].name
-            this.addToMyDayState = this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].addToMyDay
+        if (!!this.selectTask.childListId) {
+            this.taskName = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].name
+            this.addToMyDayState = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].addToMyDay
         } else {
             this.taskName = this.lists[this.selectTask.listId].tasks[this.selectTask.id].name
             this.addToMyDayState = this.lists[this.selectTask.listId].tasks[this.selectTask.id].addToMyDay
@@ -37,9 +37,9 @@ export default {
     },
     methods: {
         addToMyDay() {
-            if (!!this.selectTask.childId) {
-                this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].addToMyDay = true
-                this.lists[0].tasks.push(this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id])
+            if (!!this.selectTask.childListId) {
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].addToMyDay = true
+                this.lists[0].tasks.push(this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id])
 
             } else {
                 this.lists[this.selectTask.listId].tasks[this.selectTask.id].addToMyDay = true
@@ -51,15 +51,15 @@ export default {
             this.addToMyDayState = true
         },
         closeToMyDay() {
-            if (!!this.selectTask.childId) {
-                this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].addToMyDay = false
+            if (!!this.selectTask.childListId) {
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].addToMyDay = false
 
 
                 if (+this.listId === 0) {
                     this.lists[0].tasks.splice(this.taskElementId, 1)
                 } else {
                     this.lists[0].tasks.forEach((task, index) => {
-                        if (+task.id === +this.taskElementId && +task.listId === +this.listId && +this.childId === +task.childListId) {
+                        if (+task.id === +this.taskElementId && +task.listId === +this.listId && +this.childListId === +task.childListId) {
                             this.lists[0].tasks.splice(index, 1)
                         }
                     })

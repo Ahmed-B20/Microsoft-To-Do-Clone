@@ -27,8 +27,8 @@ export default {
         ...mapWritableState(allLists, ['lists', 'smartList']),
 
         returnCompleteState() {
-            if (!!this.selectTask.childId) {
-                return this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].complete
+            if (!!this.selectTask.childListId) {
+                return this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete
             } else {
                 return this.lists[this.selectTask.listId].tasks[this.selectTask.id].complete
             }
@@ -36,21 +36,21 @@ export default {
     },
     methods: {
         completeTask() {
-            if (!!this.selectTask.childId) {
-                if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].complete) {
-                    this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].complete = false
+            if (!!this.selectTask.childListId) {
+                if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete) {
+                    this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete = false
                 } else {
-                    if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].repeatedTask) {
+                    if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].repeatedTask) {
                         this.calcDueDate(true)
                     }
                     else {
-                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].complete = true
+                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete = true
                     }
                 }
 
-                if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].steps.length > 0) {
-                    this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].steps.forEach((step) => {
-                        if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].complete) {
+                if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].steps.length > 0) {
+                    this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].steps.forEach((step) => {
+                        if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete) {
                             step.complete = true
                         } else {
                             step.complete = false
@@ -97,9 +97,9 @@ export default {
         },
         calcDueDate(childList) {
             if (childList) {
-                this.oldObj = this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id]
+                this.oldObj = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id]
                 this.transferObj()
-                this.repeatedTaskObject.id = this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks.length
+                this.repeatedTaskObject.id = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.length
             } else {
                 this.oldObj = this.lists[this.selectTask.listId].tasks[this.selectTask.id]
                 this.transferObj()
@@ -127,9 +127,9 @@ export default {
             }
 
             if (childList) {
-                this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks.push(this.repeatedTaskObject)
-                this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].complete = true
-                this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].repeatedTask = false
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.push(this.repeatedTaskObject)
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete = true
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].repeatedTask = false
             } else {
                 this.lists[this.selectTask.listId].tasks.push(this.repeatedTaskObject)
                 this.lists[this.selectTask.listId].tasks[this.selectTask.id].complete = true

@@ -139,7 +139,6 @@ export default {
     beforeMount() {
         this.lists.forEach((list, index) => {
             if (list.listChildren === false) {
-                console.log(this.listId);
                 if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4 && +this.selectTask.listId !== +list.id) {
                     this.ReturnAllListsArray.push(list)
                 }

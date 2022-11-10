@@ -30,8 +30,8 @@ export default {
         }
     },
     beforeMount() {
-        if (!!this.selectTask.childId) {
-            this.taskName = this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].name
+        if (!!this.selectTask.childListId) {
+            this.taskName = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].name
         } else {
             this.taskName = this.lists[this.selectTask.listId].tasks[this.selectTask.id].name
         }
@@ -57,8 +57,8 @@ export default {
         },
         newTaskName() {
             if (this.newName.length > 0) {
-                if (!!this.selectTask.childId) {
-                    this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks[this.selectTask.id].name = this.newName
+                if (!!this.selectTask.childListId) {
+                    this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].name = this.newName
                 } else {
                     this.lists[this.selectTask.listId].tasks[this.selectTask.id].name = this.newName
                 }

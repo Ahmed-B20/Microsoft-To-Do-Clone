@@ -26,7 +26,6 @@ export default {
     },
     methods: {
         completeTask() {
-            console.log(this.task);
             this.thisTask = this.index
             if (event.target.parentElement.tagName === 'SPAN') {
                 this.taskElement = event.target.parentElement.parentElement
