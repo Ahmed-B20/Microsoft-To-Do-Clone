@@ -151,7 +151,7 @@ export default {
                 this.listObj.toggleChildList = true;
                 this.toggleListChildren = !this.toggleListChildren
 
-                this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
+                this.listArray = this.lists;
                 this.listArray.push(this.listObj);
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
                 this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
