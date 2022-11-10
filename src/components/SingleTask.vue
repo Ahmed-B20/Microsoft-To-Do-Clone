@@ -450,6 +450,7 @@ export default {
         },
         MoveTaskTo() {
             if (!!this.childId) {
+                this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].listId = this.$refs.selectedLists.value
                 this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
 
                 if (this.lists[this.$refs.selectedLists.value].tasks.length > 0) {
@@ -466,6 +467,7 @@ export default {
                     }
                 })
             } else {
+                this.lists[this.listId].tasks[this.taskElementId].listId = this.$refs.selectedLists.value
                 this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].tasks[this.taskElementId])
                 if (+this.lists[this.$refs.selectedLists.value].tasks.length > 0) {
                     let index = this.lists[this.$refs.selectedLists.value].tasks.length - 1
