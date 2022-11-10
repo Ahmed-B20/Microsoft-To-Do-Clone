@@ -1,5 +1,5 @@
 <template>
-  <div class="user-info-parent">
+  <div class="user-info-parent" @click="showUserInfo">
     <div class="user-info">
       <div class="img">
         <span>UN</span>
@@ -10,24 +10,45 @@
         <p>mail@test.test</p>
       </div>
     </div>
-
-    <!-- <div ref="searchContainer" class="search" :class="{active: toggleBorderClass}">
-      <input @blur="toggleBorder" @click="toggleBorder" placeholder="Search" type="search" name="" id="">
-    </div> -->
   </div>
+
+  <PopUp :showPopUp="showPopUp">
+    <template #title>
+      Hello User
+    </template>
+
+    <template v-slot:content>
+      <p>it is a good day for achievement</p>
+    </template>
+
+    <template #button>
+      <button class="close" @click="showUserInfo">Cancel</button>
+    </template>
+  </PopUp>
 </template>
 
 <script>
+import PopUp from './PopUp.vue'
+import { allLists } from '@/stores/allLists.js'
+import { mapState, mapWritableState } from 'pinia'
+
 export default {
   name: 'user-info',
   data() {
     return {
-      toggleBorderClass: false
+      showPopUp: false,
     }
   },
+  components: {
+    PopUp
+  },
+  computed: {
+    ...mapState(allLists, ['returnLists', 'smartList']),
+    ...mapWritableState(allLists, ['lists', 'smartList']),
+  },
   methods: {
-    toggleBorder() {
-      this.toggleBorderClass = !this.toggleBorderClass
+    showUserInfo() {
+      this.showPopUp = !this.showPopUp
     }
   }
 }
