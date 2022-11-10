@@ -28,13 +28,13 @@
             </template>
 
             <template #MarkAsImportant>
-                <MarkAsImportant :selectTask="selectTask" :taskElements="this.$refs.taskElement" :listId='listId' :childId='childId'
-                    :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
+                <MarkAsImportant :selectTask="selectTask" :taskElements="this.$refs.taskElement" :listId='listId'
+                    :childId='childId' :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
             </template>
 
             <template #MarkAsComplete>
-                <MarkAsComplete :selectTask="selectTask" :taskElements="this.$refs.taskElement" :listId='listId' :childId='childId'
-                    :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
+                <MarkAsComplete :selectTask="selectTask" :taskElements="this.$refs.taskElement" :listId='listId'
+                    :childId='childId' :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
             </template>
 
             <template v-if="dueDateState" #AddToMyDay>
@@ -43,23 +43,23 @@
             </template>
 
             <template v-if="dueDateState" #DueToday>
-                <DueDate :selectTask="selectTask" date="today" :listId='listId' :childId='childId' :taskElementId='taskElementId'
-                    @componentEvent='closeDropDown' />
+                <DueDate :selectTask="selectTask" date="today" :listId='listId' :childId='childId'
+                    :taskElementId='taskElementId' @componentEvent='closeDropDown' />
             </template>
 
             <template v-if="dueDateState" #DueTomorrow>
-                <DueDate :selectTask="selectTask" date="tomorrow" :listId='listId' :childId='childId' :taskElementId='taskElementId'
-                    @componentEvent='closeDropDown' />
+                <DueDate :selectTask="selectTask" date="tomorrow" :listId='listId' :childId='childId'
+                    :taskElementId='taskElementId' @componentEvent='closeDropDown' />
             </template>
 
             <template v-if="dueDateState" #DueNextWeek>
-                <DueDate :selectTask="selectTask" date="nextWeek" :listId='listId' :childId='childId' :taskElementId='taskElementId'
-                    @componentEvent='closeDropDown' />
+                <DueDate :selectTask="selectTask" date="nextWeek" :listId='listId' :childId='childId'
+                    :taskElementId='taskElementId' @componentEvent='closeDropDown' />
             </template>
 
             <template #PickADate>
-                <DueDate :selectTask="selectTask" date="customDate" :listId='listId' :childId='childId' :taskElementId='taskElementId'
-                    @componentEvent='closeDropDown' />
+                <DueDate :selectTask="selectTask" date="customDate" :listId='listId' :childId='childId'
+                    :taskElementId='taskElementId' @componentEvent='closeDropDown' />
             </template>
 
             <template #MoveTaskTo v-if="ReturnAllLists">
@@ -378,23 +378,49 @@ export default {
             }
         },
         deleteTask() {
-            if (!!this.childId) {
-                this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
+            if (!!this.selectTask.childId) {
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks.splice(this.taskElementId, 1)
 
-                this.lists[this.listId].listsArray[this.childId].tasks.forEach((list) => {
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks.forEach((list) => {
                     if (list.id >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
             } else {
-                this.lists[this.listId].tasks.splice(this.taskElementId, 1)
+                this.lists[this.selectTask.listId].tasks.splice(this.taskElementId, 1)
 
-                this.lists[this.listId].tasks.forEach((list) => {
+                this.lists[this.selectTask.listId].tasks.forEach((list) => {
                     if (list.id >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
             }
+
+            if (this.selectTask.addToMyDay || !!this.selectTask.dueDateName) {
+                if (this.selectTask.addToMyDay && !!this.selectTask.dueDateName) {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.taskElementId && +task.listId === +this.selectTask.listId || +task.listId === +this.selectTask.childId) {
+                            this.lists[2].tasks.splice(index, 1)
+                            this.lists[0].tasks.splice(index, 1)
+                        }
+                    })
+                } else {
+                    if (this.selectTask.addToMyDay) {
+                        this.lists[0].tasks.forEach((task, index) => {
+                            if (+task.id === +this.taskElementId && +task.listId === +this.selectTask.listId || +task.listId === +this.selectTask.childId) {
+                                this.lists[0].tasks.splice(index, 1)
+                            }
+                        })
+                    } else {
+                        this.lists[0].tasks.forEach((task, index) => {
+                            if (+task.id === +this.taskElementId && +task.listId === +this.selectTask.listId || +task.listId === +this.selectTask.childId) {
+                                this.lists[2].tasks.splice(index, 1)
+                            }
+                        })
+                    }
+                }
+            }
+
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.toggleDropDown = false
             this.taskElementId = null

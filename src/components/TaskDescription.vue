@@ -537,18 +537,33 @@ export default {
                 localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
 
             } else {
-                if (!!this.descriptionTaskChildList) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.descriptionTaskIndex, 1)
+                if (!!this.task.childId) {
+                    this.lists[this.task.listId].listsArray[this.task.childId].tasks.forEach((task, index) => {
+                        if (+task.id === +this.task.id) {
+                            this.lists[this.task.listId].listsArray[this.task.childId].tasks.splice(index, 1)
+                        }
+                    })
                 } else {
-                    this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
+                    this.lists[this.task.listId].tasks.forEach((task, index) => {
+                        if (+task.id === +this.task.id) {
+                            this.lists[this.task.listId].tasks.splice(index, 1)
+                        }
+                    })
                 }
 
-                if (this.chosenSmartList) {
-                    this.smartList[this.chosenSmartList].tasks.splice(this.smartListTaskId, 1)
+                if (this.task.addToMyDay || !!this.task.dueDateName) {
+                    if (this.task.addToMyDay && !!this.task.dueDateName) {
+                        this.lists[0].tasks.splice(this.descriptionTaskIndex, 1)
+                        this.lists[2].tasks.splice(this.descriptionTaskIndex, 1)
+
+                    } else {
+                        if (this.task.addToMyDay) {
+                            this.lists[0].tasks.splice(this.descriptionTaskIndex, 1)
+                        } else {
+                            this.lists[2].tasks.splice(this.descriptionTaskIndex, 1)
+                        }
+                    }
                 }
-
-                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.$emit('closeDescription', false)
                 this.showPopUp = !this.showPopUp
