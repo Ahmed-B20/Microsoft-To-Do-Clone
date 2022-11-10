@@ -5,7 +5,7 @@
                 <span @click="addList">
                     <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/plus.png" alt="add-item" />
                 </span>
-                <input @keyup.enter="addList" required @focus="toggleErrorClass" v-model="itemValue"
+                <input @keypress.enter="addList" required @focus="toggleErrorClass" v-model="itemValue"
                     placeholder="Add New List" type="text" name="" id="" />
             </div>
 

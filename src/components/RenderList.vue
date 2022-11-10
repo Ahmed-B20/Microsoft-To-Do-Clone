@@ -59,7 +59,7 @@
                                     <img @click="newListName" class="renameTask"
                                         src="@/assets/design-material/icons/plus.png" alt="add-item" />
 
-                                    <input @keyup.enter="newListName" required @focus="toggleErrorClass"
+                                    <input @keypress.enter="newListName" required @focus="toggleErrorClass"
                                         v-model="newName" placeholder="New Name" type="text" name="" id=""
                                         :class="{ error: toggleError }" />
                                     <img @click="closeRename" src="@/assets/design-material/icons/close.png"

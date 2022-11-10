@@ -18,7 +18,7 @@
                     <template v-if="showRename">
                         <img @click="newGroupName" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input ref="inputFiled" @keyup.enter="newGroupName" required v-model="newName"
+                        <input ref="inputFiled" @keypress.enter="newGroupName" required v-model="newName"
                             placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
                         <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
@@ -35,7 +35,7 @@
                     <template v-if="showAddNewList">
                         <img @click="newChildList" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input ref="inputFiled" @keyup.enter="newChildList" required v-model="newListName"
+                        <input ref="inputFiled" @keypress.enter="newChildList" required v-model="newListName"
                             placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
                         <img @click="closeNewList" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
@@ -71,7 +71,7 @@
                     <template v-if="showChildRename">
                         <img @click="newChildListNameFun" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input @keyup.enter="newChildListNameFun" required @focus="toggleErrorClass"
+                        <input @keypress.enter="newChildListNameFun" required @focus="toggleErrorClass"
                             v-model="newChildListName" placeholder="New Name" type="text" name="" id=""
                             :class="{ error: toggleError }" />
                         <img @click="closeChildRename" src="@/assets/design-material/icons/close.png"

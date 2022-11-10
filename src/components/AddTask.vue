@@ -6,16 +6,16 @@
                     <img src="@/assets/design-material/icons/plus.png" alt="add-task" />
                 </span>
 
-                <input @keypress.enter="addTaskToList" required placeholder="add task" v-model="inputValue" ref="taskInput"
-                    type="text">
+                <input @keypress.enter="addTaskToList" required placeholder="add task" v-model="inputValue"
+                    ref="taskInput" type="text">
             </template>
 
             <template v-else>
-                <input @keypress.enter="SearchForTask" required placeholder="Search For Task" v-model="inputValue"
+                <input @keyup="SearchForTask" required placeholder="Search For Task" v-model="inputValue"
                     ref="taskInput" type="text">
 
-                <span :class="{ active: activeToggle }" ref="addTask" @click="SearchForTask">
-                    <img src="@/assets/design-material/icons/search.png" alt="add-task" />
+                <span :class="{ active: activeToggle }" @click="SearchForTask($event)">
+                    <img src="@/assets/design-material/icons/search.png" alt="task-search" />
                 </span>
             </template>
         </div>
@@ -150,19 +150,38 @@ export default {
                 }
             }
         },
-        SearchForTask() {
+        SearchForTask(event) {
             if (this.inputValue.length > 0) {
-                console.log('f');
+                this.lists[4].tasks = []
+                this.lists.forEach((list) => {
+                    if (list.listChildren) {
+                        list.listsArray.forEach((childList) => {
+                            childList.tasks.forEach((task) => {
+                                if (task.name.includes(this.inputValue)) {
+                                    this.lists[4].tasks.push(task)
+                                }
+                            })
+                        })
+                    } else {
+                        list.tasks.forEach((task) => {
+                            if (task.name.includes(this.inputValue)) {
+                                this.lists[4].tasks.push(task)
+                            }
+                        })
+                    }
+                })
             } else {
-                if (this.errorToggle) {
-                    this.errorToggle = false
-                    setTimeout(() => {
-                        this.errorToggle = true
-                    }, 0)
-                } else {
-                    setTimeout(() => {
-                        this.errorToggle = true
-                    }, 0)
+                if (+event.keyCode !== 8) {
+                    if (this.errorToggle) {
+                        this.errorToggle = false
+                        setTimeout(() => {
+                            this.errorToggle = true
+                        }, 0)
+                    } else {
+                        setTimeout(() => {
+                            this.errorToggle = true
+                        }, 0)
+                    }
                 }
             }
         }
@@ -172,9 +191,9 @@ export default {
             if (this.inputValue.length > 0) {
                 this.activeToggle = true
                 this.errorToggle = false
-
             } else {
                 this.activeToggle = false
+                this.lists[4].tasks = []
             }
         }
     }
