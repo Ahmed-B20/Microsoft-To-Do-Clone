@@ -3,7 +3,7 @@
         <template v-if="showRename">
             <img @click="newTaskName" class="renameTask" :class="{ active: itemDetect }"
                 src="@/assets/design-material/icons/plus.png" alt="add-item" />
-            <input @keyup.enter="newTaskName" required @focus="toggleErrorClass" v-model="newName"
+            <input @keypress.enter="newTaskName" required @focus="toggleErrorClass" v-model="newName"
                 placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
             <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
         </template>

@@ -5,7 +5,7 @@
                 <span @click="addList">
                     <img :class="{ active: itemDetect }" src="@/assets/design-material/icons/plus.png" alt="add-item" />
                 </span>
-                <input @keyup.enter="addList" required @focus="toggleErrorClass" v-model="itemValue"
+                <input @keypress.enter="addList" required @focus="toggleErrorClass" v-model="itemValue"
                     placeholder="Add New List" type="text" name="" id="" />
             </div>
 
@@ -151,7 +151,7 @@ export default {
                 this.listObj.toggleChildList = true;
                 this.toggleListChildren = !this.toggleListChildren
 
-                this.listArray = JSON.parse(localStorage.getItem("allListAndTasks")) || [];
+                this.listArray = this.lists;
                 this.listArray.push(this.listObj);
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
                 this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))

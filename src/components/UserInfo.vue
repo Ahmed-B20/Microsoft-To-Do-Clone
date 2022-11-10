@@ -11,9 +11,9 @@
       </div>
     </div>
 
-    <div ref="searchContainer" class="search" :class="{active: toggleBorderClass}">
+    <!-- <div ref="searchContainer" class="search" :class="{active: toggleBorderClass}">
       <input @blur="toggleBorder" @click="toggleBorder" placeholder="Search" type="search" name="" id="">
-    </div>
+    </div> -->
   </div>
 </template>
 

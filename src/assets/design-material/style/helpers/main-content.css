@@ -15,7 +15,9 @@
 
 .main-content aside .toggle-aside {
     display: none;
+    /* padding: 15px; */
     padding: 15px;
+    padding-bottom: 0;
     width: fit-content;
     cursor: pointer;
     display: flex;

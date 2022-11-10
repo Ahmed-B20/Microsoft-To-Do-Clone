@@ -407,6 +407,7 @@
 
 .view-content-container .add-task .add-task-container span img {
     width: 20px;
+    cursor: pointer;
 }
 
 .view-content-container .add-task .add-task-container input {

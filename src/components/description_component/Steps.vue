@@ -48,7 +48,7 @@
             <img :class="{ active: activeToggle }" @click="addStep" src="@/assets/design-material/icons/plus.png"
                 alt="add-steps" />
 
-            <input v-model="inputValue" @keyup.enter="addStep" required placeholder="Add New step" type="text" />
+            <input v-model="inputValue" @keypress.enter="addStep" required placeholder="Add New step" type="text" />
         </div>
     </div>
 

@@ -51,7 +51,7 @@
                     <template v-if="showRename">
                         <img @click="newListName" class="renameTask" :class="{ active: itemDetect }"
                             src="@/assets/design-material/icons/plus.png" alt="add-item" />
-                        <input @keyup.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
+                        <input @keypress.enter="newListName" required @focus="toggleErrorClass" v-model="newName"
                             placeholder="New Name" type="text" name="" id="" :class="{ error: toggleError }" />
                         <img @click="closeRename" src="@/assets/design-material/icons/close.png" alt="close rename" />
                     </template>
@@ -181,6 +181,8 @@ export default {
             this.listName = this.chosenList.listName
             this.allTasks = this.chosenList.tasks;
         }
+
+        this.lists[4].tasks = []
     },
     data() {
         return {

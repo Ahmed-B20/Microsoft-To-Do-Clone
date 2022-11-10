@@ -3,7 +3,7 @@
         <div class="lists-parent">
             <ul ref="listParent" class="lists-container">
                 <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index)"
-                    v-for="(list,index) in lists.slice(0,4)" :key="list.id"
+                    v-for="(list,index) in lists.slice(0,5)" :key="list.id"
                     :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
                     <p @click="showListTasks(list, index)">
                         <img class="different-size" v-if="index === 0" src="@/assets/design-material/icons/sun.png"
@@ -14,6 +14,8 @@
                             alt="single-list">
                         <img class="different-size" v-if="index === 3" src="@/assets/design-material/icons/task.png"
                             alt="single-list">
+                        <img class="different-size" v-if="index === 4"
+                            src="@/assets/design-material/icons/clipboard.png" alt="single-list">
 
                         <span>{{ list.listName }}</span>
 
@@ -27,7 +29,7 @@
 
                 <transition-group name="render-list">
                     <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index + 4)"
-                        v-for="(list, index) in lists.slice(4)" :key="list.id"
+                        v-for="(list, index) in lists.slice(5)" :key="list.id"
                         :class='[list.listChildren ? "group-of-lists" : "single-list"]'>
 
                         <template v-if="list.listChildren">
@@ -55,7 +57,7 @@
                                     <img @click="newListName" class="renameTask"
                                         src="@/assets/design-material/icons/plus.png" alt="add-item" />
 
-                                    <input @keyup.enter="newListName" required @focus="toggleErrorClass"
+                                    <input @keypress.enter="newListName" required @focus="toggleErrorClass"
                                         v-model="newName" placeholder="New Name" type="text" name="" id=""
                                         :class="{ error: toggleError }" />
                                     <img @click="closeRename" src="@/assets/design-material/icons/close.png"
