@@ -181,6 +181,8 @@ export default {
             this.listName = this.chosenList.listName
             this.allTasks = this.chosenList.tasks;
         }
+
+        this.lists[4].tasks = []
     },
     data() {
         return {
