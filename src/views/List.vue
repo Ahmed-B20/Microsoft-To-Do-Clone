@@ -1,6 +1,7 @@
 <template>
     <!-- <keep-alive> -->
-    <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :childId="childId" :listId="listId" :key="childId ? childId : listId">
+    <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :childId="childId" :listId="listId"
+        :key="childId ? childId : listId">
         <template #toggle-sidebar>
             <button @click="openSideBarDescription">
                 <img src="@/assets/design-material/icons/menu.png" alt="open-sidebar">
@@ -158,6 +159,13 @@ export default {
         return {
             chosenListId: () => this.comListId,
             chosenChildIdListId: () => this.comChildId
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        if (to.params.listId > JSON.parse(localStorage.getItem("allListAndTasks")).length || to.params.childId > JSON.parse(localStorage.getItem("allListAndTasks"))[to.params.listId].listsArray.length) {
+            next('not-found')
+        } else {
+            next()
         }
     },
     beforeMount: function () {
