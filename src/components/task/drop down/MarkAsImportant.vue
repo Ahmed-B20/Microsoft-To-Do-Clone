@@ -55,19 +55,19 @@ export default {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
                         }
-                        this.importantTask = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId]
-                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.splice(this.taskElementId, 1)
-                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.push(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId]
+                        // this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.splice(this.taskElementId, 1)
+                        // this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.push(this.importantTask)
+                        // this.importantTask = {}
                     } else {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                         }
                         this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId].important = true
-                        this.importantTask = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId]
-                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.splice(this.taskElementId, 1)
-                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.unshift(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId]
+                        // this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.splice(this.taskElementId, 1)
+                        // this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.unshift(this.importantTask)
+                        // this.importantTask = {}
                     }
                 }
 
@@ -80,19 +80,19 @@ export default {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
                         }
-                        this.importantTask = this.lists[this.selectTask.listId].tasks[this.taskElementId]
-                        this.lists[this.selectTask.listId].tasks.splice(this.taskElementId, 1)
-                        this.lists[this.selectTask.listId].tasks.push(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.selectTask.listId].tasks[this.taskElementId]
+                        // this.lists[this.selectTask.listId].tasks.splice(this.taskElementId, 1)
+                        // this.lists[this.selectTask.listId].tasks.push(this.importantTask)
+                        // this.importantTask = {}
                     } else {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                         }
                         this.lists[this.selectTask.listId].tasks[this.taskElementId].important = true
-                        this.importantTask = this.lists[this.selectTask.listId].tasks[this.taskElementId]
-                        this.lists[this.selectTask.listId].tasks.splice(this.taskElementId, 1)
-                        this.lists[this.selectTask.listId].tasks.unshift(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.selectTask.listId].tasks[this.taskElementId]
+                        // this.lists[this.selectTask.listId].tasks.splice(this.taskElementId, 1)
+                        // this.lists[this.selectTask.listId].tasks.unshift(this.importantTask)
+                        // this.importantTask = {}
                     }
                 }
 

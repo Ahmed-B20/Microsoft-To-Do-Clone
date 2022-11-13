@@ -38,19 +38,19 @@ export default {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
                         }
-                        this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[this.index]
-                        this.lists[this.listId].listsArray[this.childId].tasks.splice(this.index, 1)
-                        this.lists[this.listId].listsArray[this.childId].tasks.push(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[this.index]
+                        // this.lists[this.listId].listsArray[this.childId].tasks.splice(this.index, 1)
+                        // this.lists[this.listId].listsArray[this.childId].tasks.push(this.importantTask)
+                        // this.importantTask = {}
                     } else {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                         }
                         this.lists[this.listId].listsArray[this.childId].tasks[this.index].important = true
-                        this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[this.index]
-                        this.lists[this.listId].listsArray[this.childId].tasks.splice(this.index, 1)
-                        this.lists[this.listId].listsArray[this.childId].tasks.unshift(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[this.index]
+                        // this.lists[this.listId].listsArray[this.childId].tasks.splice(this.index, 1)
+                        // this.lists[this.listId].listsArray[this.childId].tasks.unshift(this.importantTask)
+                        // this.importantTask = {}
                     }
                 }
             } else {
@@ -62,19 +62,19 @@ export default {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
                         }
-                        this.importantTask = this.lists[this.listId].tasks[this.index]
-                        this.lists[this.listId].tasks.splice(this.index, 1)
-                        this.lists[this.listId].tasks.push(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.listId].tasks[this.index]
+                        // this.lists[this.listId].tasks.splice(this.index, 1)
+                        // this.lists[this.listId].tasks.push(this.importantTask)
+                        // this.importantTask = {}
                     } else {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                         }
                         this.lists[this.listId].tasks[this.index].important = true
-                        this.importantTask = this.lists[this.listId].tasks[this.index]
-                        this.lists[this.listId].tasks.splice(this.index, 1)
-                        this.lists[this.listId].tasks.unshift(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.listId].tasks[this.index]
+                        // this.lists[this.listId].tasks.splice(this.index, 1)
+                        // this.lists[this.listId].tasks.unshift(this.importantTask)
+                        // this.importantTask = {}
                     }
                 }
             }
