@@ -270,7 +270,6 @@ import AddToMyDay from './description_component/AddToMyDay.vue';
 import TaskNote from './description_component/TaskNote.vue';
 import AddDueDate from './description_component/AddDueDate.vue';
 import RepeatDueDate from './description_component/RepeatDueDate.vue';
-import RemindDueDate from './description_component/RemindDueDate.vue';
 import Steps from './description_component/Steps.vue';
 
 export default {
@@ -308,7 +307,6 @@ export default {
         TaskNote,
         AddDueDate,
         RepeatDueDate,
-        RemindDueDate,
         Steps
     },
     emits: ['closeDescription'],
