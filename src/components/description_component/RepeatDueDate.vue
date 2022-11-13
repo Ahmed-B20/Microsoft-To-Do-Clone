@@ -75,20 +75,25 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Daily'
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'ToDay'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
                 } else if (date === 'weekDays') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'WeekDays'
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
                 } else if (date === 'weekly') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Weekly'
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
                 } else if (date === 'monthly') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Monthly'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
                 } else if (date === 'yearly') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'Yearly'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
                 } else if (date === 'customDate') {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
                     this.pickCustomRepeatDate = true
@@ -112,22 +117,27 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Daily'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'ToDay'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
                 } else if (date === 'weekDays') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'WeekDays'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
                 } else if (date === 'weekly') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Weekly'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
                 }
                 else if (date === 'monthly') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Monthly'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
                 }
                 else if (date === 'yearly') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'Yearly'
                     this.$emit('componentEvent')
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
                 } else if (date === 'customDate') {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
                     this.pickCustomRepeatDate = true
@@ -146,6 +156,8 @@ export default {
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realRepeatDueDateName = 'CustomDate'
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex] = Math.ceil((new Date(this.pickedCustomRepeatDate) - new Date()) / (24 * 60 * 60 * 1000))
 
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+
                     let dueName = new Date().toString().split(' ')
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
                     this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = dueName.slice(0, 4).join(' ')
@@ -157,6 +169,8 @@ export default {
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatDueDateName = name.slice(0, 4).join(' ')
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].realRepeatDueDateName = 'CustomDate'
                     this.lists[this.descriptionTaskList].tasks[this.taskIndex].repeatedCustomTaskDuration = Math.ceil((new Date(this.pickedCustomRepeatDate) - new Date()) / (24 * 60 * 60 * 1000))
+
+                    this.addToPlanedTasks(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
 
                     let dueName = new Date().toString().split(' ')
                     if (!this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime) {
@@ -180,6 +194,25 @@ export default {
                         this.errorCustomRepeatDateToggle = true
                     }, 0)
                 }
+            }
+        },
+        addToPlanedTasks(task) {
+            if (!!task.childListId) {
+                this.lists[2].tasks.forEach((task, index) => {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +task.childListId === +this.descriptionTaskChildList) {
+                        this.lists[2].tasks.splice(index, 1)
+                    }
+                })
+
+                this.lists[2].tasks.push(task)
+            } else {
+                this.lists[2].tasks.forEach((task, index) => {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
+                        this.lists[2].tasks.splice(index, 1)
+                    }
+                })
+
+                this.lists[2].tasks.push(task)
             }
         }
     }
