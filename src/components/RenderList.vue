@@ -387,6 +387,10 @@ export default {
         MoveListTo() {
             this.toggleDropDown = !this.toggleDropDown
             this.lists[this.listId].id = this.lists[this.$refs.selectedGroupOfList.value].listsArray.length
+            this.lists[this.listId].tasks.forEach((task)=>{
+                task.listId = this.$refs.selectedGroupOfList.value
+                task.childListId = this.lists[this.$refs.selectedGroupOfList.value].listsArray.length
+            })
             this.lists[this.$refs.selectedGroupOfList.value].listsArray.push(this.lists[this.listId])
 
             this.lists.splice(this.listId, 1)

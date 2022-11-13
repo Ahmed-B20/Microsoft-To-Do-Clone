@@ -450,6 +450,7 @@ export default {
         MoveTaskTo() {
             if (!!this.childId) {
                 this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].listId = this.$refs.selectedLists.value
+                this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].childListId = null
                 this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
 
                 if (this.lists[this.$refs.selectedLists.value].tasks.length > 0) {

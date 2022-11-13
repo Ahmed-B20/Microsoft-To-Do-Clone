@@ -625,7 +625,12 @@ export default {
             this.promoteList.id = this.lists.length
             this.promoteList.listName = list.listName
             this.promoteList.listChildren = false
-            this.promoteList.tasks = []
+            this.promoteList.tasks = this.lists[this.parentId].listsArray[this.selectedChildListId].tasks
+
+            this.promoteList.tasks.forEach((task) => {
+                task.childListId = ''
+                task.listId = this.lists.length
+            })
 
             this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
 
