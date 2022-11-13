@@ -14,6 +14,7 @@ import TabContent from "./TabContent.vue";
 
 import { toggleAside } from '@/stores/toggleAside.js'
 import { mapState, mapWritableState } from 'pinia'
+import { allLists } from '@/stores/allLists.js'
 
 export default {
   name: "dashboard-content",
@@ -28,8 +29,12 @@ export default {
   destroyed() {
     window.removeEventListener("resize", this.myEventHandler);
   },
+  beforeMount(){
+    localStorage.setItem('allListAndTasks', JSON.stringify(this.lists))
+  },
   computed: {
     ...mapWritableState(toggleAside, ['toggleState']),
+    ...mapWritableState(allLists, ['lists', 'smartList']),
   },
   methods: {
     myEventHandler() {
