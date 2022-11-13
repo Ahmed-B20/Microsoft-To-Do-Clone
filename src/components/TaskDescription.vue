@@ -870,6 +870,33 @@ export default {
             this.hours = this.hours ? this.hours : 12;
             this.minutes = this.minutes < 10 ? '0' + this.minutes : this.minutes;
             this.strTime = this.hours + ':' + this.minutes + ' ' + this.ampm;
+
+            if (!!this.descriptionTaskChildList) {
+                this.lists[2].tasks.forEach((task, index) => {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +task.childListId === +this.descriptionTaskChildList) {
+                        this.lists[2].tasks.splice(index, 1)
+                    }
+                })
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.time
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = time
+
+                this.lists[2].tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+            } else {
+                this.lists[2].tasks.forEach((task, index) => {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
+                        this.lists[2].tasks.splice(index, 1)
+                    }
+                })
+
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = this.time
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = time
+
+                this.lists[2].tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+            }
+
         },
         addCustomRemindDate() {
             if (!!this.pickedCustomRemindDate) {

@@ -30,6 +30,11 @@ export default {
             pickCustomDate: false,
             pickedCustomDate: null,
             errorCustomDateToggle: false,
+            time: '',
+            hours: '',
+            minutes: '',
+            ampm: '',
+            strTime: ''
         }
     },
     computed: {
@@ -40,26 +45,30 @@ export default {
         addDueDate(date) {
             if (!!this.descriptionTaskChildList) {
                 if (date === 'today') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'ToDay'
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'ToDay'
+                    this.calcTime(new Date())
+
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date()
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'ToDay'
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'ToDay'
                     this.$emit('componentEvent')
 
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
                 } else if (date === 'tomorrow') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
+                    this.calcTime(new Date(new Date().setDate(new Date().getDate() + 1)))
+
+
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
                     this.$emit('componentEvent')
 
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
                 } else if (date === 'nextWeek') {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
+                    this.calcTime(new Date(new Date().setDate(new Date().getDate() + 7)))
+
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
                     this.$emit('componentEvent')
 
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
                 } else if (date === 'customDate') {
                     this.pickCustomDate = true
                 }
@@ -67,26 +76,29 @@ export default {
                 localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
             } else {
                 if (date === 'today') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'ToDay'
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'ToDay'
+                    this.calcTime(new Date())
+
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date()
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'ToDay'
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'ToDay'
                     this.$emit('componentEvent')
 
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
                 } else if (date === 'tomorrow') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
+                    this.calcTime(new Date(new Date().setDate(new Date().getDate() + 1)))
+
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 1))
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = 'Tomorrow'
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'Tomorrow'
                     this.$emit('componentEvent')
 
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
                 } else if (date === 'nextWeek') {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
+                    this.calcTime(new Date(new Date().setDate(new Date().getDate() + 7)))
+
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = new Date(new Date().setDate(new Date().getDate() + 7))
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[1] + ' ' + new Date(new Date().setDate(new Date().getDate() + 7)).toString().split(' ')[2]
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'NextWeek'
                     this.$emit('componentEvent')
 
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
                 } else if (date === 'customDate') {
                     this.pickCustomDate = true
                 }
@@ -98,17 +110,18 @@ export default {
         addCustomDate() {
             if (!!this.pickedCustomDate) {
                 if (!!this.descriptionTaskChildList) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
+                    this.calcTime(this.pickedCustomDate)
 
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
+                    // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
+
                 } else {
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
-                    this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
+                    this.calcTime(this.pickedCustomDate)
 
-                    this.smartList.planned.tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = this.pickedCustomDate
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = new Date(this.pickedCustomDate).toString().split(' ')[1] + ' ' + new Date(this.pickedCustomDate).toString().split(' ')[2]
+                    // this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = 'CustomDate'
                 }
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
@@ -128,6 +141,43 @@ export default {
                     }, 0)
                 }
             }
+        },
+        calcTime(time) {
+            this.time = new Date(time)
+            this.hours = this.time.getHours()
+            this.minutes = this.time.getMinutes()
+            this.ampm = this.hours >= 12 ? 'pm' : 'am';
+            this.hours = this.hours % 12;
+            this.hours = this.hours ? this.hours : 12;
+            this.minutes = this.minutes < 10 ? '0' + this.minutes : this.minutes;
+            this.strTime = this.hours + ':' + this.minutes + ' ' + this.ampm;
+
+            if (!!this.descriptionTaskChildList) {
+                this.lists[2].tasks.forEach((task, index) => {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +task.childListId === +this.descriptionTaskChildList) {
+                        this.lists[2].tasks.splice(index, 1)
+                    }
+                })
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.time
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = time
+
+                this.lists[2].tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+            } else {
+                this.lists[2].tasks.forEach((task, index) => {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
+                        this.lists[2].tasks.splice(index, 1)
+                    }
+                })
+
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = this.time
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = time
+
+                this.lists[2].tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+            }
+
         }
     }
 }
