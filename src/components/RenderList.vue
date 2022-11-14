@@ -351,7 +351,6 @@ export default {
             return this.result
         },
         DuplicateList() {
-            console.log(this.listId);
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
             this.DuplicatedList.id = +this.listId + 1
             this.DuplicatedList.listChildren = this.lists[this.listId].listChildren
