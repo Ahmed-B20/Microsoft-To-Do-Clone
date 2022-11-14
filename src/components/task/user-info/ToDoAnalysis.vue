@@ -12,7 +12,9 @@
 
         <tbody>
             <tr v-for="(value, key) in statistics" :key="key">
-                <td>{{ key }}</td>
+                <td>{{ key === 'allList' ? 'All Lists' : key === 'allGroupOfList' ? 'All Group Of Lists' : key ===
+                        'allChildList' ? 'All Child Lists' : 'All Tasks'
+                }}</td>
                 <td v-for="(childValue, key) in value" :key="key">{{ childValue }}</td>
             </tr>
         </tbody>

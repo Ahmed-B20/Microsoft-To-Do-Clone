@@ -5,7 +5,8 @@ table {
 }
 
 table thead tr th.main {
-    width: 40%;
+    /* width: 40%; */
+    width: 55%;
 }
 
 td,
