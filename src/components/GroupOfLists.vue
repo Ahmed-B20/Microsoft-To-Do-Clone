@@ -140,8 +140,8 @@
     <PopUp :showPopUp="showPopUp">
         <template #title>
             {{ togglePopupTarget === 'deleteList' ? `Delete Child Lists` : togglePopupTarget === 'deleteGroup' ? `Delete
-                        Group
-                        Of Lists`: `Move Child List To`
+            Group
+            Of Lists`: `Move Child List To`
             }}
         </template>
 
@@ -157,7 +157,7 @@
 
             <p v-else>
                 {{ togglePopupTarget === 'deleteList' ? `Child list: ${selectedChildListName} will be permanently
-                                deleted`: `Group of list: ${listName} will be permanently deleted`
+                deleted`: `Group of list: ${listName} will be permanently deleted`
                 }}
             </p>
         </template>
@@ -610,8 +610,9 @@ export default {
         MoveChildListTo() {
             this.lists[this.$refs.selectedLists.value].listsArray.push(this.lists[this.parentId].listsArray[this.selectedChildListId])
 
-            this.lists[this.$refs.selectedLists.value].listsArray.at(-1).tasks.forEach((task)=>{
+            this.lists[this.$refs.selectedLists.value].listsArray.at(-1).tasks.forEach((task) => {
                 task.listId = this.$refs.selectedLists.value
+                task.childListId = this.lists[this.$refs.selectedLists.value].listsArray.length
             })
 
             if (this.lists[this.$refs.selectedLists.value].listsArray.length > 0) {
@@ -621,6 +622,10 @@ export default {
                 this.lists[this.parentId].listsArray.forEach((list, index) => {
                     if (index >= +this.selectedChildListId) {
                         list.id -= 1
+
+                        list.tasks.forEach((task) => {
+                            task.childListId -= 1
+                        })
                     }
                 })
             } else {
