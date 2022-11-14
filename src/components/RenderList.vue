@@ -211,9 +211,6 @@ export default {
             this.listId = index
             this.listName = list.listName
 
-            console.log(this.listId);
-
-
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG') {
                 this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
                 this.listElement = event.target.parentElement.parentElement
@@ -312,10 +309,7 @@ export default {
                     }
                 }
             })
-
-            console.log('ff');
             this.$router.push({ name: 'home' })
-
 
             // if (this.lists.length > 5 && !this.lists.at(5).listChildren) {
             //     if (+this.listId > +this.$route.params.listId && +this.$route.params.listId !== 6) {
@@ -355,7 +349,6 @@ export default {
             return this.result
         },
         DuplicateList() {
-            console.log(this.listId);
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
             this.DuplicatedList.id = +this.listId + 1
             this.DuplicatedList.listChildren = this.lists[this.listId].listChildren
