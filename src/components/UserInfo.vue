@@ -9,6 +9,8 @@
         <p>User Name</p>
         <p>mail@test.test</p>
       </div>
+
+      <img title="user setting" class="user-setting" src="@/assets/design-material/icons/setting.png" alt="settings">
     </div>
   </div>
 
