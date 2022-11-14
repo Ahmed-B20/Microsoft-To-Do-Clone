@@ -28,7 +28,7 @@
                 <hr class="custom-hr">
 
                 <transition-group name="render-list">
-                    <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index + 4)"
+                    <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index + 5)"
                         v-for="(list, index) in lists.slice(5)" :key="list.id"
                         :class='[list.listChildren ? "group-of-lists" : "single-list"]'>
 
@@ -38,7 +38,7 @@
                                 :childDropDown="childDropDown" />
                         </template>
 
-                        <p @click="showListTasks(list, index)" @contextmenu="openDropDown(list, index + 4)" v-else>
+                        <p @click="showListTasks(list, index)" @contextmenu="openDropDown(list, index + 5)" v-else>
                             <img src="@/assets/design-material/icons/menu.png" alt="single-list">
                             <span>{{ list.listName }}</span>
 
@@ -211,6 +211,9 @@ export default {
             this.listId = index
             this.listName = list.listName
 
+            console.log(this.listId);
+
+
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG') {
                 this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
                 this.listElement = event.target.parentElement.parentElement
@@ -352,16 +355,35 @@ export default {
             return this.result
         },
         DuplicateList() {
+            console.log(this.listId);
             this.DuplicatedList.listName = this.lists[this.listId].listName + ' copy'
             this.DuplicatedList.id = +this.listId + 1
             this.DuplicatedList.listChildren = this.lists[this.listId].listChildren
             this.DuplicatedList.tasks = this.lists[this.listId].tasks
             this.lists.splice(+this.listId + 1, 0, this.DuplicatedList)
-            this.lists.forEach(((list, index) => {
+            // this.lists.forEach(((list, index) => {
+            //     if (+this.listId + 1 <= index) {
+            //         list.id = index
+            //     }
+            // }))
+
+            this.lists.forEach((list, index) => {
                 if (+this.listId + 1 <= index) {
                     list.id = index
+
+                    if (list.listChildren) {
+                        list.listsArray.forEach((childList) => {
+                            childList.tasks.forEach((task) => {
+                                task.listId = index
+                            })
+                        })
+                    } else {
+                        list.tasks.forEach((task) => {
+                            task.listId = index
+                        })
+                    }
                 }
-            }))
+            })
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
