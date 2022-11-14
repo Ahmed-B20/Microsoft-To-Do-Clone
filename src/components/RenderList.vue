@@ -2,7 +2,7 @@
     <transition name="render-list">
         <div class="lists-parent">
             <ul ref="listParent" class="lists-container">
-                <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index)"
+                <li @click.self="showListTasks(list, index)"
                     v-for="(list,index) in lists.slice(0,5)" :key="list.id"
                     :class='[ list.listChildren ? "group-of-lists" : "single-list"]'>
                     <p @click="showListTasks(list, index)">
@@ -28,7 +28,7 @@
                 <hr class="custom-hr">
 
                 <transition-group name="render-list">
-                    <li @contextmenu.self="openDropDown(list, index)" @click.self="showListTasks(list, index + 5)"
+                    <li @contextmenu.self="openDropDown(list, index + 5)" @click.self="showListTasks(list, index + 5)"
                         v-for="(list, index) in lists.slice(5)" :key="list.id"
                         :class='[list.listChildren ? "group-of-lists" : "single-list"]'>
 
@@ -210,6 +210,9 @@ export default {
             this.parentElementDomRect = this.$refs.listParent.getBoundingClientRect()
             this.listId = index
             this.listName = list.listName
+
+            console.log(this.listId);
+
 
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG') {
                 this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
