@@ -162,7 +162,7 @@ export default {
         }
     },
     beforeRouteEnter(to, from, next) {
-        if (to.params.listId > JSON.parse(localStorage.getItem("allListAndTasks"))?.length || to.params?.childId > JSON.parse(localStorage.getItem("allListAndTasks"))[to.params.listId].listsArray?.length) {
+        if (to.params.listId >= JSON.parse(localStorage.getItem("allListAndTasks"))?.length || to.params?.childId > JSON.parse(localStorage.getItem("allListAndTasks"))[to.params.listId]?.listsArray?.length) {
             next('not-found')
         } else if (JSON.parse(localStorage.getItem("allListAndTasks"))[to.params.listId].listChildren && !to.params?.childId) {
             next('not-found')
