@@ -513,9 +513,9 @@ export default {
             this.newName = ''
         },
         deleteList() {
-            if (+this.lists.length === 1 && this.lists.at(-1).listChildren) {
-                this.$router.push({ name: 'my-day' })
-            }
+            // if (+this.lists.length === 1 && this.lists.at(-1).listChildren) {
+            //     this.$router.push({ name: 'my-day' })
+            // }
 
             this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
             this.lists[this.parentId].listsArray.forEach((list, index) => {
@@ -524,15 +524,17 @@ export default {
                 }
             })
 
-            if (+this.lists.length > 1) {
-                if (+this.selectedChildListId > +this.$route.params.childId && +this.$route.params.childId !== 0) {
-                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: +this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
-                } else if (+this.$route.params.childId >= +this.selectedChildListId && +this.$route.params.childId !== 0) {
-                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId - 1 }, props: { name: this.randomString(10), currentListName: this.listName } })
-                } else {
-                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
-                }
-            }
+            this.$router.push({ name: 'home' })
+
+            // if (+this.lists.length > 1) {
+            //     if (+this.selectedChildListId > +this.$route.params.childId && +this.$route.params.childId !== 0) {
+            //         this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: +this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
+            //     } else if (+this.$route.params.childId >= +this.selectedChildListId && +this.$route.params.childId !== 0) {
+            //         this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId - 1 }, props: { name: this.randomString(10), currentListName: this.listName } })
+            //     } else {
+            //         this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
+            //     }
+            // }
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
