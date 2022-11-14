@@ -7,6 +7,7 @@
 
 
 @import url('./helpers/main-content.css');
+@import url('./helpers/table.css');
 @import url('./helpers/drop-down.css');
 @import url('./helpers/pop-up.css');
 @import url('./helpers/user-info.css');

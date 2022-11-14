@@ -118,3 +118,40 @@
 .delay-leave-to {
     display: none;
 }
+
+.pop-up-parent .pop-up-container .pop-up-content table {
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+    display: block;
+    max-width: 100%;
+    overflow-x: hidden;
+    margin-top: 15px;
+}
+
+.pop-up-parent .pop-up-container .pop-up-content table::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+.pop-up-parent .pop-up-container .pop-up-content table::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.pop-up-parent .pop-up-container .pop-up-content table::-webkit-scrollbar-thumb {
+    background-color: #5f73c1;
+
+    border-radius: 3px;
+}
+
+/* Handle on hover */
+.pop-up-parent .pop-up-container .pop-up-content table::-webkit-scrollbar-thumb:hover {
+    background-color: #888;
+
+}
+
+.pop-up-parent .pop-up-container .pop-up-content .custom-hr {
+    margin: 10px 0;
+    border-bottom: 1px solid #dfdfdf;
+}

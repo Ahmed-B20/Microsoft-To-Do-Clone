@@ -19,6 +19,10 @@
 
     <template v-slot:content>
       <p>it is a good day for achievement</p>
+
+      <hr class="custom-hr">
+
+      <ToDoAnalysisVue />
     </template>
 
     <template #button>
@@ -31,6 +35,7 @@
 import PopUp from './PopUp.vue'
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
+import ToDoAnalysisVue from './task/user-info/ToDoAnalysis.vue'
 
 export default {
   name: 'user-info',
@@ -40,7 +45,8 @@ export default {
     }
   },
   components: {
-    PopUp
+    PopUp,
+    ToDoAnalysisVue
   },
   computed: {
     ...mapState(allLists, ['returnLists', 'smartList']),

@@ -9,27 +9,7 @@ export const allLists = defineStore('allLists', {
           {listName: "Planned", id: 2, listChildren: false, tasks: []},
           {listName: "Tasks", id: 3, listChildren: false, tasks: []},
           {listName: "Search", id: 4, listChildren: false, tasks: []}
-        ],
-        smartList: JSON.parse(localStorage.getItem('allSmartLists')) || {
-          myDay: {
-            tasks: []
-          },
-          important: {
-            tasks: []
-          },
-          planned: {
-            tasks: []
-          },
-          tasks: {
-            tasks: []
-          },
-          complete: {
-            tasks: []
-          },
-          all: {
-            tasks: []
-          }
-        }
+        ]
     }
   },
   getters: {

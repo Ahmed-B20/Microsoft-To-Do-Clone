@@ -33,6 +33,7 @@
   
 <script>
 import { allLists } from '@/stores/allLists.js'
+import { statistics } from '@/stores/statistics.js'
 import { mapWritableState } from 'pinia'
 import PopUp from './PopUp.vue'
 
@@ -76,6 +77,7 @@ export default {
             }
         },
         ...mapWritableState(allLists, ['lists']),
+        ...mapWritableState(statistics, ['statistics']),
     },
 
     methods: {
@@ -99,6 +101,9 @@ export default {
 
                     this.listArray = this.lists;
                     this.listArray.at(-1).listsArray = this.listObj.listsArray
+                    this.statistics.allChildList.allChildList++
+                    localStorage.setItem("allListAndTasksStatistics", JSON.stringify(this.statistics));
+
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
                     this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
                 } else {
@@ -109,6 +114,8 @@ export default {
 
                     this.listArray = this.lists;
                     this.listArray.push(this.listObj);
+                    this.statistics.allList.allList++
+                    localStorage.setItem("allListAndTasksStatistics", JSON.stringify(this.statistics));
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
                     this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
                     this.taskNumber++;
@@ -154,6 +161,8 @@ export default {
                 this.listArray = this.lists;
                 this.listArray.push(this.listObj);
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.listArray));
+                this.statistics.allGroupOfList.allGroupOfList++
+                localStorage.setItem("allListAndTasksStatistics", JSON.stringify(this.statistics));
                 this.lists = JSON.parse(localStorage.getItem("allListAndTasks"))
 
                 if (localStorage.getItem("allListAndTasks")) {
