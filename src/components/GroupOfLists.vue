@@ -140,8 +140,8 @@
     <PopUp :showPopUp="showPopUp">
         <template #title>
             {{ togglePopupTarget === 'deleteList' ? `Delete Child Lists` : togglePopupTarget === 'deleteGroup' ? `Delete
-            Group
-            Of Lists`: `Move Child List To`
+                        Group
+                        Of Lists`: `Move Child List To`
             }}
         </template>
 
@@ -157,7 +157,7 @@
 
             <p v-else>
                 {{ togglePopupTarget === 'deleteList' ? `Child list: ${selectedChildListName} will be permanently
-                deleted`: `Group of list: ${listName} will be permanently deleted`
+                                deleted`: `Group of list: ${listName} will be permanently deleted`
                 }}
             </p>
         </template>
@@ -426,6 +426,10 @@ export default {
         ungroupLists() {
             this.lists[this.groupOfListId].listsArray.forEach((childList, index, arr) => {
                 childList.id = +this.groupOfListId + index
+                childList.tasks.forEach((task) => {
+                    task.childListId = ''
+                    task.listId = childList.id
+                })
                 this.ungroupListsArray.push(childList)
 
                 if (index + 1 === arr.length) {
@@ -436,6 +440,10 @@ export default {
 
                         if (index >= +this.groupOfListId + arr.length - 2) {
                             list.id = index
+
+                            list.tasks.forEach((task) => {
+                                task.listId = index
+                            })
                         }
                     })
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
