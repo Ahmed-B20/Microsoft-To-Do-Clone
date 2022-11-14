@@ -66,7 +66,7 @@ export default {
                     this.checkHeight = false
                 }
             } else if (!!this.listId) {
-                if (window.innerHeight - 250 <= (+this.lists[this.listId].tasks.length + 1) * 55) {
+                if (window.innerHeight - 250 <= (+this.lists[this.listId]?.tasks?.length + 1) * 55) {
                     this.checkHeight = true
                 } else {
                     this.checkHeight = false
