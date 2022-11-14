@@ -521,16 +521,13 @@ export default {
             this.lists[this.parentId].listsArray.forEach((list, index) => {
                 if (index >= this.selectedChildListId) {
                     list.id = list.id - 1
-                    
+
                     if (list.listChildren) {
                         list.listsArray.forEach((childList) => {
                             childList.tasks.forEach((task) => {
+                                task.childListId -= 1
                                 task.listId -= 1
                             })
-                        })
-                    } else {
-                        list.tasks.forEach((task) => {
-                            task.listId -= 1
                         })
                     }
                 }
@@ -613,6 +610,10 @@ export default {
         MoveChildListTo() {
             this.lists[this.$refs.selectedLists.value].listsArray.push(this.lists[this.parentId].listsArray[this.selectedChildListId])
 
+            this.lists[this.$refs.selectedLists.value].listsArray.at(-1).tasks.forEach((task)=>{
+                task.listId = this.$refs.selectedLists.value
+            })
+
             if (this.lists[this.$refs.selectedLists.value].listsArray.length > 0) {
                 let index = this.lists[this.$refs.selectedLists.value].listsArray.length - 1
                 this.lists[this.$refs.selectedLists.value].listsArray[index].id = this.lists[this.$refs.selectedLists.value].listsArray.length
@@ -620,6 +621,10 @@ export default {
                 this.lists[this.parentId].listsArray.forEach((list, index) => {
                     if (index >= +this.selectedChildListId) {
                         list.id -= 1
+
+                        list.tasks.forEach((task) => {
+                            task.childListId -= 1
+                        })
                     }
                 })
             } else {
@@ -651,6 +656,10 @@ export default {
             this.lists[this.parentId].listsArray.forEach((list, index) => {
                 if (index >= +this.selectedChildListId) {
                     list.id -= 1
+
+                    list.tasks.forEach((task) => {
+                        task.childListId -= 1
+                    })
                 }
             })
 
