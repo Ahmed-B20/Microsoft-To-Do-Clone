@@ -521,6 +521,18 @@ export default {
             this.lists[this.parentId].listsArray.forEach((list, index) => {
                 if (index >= this.selectedChildListId) {
                     list.id = list.id - 1
+                    
+                    if (list.listChildren) {
+                        list.listsArray.forEach((childList) => {
+                            childList.tasks.forEach((task) => {
+                                task.listId -= 1
+                            })
+                        })
+                    } else {
+                        list.tasks.forEach((task) => {
+                            task.listId -= 1
+                        })
+                    }
                 }
             })
 

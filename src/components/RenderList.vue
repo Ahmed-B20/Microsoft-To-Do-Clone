@@ -286,12 +286,31 @@ export default {
             // }
 
             this.lists.splice(this.listId, 1)
+            // this.lists.forEach((list, index) => {
+            //     if (index >= this.listId) {
+            //         list.id = list.id - 1
+            //     }
+            // })
+
             this.lists.forEach((list, index) => {
                 if (index >= this.listId) {
                     list.id = list.id - 1
+
+                    if (list.listChildren) {
+                        list.listsArray.forEach((childList) => {
+                            childList.tasks.forEach((task) => {
+                                task.listId -= 1
+                            })
+                        })
+                    } else {
+                        list.tasks.forEach((task) => {
+                            task.listId -= 1
+                        })
+                    }
                 }
             })
 
+            console.log('ff');
             this.$router.push({ name: 'home' })
 
 
@@ -398,9 +417,27 @@ export default {
 
             this.lists.splice(this.listId, 1)
 
+            // this.lists.forEach((list, index) => {
+            //     if (index >= this.listId) {
+            //         list.id = list.id - 1
+            //     }
+            // })
+
             this.lists.forEach((list, index) => {
                 if (index >= this.listId) {
                     list.id = list.id - 1
+
+                    if (list.listChildren) {
+                        list.listsArray.forEach((childList) => {
+                            childList.tasks.forEach((task) => {
+                                task.listId -= 1
+                            })
+                        })
+                    } else {
+                        list.tasks.forEach((task) => {
+                            task.listId -= 1
+                        })
+                    }
                 }
             })
 
