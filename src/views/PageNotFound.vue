@@ -19,11 +19,6 @@ import { toggleAside } from '@/stores/toggleAside.js'
 
 export default {
     name: 'PageNotFound',
-    data() {
-        return {
-
-        }
-    },
     computed: {
         ...mapWritableState(toggleAside, ['toggleState']),
     },

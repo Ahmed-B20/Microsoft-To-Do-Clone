@@ -162,6 +162,8 @@ export default {
         }
     },
     beforeRouteEnter(to, from, next) {
+        console.log(to, from);
+
         if (to.params.listId > JSON.parse(localStorage.getItem("allListAndTasks"))?.length || to.params?.childId > JSON.parse(localStorage.getItem("allListAndTasks"))[to.params.listId].listsArray?.length) {
             next('not-found')
         } else {
