@@ -17,44 +17,49 @@
                     <input type="checkbox" id="chk" aria-hidden="true">
 
                     <div class="signup">
-                        <form>
+                        <div>
                             <label for="chk" aria-hidden="true">Sign up</label>
 
                             <label for="username" class="custom-label">
                                 <img for="username" src="@/assets/design-material/icons/user.png" alt="email" />
-                                <input type="text" name="username" placeholder="User name" required id="username">
+                                <input type="text" name="username" placeholder="User name" required id="username"
+                                    v-model="username">
                             </label>
 
                             <label for="email" class="custom-label">
                                 <img for="email" src="@/assets/design-material/icons/user.png" alt="email" />
-                                <input type="email" name="email" placeholder="Email" required id="email">
+                                <input type="email" name="email" placeholder="Email" required id="email"
+                                    v-model="email">
                             </label>
 
                             <label for="password" class="custom-label">
                                 <img for="password" src="@/assets/design-material/icons/lock.png" alt="email" />
-                                <input type="password" name="password" placeholder="Password" required id="password">
+                                <input type="password" name="password" placeholder="Password" required id="password"
+                                    v-model="password">
                             </label>
 
-                            <button>Sign up</button>
-                        </form>
+                            <button @click="signUp">Sign up</button>
+                        </div>
                     </div>
 
                     <div class="login">
-                        <form>
+                        <div>
                             <label for="chk" aria-hidden="true">Login</label>
 
                             <label for="email" class="custom-label">
                                 <img for="email" src="@/assets/design-material/icons/user.png" alt="email" />
-                                <input type="email" name="email" placeholder="Email" required id="email">
+                                <input type="email" name="email" placeholder="Email" required id="email"
+                                    v-model="email">
                             </label>
 
                             <label for="password" class="custom-label">
                                 <img for="password" src="@/assets/design-material/icons/lock.png" alt="email" />
-                                <input type="password" name="password" placeholder="Password" required id="password">
+                                <input type="password" name="password" placeholder="Password" required id="password"
+                                    v-model="password">
                             </label>
 
-                            <button>Login</button>
-                        </form>
+                            <button @click="login">Login</button>
+                        </div>
                     </div>
 
                     <div class="screen">
@@ -70,3 +75,45 @@
         </div>
     </teleport>
 </template>
+
+<script>
+import { allUsers } from '@/stores/allUsers.js'
+import { mapState, mapWritableState } from 'pinia'
+
+export default {
+    name: 'Login',
+    data() {
+        return {
+            username: '',
+            email: '',
+            password: '',
+            regexForMail: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/,
+            regexForPassword: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+            regexForUsername: /^[A-Za-z][A-Za-z0-9_]{3,16}$/
+        }
+    },
+    watch: {
+        email() {
+            if (this.regexForMail.test(this.email)) {
+                console.log(true);
+            } else {
+                console.log(false);
+            }
+        },
+        password() {
+            if (this.regexForPassword.test(this.password)) {
+                console.log(true);
+            } else {
+                console.log(false);
+            }
+        },
+        username() {
+            if (this.regexForUsername.test(this.username)) {
+                console.log(true);
+            } else {
+                console.log(false);
+            }
+        }
+    }
+}
+</script>
