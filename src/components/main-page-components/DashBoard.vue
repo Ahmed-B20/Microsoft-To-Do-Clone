@@ -38,9 +38,9 @@ export default {
   },
   computed: {
     ...mapWritableState(toggleAside, ['toggleState']),
-    ...mapWritableState(allLists, ['lists', 'smartList']),
-    ...mapWritableState(allUsers, ['allUsers',]),
-    ...mapWritableState(statistics, ['statistics',]),
+    ...mapWritableState(allLists, ['lists']),
+    ...mapWritableState(allUsers, ['allUsers']),
+    ...mapWritableState(statistics, ['statistics']),
   },
   methods: {
     myEventHandler() {

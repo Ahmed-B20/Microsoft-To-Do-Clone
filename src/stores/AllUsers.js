@@ -17,6 +17,3 @@ export const allUsers = defineStore('allUsers', {
     },
   },
 })
-
-
-
