@@ -19,9 +19,22 @@
                     <div class="signup">
                         <form>
                             <label for="chk" aria-hidden="true">Sign up</label>
-                            <input type="text" name="txt" placeholder="User name" required>
-                            <input type="email" name="email" placeholder="Email" required>
-                            <input type="password" name="pswd" placeholder="Password" required>
+
+                            <label for="username" class="custom-label">
+                                <img for="username" src="@/assets/design-material/icons/user.png" alt="email" />
+                                <input type="text" name="username" placeholder="User name" required id="username">
+                            </label>
+
+                            <label for="email" class="custom-label">
+                                <img for="email" src="@/assets/design-material/icons/user.png" alt="email" />
+                                <input type="email" name="email" placeholder="Email" required id="email">
+                            </label>
+
+                            <label for="password" class="custom-label">
+                                <img for="password" src="@/assets/design-material/icons/lock.png" alt="email" />
+                                <input type="password" name="password" placeholder="Password" required id="password">
+                            </label>
+
                             <button>Sign up</button>
                         </form>
                     </div>
@@ -29,8 +42,17 @@
                     <div class="login">
                         <form>
                             <label for="chk" aria-hidden="true">Login</label>
-                            <input type="email" name="email" placeholder="Email" required>
-                            <input type="password" name="pswd" placeholder="Password" required>
+
+                            <label for="email" class="custom-label">
+                                <img for="email" src="@/assets/design-material/icons/user.png" alt="email" />
+                                <input type="email" name="email" placeholder="Email" required id="email">
+                            </label>
+
+                            <label for="password" class="custom-label">
+                                <img for="password" src="@/assets/design-material/icons/lock.png" alt="email" />
+                                <input type="password" name="password" placeholder="Password" required id="password">
+                            </label>
+
                             <button>Login</button>
                         </form>
                     </div>
