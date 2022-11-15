@@ -17,11 +17,11 @@
                     <input type="checkbox" id="chk" aria-hidden="true">
 
                     <div class="signup">
-                        <div>
+                        <form>
                             <label for="chk" aria-hidden="true">Sign up</label>
 
                             <label for="username" class="custom-label">
-                                <img for="username" src="@/assets/design-material/icons/user.png" alt="email" />
+                                <img for="username" src="@/assets/design-material/icons/user.png" alt="username" />
                                 <input type="text" name="username" placeholder="User name" required id="username"
                                     v-model="username">
                             </label>
@@ -33,33 +33,33 @@
                             </label>
 
                             <label for="password" class="custom-label">
-                                <img for="password" src="@/assets/design-material/icons/lock.png" alt="email" />
+                                <img for="password" src="@/assets/design-material/icons/lock.png" alt="password" />
                                 <input type="password" name="password" placeholder="Password" required id="password"
                                     v-model="password">
                             </label>
 
                             <button @click="signUp">Sign up</button>
-                        </div>
+                        </form>
                     </div>
 
                     <div class="login">
-                        <div>
+                        <form>
                             <label for="chk" aria-hidden="true">Login</label>
 
-                            <label for="email" class="custom-label">
-                                <img for="email" src="@/assets/design-material/icons/user.png" alt="email" />
-                                <input type="email" name="email" placeholder="Email" required id="email"
+                            <label for="login-email" class="custom-label">
+                                <img for="login-email" src="@/assets/design-material/icons/user.png" alt="email" />
+                                <input type="email" name="email" placeholder="Email" required id="login-email"
                                     v-model="email">
                             </label>
 
-                            <label for="password" class="custom-label">
-                                <img for="password" src="@/assets/design-material/icons/lock.png" alt="email" />
-                                <input type="password" name="password" placeholder="Password" required id="password"
+                            <label for="login-password" class="custom-label">
+                                <img for="login-password" src="@/assets/design-material/icons/lock.png" alt="password" />
+                                <input type="password" name="password" placeholder="Password" required id="login-password"
                                     v-model="password">
                             </label>
 
                             <button @click="login">Login</button>
-                        </div>
+                        </form>
                     </div>
 
                     <div class="screen">
@@ -89,29 +89,38 @@ export default {
             password: '',
             regexForMail: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/,
             regexForPassword: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-            regexForUsername: /^[A-Za-z][A-Za-z0-9_]{3,16}$/
+            regexForUsername: /^[A-Za-z][A-Za-z0-9_]{3,16}$/,
+            usernameState: false,
+            emailState: false,
+            passwordState: false,
         }
+    },
+    computed: {
+        ...mapWritableState(allUsers, ['allUsers']),
+    },
+    methods:{
+        signUp
     },
     watch: {
         email() {
             if (this.regexForMail.test(this.email)) {
-                console.log(true);
+                this.emailState = true
             } else {
-                console.log(false);
+                this.emailState = false
             }
         },
         password() {
             if (this.regexForPassword.test(this.password)) {
-                console.log(true);
+                this.passwordState = true
             } else {
-                console.log(false);
+                this.passwordState = true
             }
         },
         username() {
             if (this.regexForUsername.test(this.username)) {
-                console.log(true);
+                this.usernameState = true
             } else {
-                console.log(false);
+                this.usernameState = true
             }
         }
     }

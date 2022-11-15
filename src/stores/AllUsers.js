@@ -43,15 +43,17 @@ export const allUsers = defineStore('allUsers', {
 
         allUsers: JSON.parse(localStorage.getItem('allUsers')) || [
           {
-              userCredentials: [
+              usersCredentials: [
                 {
                   id:'',
                   userName: '',
                   email: '',
                   password: '',
-                  lastLogin: ''
+                  lastLogin: '',
+                  loginStatus: false,
                 }
-              ]
+              ],
+              numberOfUsers: 0
           }
       ]
     }
