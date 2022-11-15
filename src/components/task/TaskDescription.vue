@@ -258,11 +258,10 @@
 
 <script>
 import { allLists } from '@/stores/allLists.js'
-
 import { mapState, mapWritableState } from 'pinia'
-import PopUp from '../PopUp.vue'
-import DropDown from '../DropDown.vue';
 
+import DropDown from '../global-components/DropDown.vue'
+import PopUp from '../global-components/PopUp.vue'
 import ImportantToggle from './description_component/ImportantToggle.vue';
 import CompleteToggle from './description_component/CompleteToggle.vue';
 import Rename from './description_component/Rename.vue';

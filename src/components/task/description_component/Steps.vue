@@ -75,8 +75,8 @@
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 
-import DropDown from '../global-components/DropDown.vue'
-import PopUp from '../global-components/PopUp.vue'
+import DropDown from '../../global-components/DropDown.vue'
+import PopUp from '../../global-components/PopUp.vue'
 
 export default {
     name: 'Rename',

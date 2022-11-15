@@ -132,18 +132,17 @@
 
 <script>
 
-import ContentView from '@/components/ContentView.vue';
-import SingleTask from '@/components/SingleTask.vue';
-import TaskDescription from '@/components/TaskDescription.vue'
-import DropDown from '@/components/DropDown.vue';
+import ContentView from '@/components/main-page-components/ContentView.vue';
+import SingleTask from '@/components/task/SingleTask.vue';
+import TaskDescription from '@/components/task/TaskDescription.vue'
+import DropDown from '@/components/global-components/DropDown.vue';
+import PopUp from '@/components/global-components/PopUp.vue'
 
 
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
-
 import { toggleAside } from '@/stores/toggleAside.js'
 
-import PopUp from '@/components/PopUp.vue'
 
 export default {
     name: 'List',
