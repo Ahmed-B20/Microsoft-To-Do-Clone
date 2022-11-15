@@ -102,7 +102,9 @@ export default {
         ...mapWritableState(allUsers, ['allUsers']),
     },
     methods: {
-        signUp() {
+        signUp(event) {
+            event.preventDefault();
+
             if (this.emailState && this.emailState && this.passwordState && this.signInBefore) {
                 this.signUpData.id = this.allUsers[0].numberOfUsers + 1
             } else {
@@ -134,6 +136,7 @@ export default {
             if (this.regexForPassword.test(this.password)) {
                 this.passwordState = true
                 this.signUpData.password = this.password
+                console.log('ff');
             } else {
                 this.passwordState = false
                 console.log('error');
