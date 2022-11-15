@@ -107,18 +107,18 @@
 <script>
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
-import PopUp from './PopUp.vue'
-import DropDown from '../components/DropDown.vue';
-import TaskInfoIcons from './task/TaskInfoIcons.vue';
+import DropDown from '../global-components/DropDown.vue'
+import PopUp from '../global-components/PopUp.vue'
+import TaskInfoIcons from './TaskInfoIcons.vue';
 
-import Important from './task/element/Important.vue'
-import Complete from './task/element/Complete.vue'
+import Important from './element/Important.vue'
+import Complete from './element/Complete.vue'
 
-import RenameTask from './task/drop down/RenameTask.vue';
-import MarkAsImportant from './task/drop down/MarkAsImportant.vue';
-import MarkAsComplete from './task/drop down/MarkAsComplete.vue';
-import AddToMyDay from './task/drop down/AddToMyDay.vue';
-import DueDate from './task/drop down/DueDate.vue';
+import RenameTask from './drop down/RenameTask.vue';
+import MarkAsImportant from './drop down/MarkAsImportant.vue';
+import MarkAsComplete from './drop down/MarkAsComplete.vue';
+import AddToMyDay from './drop down/AddToMyDay.vue';
+import DueDate from './drop down/DueDate.vue';
 
 export default {
     name: 'SingleTask',

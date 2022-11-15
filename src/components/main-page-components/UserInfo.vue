@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import PopUp from './PopUp.vue'
+import PopUp from '../global-components/PopUp.vue'
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
-import ToDoAnalysisVue from './task/user-info/ToDoAnalysis.vue'
+import ToDoAnalysisVue from '../user-info/ToDoAnalysis.vue'
 
 export default {
   name: 'user-info',

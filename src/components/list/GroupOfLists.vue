@@ -172,8 +172,8 @@
 </template>
 
 <script>
-import PopUp from './PopUp.vue'
-import DropDown from '../components/DropDown.vue';
+import DropDown from '../global-components/DropDown.vue'
+import PopUp from '../global-components/PopUp.vue'
 
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'

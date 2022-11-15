@@ -127,13 +127,14 @@
 
 <script>
 
-import ContentView from './ContentView.vue';
-import GroupOfLists from './GroupOfLists.vue';
+// import ContentView from '../../ContentView.vue';main-page-components
+import ContentView from '../main-page-components/ContentView.vue';
+import GroupOfLists from '../list/GroupOfLists.vue';
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 
-import PopUp from './PopUp.vue'
-import DropDown from '../components/DropDown.vue';
+import DropDown from '../global-components/DropDown.vue'
+import PopUp from '../global-components/PopUp.vue'
 
 export default {
     name: 'render-list',

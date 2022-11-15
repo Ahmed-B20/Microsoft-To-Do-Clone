@@ -35,7 +35,7 @@
 import { allLists } from '@/stores/allLists.js'
 import { statistics } from '@/stores/statistics.js'
 import { mapWritableState } from 'pinia'
-import PopUp from './PopUp.vue'
+import PopUp from '../global-components/PopUp.vue'
 
 
 export default {

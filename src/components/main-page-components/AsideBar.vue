@@ -17,8 +17,8 @@ import UserInfo from "./UserInfo.vue";
 import AsideLinks from "./AsideLinks.vue";
 
 
-import RenderList from './RenderList.vue';
-import AddList from "./AddList.vue";
+import RenderList from './task/list/RenderList.vue';
+import AddList from "./task/list/AddList.vue";
 
 import { toggleAside } from '@/stores/toggleAside.js'
 import { mapState, mapWritableState } from 'pinia'
