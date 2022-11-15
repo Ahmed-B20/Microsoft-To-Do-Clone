@@ -1,7 +1,7 @@
 <template>
     <teleport to='body'>
         <div class="login-container">
-            <div class="main-content">
+            <div class="main-content-login">
                 <div class="container">
                     <div class="screen">
                         <div class="screen__background">
@@ -53,9 +53,10 @@
                             </label>
 
                             <label for="login-password" class="custom-label">
-                                <img for="login-password" src="@/assets/design-material/icons/lock.png" alt="password" />
-                                <input type="password" name="password" placeholder="Password" required id="login-password"
-                                    v-model="password">
+                                <img for="login-password" src="@/assets/design-material/icons/lock.png"
+                                    alt="password" />
+                                <input type="password" name="password" placeholder="Password" required
+                                    id="login-password" v-model="password">
                             </label>
 
                             <button @click="login">Login</button>
@@ -93,18 +94,34 @@ export default {
             usernameState: false,
             emailState: false,
             passwordState: false,
+            signInBefore: false,
         }
     },
     computed: {
         ...mapWritableState(allUsers, ['allUsers']),
     },
-    methods:{
-        signUp
+    methods: {
+        signUp() {
+            if (this.emailState && this.emailState && this.passwordState) {
+
+            }
+        }
     },
     watch: {
         email() {
             if (this.regexForMail.test(this.email)) {
                 this.emailState = true
+
+                this.allUsers.usersCredentials.forEach((userInfo, index) => {
+                    if (userInfo.email === this.email) {
+                        this.signInBefore = false
+                    } else {
+                        if (index + 1 === this.allUsers.usersCredentials.length) {
+                            this.signInBefore = true
+                            console.log(this.signInBefore);
+                        }
+                    }
+                })
             } else {
                 this.emailState = false
             }
