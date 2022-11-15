@@ -107,6 +107,12 @@ export default {
 
             if (this.emailState && this.emailState && this.passwordState && this.signInBefore) {
                 this.signUpData.id = this.allUsers[0].numberOfUsers + 1
+                this.signUpData.loginStatus = true
+                this.signUpData.lastLogin = new Date()
+
+                this.allUsers[0].usersCredentials.push(this.signUpData)
+                localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
+                console.log(this.allUsers);
             } else {
                 console.log('error');
             }
@@ -136,7 +142,6 @@ export default {
             if (this.regexForPassword.test(this.password)) {
                 this.passwordState = true
                 this.signUpData.password = this.password
-                console.log('ff');
             } else {
                 this.passwordState = false
                 console.log('error');

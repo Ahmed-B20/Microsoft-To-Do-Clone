@@ -44,14 +44,14 @@ export const allUsers = defineStore('allUsers', {
         allUsers: JSON.parse(localStorage.getItem('allUsers')) || [
           {
               usersCredentials: [
-                {
-                  id:'',
-                  userName: '',
-                  email: '',
-                  password: '',
-                  lastLogin: '',
-                  loginStatus: false,
-                }
+                // {
+                //   id:'',
+                //   userName: '',
+                //   email: '',
+                //   password: '',
+                //   lastLogin: '',
+                //   loginStatus: false,
+                // }
               ],
               numberOfUsers: 0
           }
