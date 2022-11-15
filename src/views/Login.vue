@@ -95,6 +95,9 @@ export default {
             emailState: false,
             passwordState: false,
             signInBefore: false,
+            loginEmailState: false,
+            loginPasswordState: false,
+            loginIndex: null,
             signUpData: {}
         }
     },
@@ -105,7 +108,7 @@ export default {
         signUp(event) {
             event.preventDefault();
 
-            if (this.emailState && this.emailState && this.passwordState && this.signInBefore) {
+            if (this.emailState && this.usernameState && this.passwordState && this.signInBefore) {
                 this.signUpData.id = this.allUsers[0].numberOfUsers + 1
                 this.signUpData.loginStatus = true
                 this.signUpData.lastLogin = new Date()
@@ -113,6 +116,25 @@ export default {
                 this.allUsers[0].usersCredentials.push(this.signUpData)
                 localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
                 console.log(this.allUsers);
+                this.emailState = false
+                this.usernameState = false
+                this.passwordState = false
+                this.signInBefore = false
+            } else {
+                console.log('error');
+            }
+        },
+        login(event) {
+            event.preventDefault();
+            if (this.emailState && this.passwordState && this.loginEmailState && this.loginPasswordState) {
+                this.allUsers[0].usersCredentials[this.loginIndex].lastLogin = new Date()
+                localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
+
+                console.log('the first login');
+                this.emailState = false
+                this.passwordState = false
+                this.loginEmailState = false
+                this.loginPasswordState = false
             } else {
                 console.log('error');
             }
@@ -126,6 +148,8 @@ export default {
                 this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
                     if (userInfo.email === this.email) {
                         this.signInBefore = false
+                        this.loginEmailState = true
+                        this.loginIndex = index
                     } else {
                         if (index + 1 === this.allUsers[0].usersCredentials.length) {
                             this.signInBefore = true
@@ -142,6 +166,16 @@ export default {
             if (this.regexForPassword.test(this.password)) {
                 this.passwordState = true
                 this.signUpData.password = this.password
+
+                this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
+                    if (userInfo.password === this.password) {
+                        this.loginPasswordState = true
+                    } else {
+                        if (index + 1 === this.allUsers[0].usersCredentials.length) {
+                            this.loginPasswordState = false
+                        }
+                    }
+                })
             } else {
                 this.passwordState = false
                 console.log('error');
