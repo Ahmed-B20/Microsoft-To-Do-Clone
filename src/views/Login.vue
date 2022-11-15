@@ -95,6 +95,7 @@ export default {
             emailState: false,
             passwordState: false,
             signInBefore: false,
+            signUpData: {}
         }
     },
     computed: {
@@ -102,8 +103,10 @@ export default {
     },
     methods: {
         signUp() {
-            if (this.emailState && this.emailState && this.passwordState) {
-
+            if (this.emailState && this.emailState && this.passwordState && this.signInBefore) {
+                this.signUpData.id = this.allUsers[0].numberOfUsers + 1
+            } else {
+                console.log('error');
             }
         }
     },
@@ -112,32 +115,37 @@ export default {
             if (this.regexForMail.test(this.email)) {
                 this.emailState = true
 
-                this.allUsers.usersCredentials.forEach((userInfo, index) => {
+                this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
                     if (userInfo.email === this.email) {
                         this.signInBefore = false
                     } else {
-                        if (index + 1 === this.allUsers.usersCredentials.length) {
+                        if (index + 1 === this.allUsers[0].usersCredentials.length) {
                             this.signInBefore = true
-                            console.log(this.signInBefore);
+                            this.signUpData.email = this.email
                         }
                     }
                 })
             } else {
                 this.emailState = false
+                console.log('error');
             }
         },
         password() {
             if (this.regexForPassword.test(this.password)) {
                 this.passwordState = true
+                this.signUpData.password = this.password
             } else {
-                this.passwordState = true
+                this.passwordState = false
+                console.log('error');
             }
         },
         username() {
             if (this.regexForUsername.test(this.username)) {
                 this.usernameState = true
+                this.signUpData.username = this.username
             } else {
-                this.usernameState = true
+                this.usernameState = false
+                console.log('error');
             }
         }
     }

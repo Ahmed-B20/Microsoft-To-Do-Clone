@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import PopUp from '../global-components/PopUp.vue'
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
+import PopUp from '../global-components/PopUp.vue'
 import ToDoAnalysisVue from '../user-info/ToDoAnalysis.vue'
 
 export default {
