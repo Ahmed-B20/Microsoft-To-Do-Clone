@@ -24,14 +24,13 @@ export default {
     TabContent,
     AsideBar,
   },
-
   created() {
     window.addEventListener("resize", this.myEventHandler);
   },
   destroyed() {
     window.removeEventListener("resize", this.myEventHandler);
   },
-  beforeMount(){
+  beforeMount() {
     localStorage.setItem('allListAndTasks', JSON.stringify(this.lists))
     localStorage.setItem('allUsers', JSON.stringify(this.allUsers))
     localStorage.setItem('allListAndTasksStatistics', JSON.stringify(this.statistics))

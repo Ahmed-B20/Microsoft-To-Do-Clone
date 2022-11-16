@@ -19,6 +19,13 @@ import { toggleAside } from '@/stores/toggleAside.js'
 
 export default {
     name: 'PageNotFound',
+    beforeRouteEnter(to, from, next) {
+        if (!!JSON.parse(localStorage.getItem("allUsers"))[0].idOfLoginUser) {
+            next('not-found')
+        } else {
+            next('login')
+        }
+    },
     computed: {
         ...mapWritableState(toggleAside, ['toggleState']),
     },

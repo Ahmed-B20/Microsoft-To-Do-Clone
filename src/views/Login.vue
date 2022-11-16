@@ -112,6 +112,7 @@ export default {
     methods: {
         signUp(event) {
             event.preventDefault();
+            console.log(this.emailState, this.usernameState, this.passwordState, this.signInBefore);
 
             if (this.emailState && this.usernameState && this.passwordState && this.signInBefore) {
                 this.signUpData.id = this.allUsers[0].numberOfUsers + 1
@@ -119,18 +120,28 @@ export default {
                 this.signUpData.lastLogin = new Date()
 
                 this.allUsers[0].usersCredentials.push(this.signUpData)
+                this.allUsers[0].idOfLoginUser = this.signUpData.id
+                this.allUsers[0].numberOfUsers++
                 localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
-                console.log(this.allUsers);
+
                 this.emailState = false
                 this.usernameState = false
                 this.passwordState = false
                 this.signInBefore = false
+                this.showPassword = false
+                this.signUpData = {}
+
+                setTimeout(() => {
+                    console.log('work');
+                    this.$router.push({ name: 'home' })
+                }, 100)
             } else {
                 console.log('error');
             }
         },
         login(event) {
             event.preventDefault();
+            console.log(this.emailState, this.passwordState, this.loginEmailState, this.loginPasswordState);
             if (this.emailState && this.passwordState && this.loginEmailState && this.loginPasswordState) {
                 this.allUsers[0].usersCredentials[this.loginIndex].lastLogin = new Date()
                 localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
@@ -140,6 +151,11 @@ export default {
                 this.passwordState = false
                 this.loginEmailState = false
                 this.loginPasswordState = false
+                this.showPassword = false
+
+                setTimeout(() => {
+                    this.$router.push({ name: 'home' })
+                }, 100)
             } else {
                 console.log('error');
             }
@@ -160,19 +176,24 @@ export default {
         email() {
             if (this.regexForMail.test(this.email)) {
                 this.emailState = true
-
-                this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
-                    if (userInfo.email === this.email) {
-                        this.signInBefore = false
-                        this.loginEmailState = true
-                        this.loginIndex = index
-                    } else {
-                        if (index + 1 === this.allUsers[0].usersCredentials.length) {
-                            this.signInBefore = true
-                            this.signUpData.email = this.email
+                if (this.allUsers[0].usersCredentials.length > 0) {
+                    this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
+                        if (userInfo.email === this.email) {
+                            this.signInBefore = false
+                            this.loginEmailState = true
+                            this.loginIndex = index
+                        } else {
+                            if (index + 1 === this.allUsers[0].usersCredentials.length) {
+                                this.signInBefore = false
+                                this.signUpData.email = this.email
+                                this.loginEmailState = false
+                            }
                         }
-                    }
-                })
+                    })
+                } else {
+                    this.signUpData.email = this.email
+                    this.signInBefore = true
+                }
             } else {
                 this.emailState = false
                 console.log('error');

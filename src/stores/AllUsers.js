@@ -6,7 +6,8 @@ export const allUsers = defineStore('allUsers', {
         allUsers: JSON.parse(localStorage.getItem('allUsers')) || [
           {
             usersCredentials: [],
-            numberOfUsers: 0
+            numberOfUsers: 0,
+            idOfLoginUser: null
           }
       ]
     }
