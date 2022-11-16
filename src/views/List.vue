@@ -1,5 +1,4 @@
 <template>
-    <!-- <keep-alive> -->
     <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :childId="childId" :listId="listId"
         :key="childId ? childId : listId">
         <template #toggle-sidebar>
@@ -36,7 +35,6 @@
                 :childId="childId" />
         </template>
     </content-view>
-    <!-- </keep-alive> -->
 
     <transition name="to-left" :css="animated">
         <TaskDescription :key="descriptionTaskIndex" :toggleShrink="toggleShrink"
@@ -163,14 +161,14 @@ export default {
     beforeRouteEnter(to, from, next) {
         if (!!JSON.parse(localStorage.getItem("allUsers"))[0].idOfLoginUser) {
             if (to.params.listId >= JSON.parse(localStorage.getItem("allListAndTasks"))?.length || to.params?.childId > JSON.parse(localStorage.getItem("allListAndTasks"))[to.params.listId]?.listsArray?.length) {
-                next('not-found')
+                next({ name: 'not-found' })
             } else if (JSON.parse(localStorage.getItem("allListAndTasks"))[to.params.listId].listChildren && !to.params?.childId) {
-                next('not-found')
+                next({ name: 'not-found' })
             } else {
                 next()
             }
         } else {
-            next('login')
+            next({ name: 'login' })
         }
     },
     beforeMount: function () {

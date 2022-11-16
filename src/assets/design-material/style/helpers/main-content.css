@@ -71,3 +71,27 @@
     opacity: 1;
     transform: translateX(-280px);
 }
+
+/* .main-content-enter-active,
+.main-content-leave-active {
+    transition: opacity 0.2s ease;
+}
+
+.main-content-enter-from,
+.main-content-leave-to {
+    opacity: 0;
+} */
+
+
+.main-content-enter-active,
+.main-content-leave-active {
+  transition: all 0.25s ease-out;
+}
+.main-content-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.main-content-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}

@@ -87,6 +87,13 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'Login',
+    beforeRouteEnter(to, from, next) {
+        if (!!JSON.parse(localStorage.getItem("allUsers"))[0].idOfLoginUser) {
+            next({ name: 'home' })
+        } else {
+            next()
+        }
+    },
     data() {
         return {
             username: '',

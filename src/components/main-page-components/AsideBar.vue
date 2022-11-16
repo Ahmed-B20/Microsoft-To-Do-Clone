@@ -4,7 +4,6 @@
       <img src="@/assets/design-material/icons/menu.png" alt="close-sidebar">
     </button>
     <UserInfo />
-    <!-- <AsideLinks /> -->
 
     <RenderList />
 
@@ -14,7 +13,6 @@
   
 <script>
 import UserInfo from "./UserInfo.vue";
-import AsideLinks from "./AsideLinks.vue";
 
 
 import RenderList from '../list/RenderList.vue';
@@ -29,7 +27,6 @@ export default {
     UserInfo,
     RenderList,
     AddList,
-    AsideLinks,
   },
   computed: {
     ...mapWritableState(toggleAside, ['toggleState']),
