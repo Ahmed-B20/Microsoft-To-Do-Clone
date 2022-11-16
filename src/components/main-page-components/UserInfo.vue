@@ -2,7 +2,7 @@
   <div class="user-info-parent" @click.self="showUserInfo">
     <div class="user-info" @click.self="showUserInfo">
       <div @click="showUserInfo" class="img">
-        <span>{{ username.slice(0, 2) }}</span>
+        <span>{{ username?.slice(0, 2) }}</span>
       </div>
 
       <div @click="showUserInfo" class="info">
@@ -39,14 +39,32 @@
     </template>
 
     <template v-slot:content>
-      <p @click="deleteAllLists">Delete All Lists and Tasks</p>
-      <p @click="deleteAllStatistics">Delete All Statistics</p>
-      <p @click="deleteAccount">Delete Account</p>
-      <p @click="logOut">Log Out</p>
+      <p class="user-setting" @click="toggleConfirmPopup('lists')">Delete All Lists and Tasks</p>
+      <p class="user-setting" @click="toggleConfirmPopup('statistics')">Delete All Statistics</p>
+      <p class="user-setting" @click="toggleConfirmPopup('account')">Delete Account</p>
+      <p class="user-setting" @click="logOut">Log Out</p>
     </template>
 
     <template #button>
       <button class="close" @click="userSetting">Cancel</button>
+    </template>
+  </PopUp>
+
+  <PopUp :showPopUp="confirmPopup">
+    <template #title>
+      Hello {{ username }}
+    </template>
+
+    <template v-slot:content>
+      <p>You Will Delete {{ target === 'lists' ? 'All Lists' : target === 'statistics' ? 'All Statistics' : 'Your Account' }} Permanently
+      </p>
+    </template>
+
+    <template #button>
+      <button v-if="target === 'lists'" class="delete" @click="deleteAllLists">ok</button>
+      <button v-if="target === 'statistics'" class="delete" @click="deleteAllStatistics">ok</button>
+      <button v-if="target === 'account'" class="delete" @click="deleteAccount">ok</button>
+      <button class="close" @click="toggleConfirmPopup">Cancel</button>
     </template>
   </PopUp>
 </template>
@@ -66,13 +84,15 @@ export default {
     return {
       showPopUp: false,
       showSettingPopUp: false,
+      confirmPopup: false,
+      target: '',
       username: '',
       email: '',
     }
   },
   beforeMount() {
-    this.username = this.allUsers[0].usersCredentials[0].username
-    this.email = this.allUsers[0].usersCredentials[0].email
+    this.username = this.allUsers[0].usersCredentials[0]?.username
+    this.email = this.allUsers[0].usersCredentials[0]?.email
   },
   components: {
     PopUp,
@@ -90,6 +110,10 @@ export default {
     },
     userSetting() {
       this.showSettingPopUp = !this.showSettingPopUp
+    },
+    toggleConfirmPopup(target) {
+      this.confirmPopup = !this.confirmPopup
+      this.target = target
     },
     logOut() {
       this.allUsers[0].idOfLoginUser = null

@@ -203,3 +203,9 @@
     right: 50px;
     border-radius: 60px;
 }
+
+/* ========================= user-setting */
+.user-setting {
+    cursor: pointer;
+    margin: 2px 0;
+}
