@@ -56,7 +56,8 @@
     </template>
 
     <template v-slot:content>
-      <p>You Will Delete {{ target === 'lists' ? 'All Lists' : target === 'statistics' ? 'All Statistics' : 'Your Account' }} Permanently
+      <p>
+        You Will Delete {{ target === 'lists' ? 'All Lists' : target === 'statistics' ? 'All Statistics' : 'Your Account' }} Permanently
       </p>
     </template>
 
@@ -198,6 +199,15 @@ export default {
       localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
       this.confirmPopup = !this.confirmPopup
       this.$router.push({ name: 'login' })
+    }
+  },
+  watch: {
+    allUsers: {
+      handler(newValue, oldValue) {
+        this.username = this.allUsers[0].usersCredentials[0]?.username
+        this.email = this.allUsers[0].usersCredentials[0]?.email
+      },
+      deep: true
     }
   }
 }
