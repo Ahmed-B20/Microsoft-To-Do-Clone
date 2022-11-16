@@ -187,6 +187,8 @@ export default {
                     this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
                         if (userInfo.email === this.email) {
                             this.signInBefore = false
+                            this.allUsers[0].idOfLoginUser = userInfo.id
+
                             this.loginEmailState = true
                             this.loginIndex = index
                         } else {
