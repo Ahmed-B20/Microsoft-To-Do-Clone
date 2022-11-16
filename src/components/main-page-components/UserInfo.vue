@@ -94,6 +94,8 @@ export default {
     logOut() {
       this.allUsers[0].idOfLoginUser = null
       localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
+      this.showSettingPopUp = !this.showSettingPopUp
+      this.$router.push({ name: 'login' })
     },
     deleteAllLists() {
       this.lists = [
@@ -105,6 +107,7 @@ export default {
       ]
 
       localStorage.setItem("allListAndTasks", JSON.stringify(this.lists));
+      this.showSettingPopUp = !this.showSettingPopUp
     },
     deleteAllStatistics() {
       this.statistics = {
@@ -127,6 +130,7 @@ export default {
       }
 
       localStorage.setItem("allListAndTasksStatistics", JSON.stringify(this.statistics));
+      this.showSettingPopUp = !this.showSettingPopUp
     },
     deleteAccount() {
       this.lists = [
@@ -167,6 +171,8 @@ export default {
       localStorage.setItem("allListAndTasks", JSON.stringify(this.lists));
       localStorage.setItem("allListAndTasksStatistics", JSON.stringify(this.statistics));
       localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
+      this.showSettingPopUp = !this.showSettingPopUp
+      this.$router.push({ name: 'login' })
     }
   }
 }
