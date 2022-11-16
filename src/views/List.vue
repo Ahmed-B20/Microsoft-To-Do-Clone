@@ -254,7 +254,7 @@ export default {
         },
         returnListName() {
             if (!!this.$route.params.childId) {
-                return this.lists[this.$route.params.listId].listsArray[this.$route.params.childId].listName
+                return this.lists[this.$route.params.listId]?.listsArray[this.$route.params.childId].listName
             } else {
                 return this.lists[this.$route.params.listId]?.listName
             }

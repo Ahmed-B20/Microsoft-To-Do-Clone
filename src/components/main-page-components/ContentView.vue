@@ -60,11 +60,16 @@ export default {
         },
         checkHeightFun() {
             if (!!this.childId) {
-                if (window.innerHeight - 250 <= (+this.lists[this.listId].listsArray[this.childId].tasks.length + 1) * 55) {
-                    this.checkHeight = true
-                } else {
-                    this.checkHeight = false
+                try {
+                    if (window.innerHeight - 250 <= (+this.lists[this.listId]?.listsArray[this.childId]?.tasks?.length + 1) * 55) {
+                        this.checkHeight = true
+                    } else {
+                        this.checkHeight = false
+                    }
+                } catch (error) {
+                    this.$router.push({ name: 'list', params: { listId: 0 } })
                 }
+
             } else if (!!this.listId) {
                 if (window.innerHeight - 250 <= (+this.lists[this.listId]?.tasks?.length + 1) * 55) {
                     this.checkHeight = true

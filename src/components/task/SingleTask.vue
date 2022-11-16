@@ -186,7 +186,7 @@ export default {
                 }
             } else {
                 if (!!this.childId) {
-                    if (this.returnLists[this.listId].listsArray[this.childId].tasks.length > 0) {
+                    if (this.returnLists[this.listId]?.listsArray[this.childId].tasks.length > 0) {
                         return this.returnLists[this.listId].listsArray[this.childId].tasks
                     }
                 } else {
