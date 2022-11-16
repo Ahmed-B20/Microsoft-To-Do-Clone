@@ -34,8 +34,10 @@
 
                             <label for="password" class="custom-label">
                                 <img for="password" src="@/assets/design-material/icons/lock.png" alt="password" />
-                                <input type="password" name="password" placeholder="Password" required id="password"
-                                    v-model="password">
+                                <input ref="signUpPass" type="password" name="password" placeholder="Password" required
+                                    id="password" v-model="password">
+                                <img v-if="showPassword" @click="togglePassword($event, 'signUpPass')"
+                                    src="@/assets/design-material/icons/eye.png" alt="show password" />
                             </label>
 
                             <button @click="signUp">Sign up</button>
@@ -55,8 +57,10 @@
                             <label for="login-password" class="custom-label">
                                 <img for="login-password" src="@/assets/design-material/icons/lock.png"
                                     alt="password" />
-                                <input type="password" name="password" placeholder="Password" required
+                                <input ref="loginPass" type="password" name="password" placeholder="Password" required
                                     id="login-password" v-model="password">
+                                <img v-if="showPassword" @click="togglePassword($event, 'loginPass')"
+                                    src="@/assets/design-material/icons/eye.png" alt="show password" />
                             </label>
 
                             <button @click="login">Login</button>
@@ -98,7 +102,8 @@ export default {
             loginEmailState: false,
             loginPasswordState: false,
             loginIndex: null,
-            signUpData: {}
+            signUpData: {},
+            showPassword: false
         }
     },
     computed: {
@@ -138,6 +143,17 @@ export default {
             } else {
                 console.log('error');
             }
+        },
+        togglePassword(event, target) {
+            if (this.showPassword) {
+                if (this.$refs[target].type === 'text') {
+                    this.$refs[target].type = 'password'
+                    event.target.src = event.target.src.replace('hidden', 'eye')
+                } else {
+                    this.$refs[target].type = 'text'
+                    event.target.src = event.target.src.replace('eye', 'hidden')
+                }
+            }
         }
     },
     watch: {
@@ -163,6 +179,7 @@ export default {
             }
         },
         password() {
+            this.showPassword = true
             if (this.regexForPassword.test(this.password)) {
                 this.passwordState = true
                 this.signUpData.password = this.password
