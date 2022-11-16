@@ -27,7 +27,7 @@
                             </label>
 
                             <label for="email" class="custom-label">
-                                <img for="email" src="@/assets/design-material/icons/user.png" alt="email" />
+                                <img for="email" src="@/assets/design-material/icons/email.png" alt="email" />
                                 <input type="email" name="email" placeholder="Email" required id="email"
                                     v-model="email">
                             </label>
@@ -47,7 +47,7 @@
                             <label for="chk" aria-hidden="true">Login</label>
 
                             <label for="login-email" class="custom-label">
-                                <img for="login-email" src="@/assets/design-material/icons/user.png" alt="email" />
+                                <img for="login-email" src="@/assets/design-material/icons/email.png" alt="email" />
                                 <input type="email" name="email" placeholder="Email" required id="login-email"
                                     v-model="email">
                             </label>
