@@ -149,7 +149,6 @@ export default {
                 this.allUsers[0].usersCredentials[this.loginIndex].lastLogin = new Date()
                 localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
 
-                console.log('the first login');
                 this.emailState = false
                 this.passwordState = false
                 this.loginEmailState = false
