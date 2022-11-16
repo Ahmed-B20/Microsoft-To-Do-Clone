@@ -14,7 +14,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'MarkAsComplete',
-    props: ['listId', 'childId', 'taskElementId', 'taskElements'],
+    props: ['listId', 'childId', 'taskElementId', 'taskElements', 'selectTask'],
     data() {
         return {
             repeatedTaskObject: {},
@@ -27,30 +27,30 @@ export default {
         ...mapWritableState(allLists, ['lists', 'smartList']),
 
         returnCompleteState() {
-            if (!!this.childId) {
-                return this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete
+            if (!!this.selectTask.childListId) {
+                return this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete
             } else {
-                return this.lists[this.listId].tasks[this.taskElementId].complete
+                return this.lists[this.selectTask.listId].tasks[this.selectTask.id].complete
             }
         }
     },
     methods: {
         completeTask() {
-            if (!!this.childId) {
-                if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete) {
-                    this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete = false
+            if (!!this.selectTask.childListId) {
+                if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete) {
+                    this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete = false
                 } else {
-                    if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].repeatedTask) {
+                    if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].repeatedTask) {
                         this.calcDueDate(true)
                     }
                     else {
-                        this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete = true
+                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete = true
                     }
                 }
 
-                if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].steps.length > 0) {
-                    this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].steps.forEach((step) => {
-                        if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete) {
+                if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].steps.length > 0) {
+                    this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].steps.forEach((step) => {
+                        if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete) {
                             step.complete = true
                         } else {
                             step.complete = false
@@ -58,18 +58,18 @@ export default {
                     })
                 }
             } else {
-                if (this.lists[this.listId].tasks[this.taskElementId].complete) {
-                    this.lists[this.listId].tasks[this.taskElementId].complete = false
+                if (this.lists[this.selectTask.listId].tasks[this.selectTask.id].complete) {
+                    this.lists[this.selectTask.listId].tasks[this.selectTask.id].complete = false
                 } else {
-                    if (this.lists[this.listId].tasks[this.taskElementId].repeatedTask) {
+                    if (this.lists[this.selectTask.listId].tasks[this.selectTask.id].repeatedTask) {
                         this.calcDueDate(false)
                     }
                     else {
-                        this.lists[this.listId].tasks[this.taskElementId].complete = true
+                        this.lists[this.selectTask.listId].tasks[this.selectTask.id].complete = true
                     }
                 }
-                this.lists[this.listId].tasks[this.taskElementId].steps.forEach((step) => {
-                    if (this.lists[this.listId].tasks[this.taskElementId].complete) {
+                this.lists[this.selectTask.listId].tasks[this.selectTask.id].steps.forEach((step) => {
+                    if (this.lists[this.selectTask.listId].tasks[this.selectTask.id].complete) {
                         step.complete = true
                     } else {
                         step.complete = false
@@ -83,27 +83,27 @@ export default {
 
             this.$emit('componentEvent')
 
-            if (this.taskElements[this.taskElementId].classList.contains('add-animation-x')) {
-                this.taskElements[this.taskElementId].classList.remove('add-animation-x')
+            if (this.taskElements[this.selectTask.id].classList.contains('add-animation-x')) {
+                this.taskElements[this.selectTask.id].classList.remove('add-animation-x')
                 setTimeout(() => {
-                    this.taskElements[this.taskElementId].classList.add('add-animation-x')
+                    this.taskElements[this.selectTask.id].classList.add('add-animation-x')
                 }, 0)
             } else {
-                this.taskElements[this.taskElementId].classList.remove('add-animation-x')
+                this.taskElements[this.selectTask.id].classList.remove('add-animation-x')
                 setTimeout(() => {
-                    this.taskElements[this.taskElementId].classList.add('add-animation-x')
+                    this.taskElements[this.selectTask.id].classList.add('add-animation-x')
                 }, 0)
             }
         },
         calcDueDate(childList) {
             if (childList) {
-                this.oldObj = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId]
+                this.oldObj = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id]
                 this.transferObj()
-                this.repeatedTaskObject.id = this.lists[this.listId].listsArray[this.childId].tasks.length
+                this.repeatedTaskObject.id = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.length
             } else {
-                this.oldObj = this.lists[this.listId].tasks[this.taskElementId]
+                this.oldObj = this.lists[this.selectTask.listId].tasks[this.selectTask.id]
                 this.transferObj()
-                this.repeatedTaskObject.id = this.lists[this.listId].tasks.length
+                this.repeatedTaskObject.id = this.lists[this.selectTask.listId].tasks.length
             }
 
             if (this.repeatedTaskObject.realRepeatDueDateName === 'Daily') {
@@ -127,13 +127,13 @@ export default {
             }
 
             if (childList) {
-                this.lists[this.listId].listsArray[this.childId].tasks.push(this.repeatedTaskObject)
-                this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].complete = true
-                this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].repeatedTask = false
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.push(this.repeatedTaskObject)
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].complete = true
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].repeatedTask = false
             } else {
-                this.lists[this.listId].tasks.push(this.repeatedTaskObject)
-                this.lists[this.listId].tasks[this.taskElementId].complete = true
-                this.lists[this.listId].tasks[this.taskElementId].repeatedTask = false
+                this.lists[this.selectTask.listId].tasks.push(this.repeatedTaskObject)
+                this.lists[this.selectTask.listId].tasks[this.selectTask.id].complete = true
+                this.lists[this.selectTask.listId].tasks[this.selectTask.id].repeatedTask = false
             }
 
             this.repeatedTaskObject = {}

@@ -23,43 +23,43 @@
     <transition name="to-bottom">
         <DropDown :dropDownSlots="dropDownSlots" :top="top" :left="left" v-if="toggleDropDown">
             <template #RenameTask>
-                <RenameTask :listId='listId' :childId='childId' :taskElementId='taskElementId'
+                <RenameTask :selectTask="selectTask" :listId='listId' :childId='childId' :taskElementId='taskElementId'
                     @componentEvent='closeDropDown' />
             </template>
 
             <template #MarkAsImportant>
-                <MarkAsImportant :taskElements="this.$refs.taskElement" :listId='listId' :childId='childId'
-                    :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
+                <MarkAsImportant :selectTask="selectTask" :taskElements="this.$refs.taskElement" :listId='listId'
+                    :childId='childId' :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
             </template>
 
             <template #MarkAsComplete>
-                <MarkAsComplete :taskElements="this.$refs.taskElement" :listId='listId' :childId='childId'
-                    :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
+                <MarkAsComplete :selectTask="selectTask" :taskElements="this.$refs.taskElement" :listId='listId'
+                    :childId='childId' :taskElementId='taskElementId' @componentEvent='resetChildComponent' />
             </template>
 
             <template v-if="dueDateState" #AddToMyDay>
-                <AddToMyDay :listId='listId' :childId='childId' :taskElementId='taskElementId'
+                <AddToMyDay :selectTask="selectTask" :listId='listId' :childId='childId' :taskElementId='taskElementId'
                     @componentEvent='resetChildComponent' />
             </template>
 
             <template v-if="dueDateState" #DueToday>
-                <DueDate date="today" :listId='listId' :childId='childId' :taskElementId='taskElementId'
-                    @componentEvent='closeDropDown' />
+                <DueDate :selectTask="selectTask" date="today" :listId='listId' :childId='childId'
+                    :taskElementId='taskElementId' @componentEvent='closeDropDown' />
             </template>
 
             <template v-if="dueDateState" #DueTomorrow>
-                <DueDate date="tomorrow" :listId='listId' :childId='childId' :taskElementId='taskElementId'
-                    @componentEvent='closeDropDown' />
+                <DueDate :selectTask="selectTask" date="tomorrow" :listId='listId' :childId='childId'
+                    :taskElementId='taskElementId' @componentEvent='closeDropDown' />
             </template>
 
             <template v-if="dueDateState" #DueNextWeek>
-                <DueDate date="nextWeek" :listId='listId' :childId='childId' :taskElementId='taskElementId'
-                    @componentEvent='closeDropDown' />
+                <DueDate :selectTask="selectTask" date="nextWeek" :listId='listId' :childId='childId'
+                    :taskElementId='taskElementId' @componentEvent='closeDropDown' />
             </template>
 
             <template #PickADate>
-                <DueDate date="customDate" :listId='listId' :childId='childId' :taskElementId='taskElementId'
-                    @componentEvent='closeDropDown' />
+                <DueDate :selectTask="selectTask" date="customDate" :listId='listId' :childId='childId'
+                    :taskElementId='taskElementId' @componentEvent='closeDropDown' />
             </template>
 
             <template #MoveTaskTo v-if="ReturnAllLists">
@@ -107,18 +107,18 @@
 <script>
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
-import PopUp from './PopUp.vue'
-import DropDown from '../components/DropDown.vue';
-import TaskInfoIcons from './task/TaskInfoIcons.vue';
+import DropDown from '../global-components/DropDown.vue'
+import PopUp from '../global-components/PopUp.vue'
+import TaskInfoIcons from './TaskInfoIcons.vue';
 
-import Important from './task/element/Important.vue'
-import Complete from './task/element/Complete.vue'
+import Important from './element/Important.vue'
+import Complete from './element/Complete.vue'
 
-import RenameTask from './task/drop down/RenameTask.vue';
-import MarkAsImportant from './task/drop down/MarkAsImportant.vue';
-import MarkAsComplete from './task/drop down/MarkAsComplete.vue';
-import AddToMyDay from './task/drop down/AddToMyDay.vue';
-import DueDate from './task/drop down/DueDate.vue';
+import RenameTask from './drop down/RenameTask.vue';
+import MarkAsImportant from './drop down/MarkAsImportant.vue';
+import MarkAsComplete from './drop down/MarkAsComplete.vue';
+import AddToMyDay from './drop down/AddToMyDay.vue';
+import DueDate from './drop down/DueDate.vue';
 
 export default {
     name: 'SingleTask',
@@ -139,7 +139,7 @@ export default {
     beforeMount() {
         this.lists.forEach((list, index) => {
             if (list.listChildren === false) {
-                if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4) {
+                if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4 && +this.selectTask.listId !== +list.id) {
                     this.ReturnAllListsArray.push(list)
                 }
             }
@@ -171,7 +171,8 @@ export default {
             oldTaskIdDrop: null,
             addToMyDayState: false,
             remindToggle: false,
-            moveTaskToggle: false
+            moveTaskToggle: false,
+            selectTask: {},
         }
     },
     computed: {
@@ -185,11 +186,11 @@ export default {
                 }
             } else {
                 if (!!this.childId) {
-                    if (this.returnLists[this.listId].listsArray[this.childId].tasks.length > 0) {
+                    if (this.returnLists[this.listId]?.listsArray[this.childId].tasks.length > 0) {
                         return this.returnLists[this.listId].listsArray[this.childId].tasks
                     }
                 } else {
-                    if (this.returnLists[this.listId].tasks.length > 0) {
+                    if (this.returnLists[this.listId]?.tasks.length > 0) {
                         return this.returnLists[this.listId].tasks
                     }
                 }
@@ -273,7 +274,7 @@ export default {
                 this.ReturnAllListsArray = []
                 this.lists.forEach((list, index) => {
                     if (list.listChildren === false) {
-                        if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4) {
+                        if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4 && +this.selectTask.listId !== +list.id) {
                             this.ReturnAllListsArray.push(list)
                         }
                     }
@@ -286,6 +287,17 @@ export default {
         openDropDown(task, index) {
             event.preventDefault()
             this.$emit('openDescriptionEvent', this.listId, index, false, this.taskElement)
+
+            this.ReturnAllListsArray = []
+            this.lists.forEach((list, index) => {
+                if (list.listChildren === false) {
+                    if (index != this.listId && +index !== 0 && +index !== 1 && +index !== 2 && +index !== 3 && +index !== 4 && +task.listId !== +list.id) {
+                        this.ReturnAllListsArray.push(list)
+                    }
+                }
+            })
+
+            this.selectTask = task
 
             this.taskElementId = index
             if (event.target.tagName === 'IMG' || (event.target.tagName === 'SPAN' && event.target.classList.contains('task-main-info') || event.target.classList.contains('check'))) {
@@ -375,23 +387,60 @@ export default {
             }
         },
         deleteTask() {
-            if (!!this.childId) {
-                this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
-
-                this.lists[this.listId].listsArray[this.childId].tasks.forEach((list) => {
+            if (!!this.selectTask.childId) {
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks.forEach((task, index) => {
+                    if (+task.id === this.selectTask.id) {
+                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks.splice(this.taskElementId, 1)
+                    }
+                })
+                this.lists[this.selectTask.listId].listsArray[this.selectTask.childId].tasks.forEach((list) => {
                     if (list.id >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
             } else {
-                this.lists[this.listId].tasks.splice(this.taskElementId, 1)
-
-                this.lists[this.listId].tasks.forEach((list) => {
+                this.lists[this.selectTask.listId].tasks.forEach((task, index) => {
+                    if (+task.id === this.selectTask.id) {
+                        this.lists[this.selectTask.listId].tasks.splice(index, 1)
+                    }
+                })
+                this.lists[this.selectTask.listId].tasks.forEach((list) => {
                     if (list.id >= this.taskElementId) {
                         list.id = list.id - 1
                     }
                 })
             }
+
+
+            if (this.selectTask.addToMyDay || !!this.selectTask.dueDateName) {
+                if (this.selectTask.addToMyDay && !!this.selectTask.dueDateName) {
+                    this.lists[0].tasks.forEach((task, index) => {
+                        if (+task.id === +this.selectTask.id && +task.listId === +this.selectTask.listId || +task.listId === +this.selectTask.childId) {
+                            this.lists[2].tasks.splice(index, 1)
+                            this.lists[0].tasks.splice(index, 1)
+                        }
+                    })
+                } else {
+                    if (this.selectTask.addToMyDay) {
+                        this.lists[0].tasks.forEach((task, index) => {
+                            if (+task.id === +this.selectTask.id && +task.listId === +this.selectTask.listId || +task.listId === +this.selectTask.childId) {
+                                this.lists[0].tasks.splice(index, 1)
+                            }
+                        })
+                    } else {
+                        this.lists[0].tasks.forEach((task, index) => {
+                            if (+task.id === +this.selectTask.id && +task.listId === +this.selectTask.listId || +task.listId === +this.selectTask.childId) {
+                                this.lists[2].tasks.splice(index, 1)
+                            }
+                        })
+                    }
+                }
+            }
+
+            if (+this.listId === 4) {
+                this.lists[4].tasks.splice(this.taskElementId, 1)
+            }
+
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
             this.toggleDropDown = false
             this.taskElementId = null
@@ -400,6 +449,8 @@ export default {
         },
         MoveTaskTo() {
             if (!!this.childId) {
+                this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].listId = this.$refs.selectedLists.value
+                this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].childListId = null
                 this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId])
 
                 if (this.lists[this.$refs.selectedLists.value].tasks.length > 0) {
@@ -416,6 +467,7 @@ export default {
                     }
                 })
             } else {
+                this.lists[this.listId].tasks[this.taskElementId].listId = this.$refs.selectedLists.value
                 this.lists[this.$refs.selectedLists.value].tasks.push(this.lists[this.listId].tasks[this.taskElementId])
                 if (+this.lists[this.$refs.selectedLists.value].tasks.length > 0) {
                     let index = this.lists[this.$refs.selectedLists.value].tasks.length - 1

@@ -258,11 +258,10 @@
 
 <script>
 import { allLists } from '@/stores/allLists.js'
-
 import { mapState, mapWritableState } from 'pinia'
-import PopUp from './PopUp.vue'
-import DropDown from '../components/DropDown.vue';
 
+import DropDown from '../global-components/DropDown.vue'
+import PopUp from '../global-components/PopUp.vue'
 import ImportantToggle from './description_component/ImportantToggle.vue';
 import CompleteToggle from './description_component/CompleteToggle.vue';
 import Rename from './description_component/Rename.vue';
@@ -270,7 +269,6 @@ import AddToMyDay from './description_component/AddToMyDay.vue';
 import TaskNote from './description_component/TaskNote.vue';
 import AddDueDate from './description_component/AddDueDate.vue';
 import RepeatDueDate from './description_component/RepeatDueDate.vue';
-import RemindDueDate from './description_component/RemindDueDate.vue';
 import Steps from './description_component/Steps.vue';
 
 export default {
@@ -308,7 +306,6 @@ export default {
         TaskNote,
         AddDueDate,
         RepeatDueDate,
-        RemindDueDate,
         Steps
     },
     emits: ['closeDescription'],
@@ -537,18 +534,48 @@ export default {
                 localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
 
             } else {
-                if (!!this.descriptionTaskChildList) {
-                    this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.descriptionTaskIndex, 1)
+                if (!!this.task.childId) {
+                    this.lists[this.task.listId].listsArray[this.task.childId].tasks.forEach((task, index) => {
+                        if (+task.id === +this.task.id) {
+                            this.lists[this.task.listId].listsArray[this.task.childId].tasks.splice(index, 1)
+                        }
+                    })
                 } else {
-                    this.lists[this.descriptionTaskList].tasks.splice(this.descriptionTaskIndex, 1)
+                    this.lists[this.task.listId].tasks.forEach((task, index) => {
+                        if (+task.id === +this.task.id) {
+                            this.lists[this.task.listId].tasks.splice(index, 1)
+                        }
+                    })
                 }
 
-                if (this.chosenSmartList) {
-                    this.smartList[this.chosenSmartList].tasks.splice(this.smartListTaskId, 1)
+                if (this.task.addToMyDay || !!this.task.dueDateName) {
+                    if (this.task.addToMyDay && !!this.task.dueDateName) {
+                        this.lists[0].tasks.forEach((task, index) => {
+                            if (+task.id === +this.task.id && +task.listId === +this.task.listId || +task.listId === +this.task.childId) {
+                                this.lists[2].tasks.splice(index, 1)
+                                this.lists[0].tasks.splice(index, 1)
+                            }
+                        })
+                    } else {
+                        if (this.task.addToMyDay) {
+                            this.lists[0].tasks.forEach((task, index) => {
+                                if (+task.id === +this.task.id && +task.listId === +this.task.listId || +task.listId === +this.task.childId) {
+                                    this.lists[0].tasks.splice(index, 1)
+                                }
+                            })
+                        } else {
+                            this.lists[0].tasks.forEach((task, index) => {
+                                if (+task.id === +this.task.id && +task.listId === +this.task.listId || +task.listId === +this.task.childId) {
+                                    this.lists[2].tasks.splice(index, 1)
+                                }
+                            })
+                        }
+                    }
                 }
 
-                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
-
+                if (+this.descriptionTaskList === 4) {
+                    this.lists[4].tasks.splice(this.descriptionTaskIndex, 1)
+                }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.$emit('closeDescription', false)
                 this.showPopUp = !this.showPopUp
@@ -840,6 +867,33 @@ export default {
             this.hours = this.hours ? this.hours : 12;
             this.minutes = this.minutes < 10 ? '0' + this.minutes : this.minutes;
             this.strTime = this.hours + ':' + this.minutes + ' ' + this.ampm;
+
+            if (!!this.descriptionTaskChildList) {
+                this.lists[2].tasks.forEach((task, index) => {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +task.childListId === +this.descriptionTaskChildList) {
+                        this.lists[2].tasks.splice(index, 1)
+                    }
+                })
+
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.time
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = time
+
+                this.lists[2].tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
+            } else {
+                this.lists[2].tasks.forEach((task, index) => {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
+                        this.lists[2].tasks.splice(index, 1)
+                    }
+                })
+
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = this.time
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = time
+
+                this.lists[2].tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
+            }
+
         },
         addCustomRemindDate() {
             if (!!this.pickedCustomRemindDate) {

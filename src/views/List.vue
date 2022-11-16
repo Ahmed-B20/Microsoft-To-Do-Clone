@@ -1,6 +1,6 @@
 <template>
-    <!-- <keep-alive> -->
-    <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :childId="childId" :listId="listId" :key="childId ? childId : listId">
+    <content-view ref="tasksParent" :class="[toggleShrink ? 'shrink' : 'grow']" :childId="childId" :listId="listId"
+        :key="childId ? childId : listId">
         <template #toggle-sidebar>
             <button @click="openSideBarDescription">
                 <img src="@/assets/design-material/icons/menu.png" alt="open-sidebar">
@@ -35,7 +35,6 @@
                 :childId="childId" />
         </template>
     </content-view>
-    <!-- </keep-alive> -->
 
     <transition name="to-left" :css="animated">
         <TaskDescription :key="descriptionTaskIndex" :toggleShrink="toggleShrink"
@@ -131,18 +130,17 @@
 
 <script>
 
-import ContentView from '@/components/ContentView.vue';
-import SingleTask from '@/components/SingleTask.vue';
-import TaskDescription from '@/components/TaskDescription.vue'
-import DropDown from '@/components/DropDown.vue';
+import ContentView from '@/components/main-page-components/ContentView.vue';
+import SingleTask from '@/components/task/SingleTask.vue';
+import TaskDescription from '@/components/task/TaskDescription.vue'
+import DropDown from '@/components/global-components/DropDown.vue';
+import PopUp from '@/components/global-components/PopUp.vue'
 
 
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
-
 import { toggleAside } from '@/stores/toggleAside.js'
 
-import PopUp from '@/components/PopUp.vue'
 
 export default {
     name: 'List',
@@ -158,6 +156,19 @@ export default {
         return {
             chosenListId: () => this.comListId,
             chosenChildIdListId: () => this.comChildId
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        if (!!JSON.parse(localStorage.getItem("allUsers"))[0].idOfLoginUser) {
+            if (to.params.listId >= JSON.parse(localStorage.getItem("allListAndTasks"))?.length || to.params?.childId > JSON.parse(localStorage.getItem("allListAndTasks"))[to.params.listId]?.listsArray?.length) {
+                next({ name: 'not-found' })
+            } else if (JSON.parse(localStorage.getItem("allListAndTasks"))[to.params.listId].listChildren && !to.params?.childId) {
+                next({ name: 'not-found' })
+            } else {
+                next()
+            }
+        } else {
+            next({ name: 'login' })
         }
     },
     beforeMount: function () {
@@ -243,9 +254,9 @@ export default {
         },
         returnListName() {
             if (!!this.$route.params.childId) {
-                return this.lists[this.$route.params.listId].listsArray[this.$route.params.childId].listName
+                return this.lists[this.$route.params.listId]?.listsArray[this.$route.params.childId].listName
             } else {
-                return this.lists[this.$route.params.listId].listName
+                return this.lists[this.$route.params.listId]?.listName
             }
         },
         hasTasks() {

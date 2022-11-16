@@ -33,21 +33,21 @@ export default {
                 this.taskElement = event.target.parentElement
             }
 
-            if (!!this.childId) {
-                if (this.lists[this.listId].listsArray[this.childId].tasks[this.index].complete) {
-                    this.lists[this.listId].listsArray[this.childId].tasks[this.index].complete = false
+            if (!!this.task.childListId) {
+                if (this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].complete) {
+                    this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].complete = false
                 } else {
-                    if (this.lists[this.listId].listsArray[this.childId].tasks[this.index].repeatedTask) {
+                    if (this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].repeatedTask) {
                         this.calcDueDate(true)
                     }
                     else {
-                        this.lists[this.listId].listsArray[this.childId].tasks[this.index].complete = true
+                        this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].complete = true
                     }
                 }
 
-                if (this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].steps.length > 0) {
-                    this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].steps.forEach((step) => {
-                        if (this.lists[this.listId].listsArray[this.childId].tasks[this.thisTask].complete) {
+                if (this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].steps.length > 0) {
+                    this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].steps.forEach((step) => {
+                        if (this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].complete) {
                             step.complete = true
                         } else {
                             step.complete = false
@@ -55,19 +55,19 @@ export default {
                     })
                 }
             } else {
-                if (this.lists[this.listId].tasks[this.index].complete) {
-                    this.lists[this.listId].tasks[this.index].complete = false
+                if (this.lists[this.task.listId].tasks[this.task.id].complete) {
+                    this.lists[this.task.listId].tasks[this.task.id].complete = false
                 } else {
-                    if (this.lists[this.listId].tasks[this.index].repeatedTask) {
+                    if (this.lists[this.task.listId].tasks[this.task.id].repeatedTask) {
                         this.calcDueDate(false)
                     }
                     else {
-                        this.lists[this.listId].tasks[this.index].complete = true
+                        this.lists[this.task.listId].tasks[this.task.id].complete = true
                     }
                 }
 
-                this.lists[this.listId].tasks[this.thisTask].steps.forEach((step) => {
-                    if (this.lists[this.listId].tasks[this.thisTask].complete) {
+                this.lists[this.task.listId].tasks[this.task.id].steps.forEach((step) => {
+                    if (this.lists[this.task.listId].tasks[this.task.id].complete) {
                         step.complete = true
                     } else {
                         step.complete = false
@@ -93,13 +93,13 @@ export default {
         },
         calcDueDate(childList) {
             if (childList) {
-                this.oldObj = this.lists[this.listId].listsArray[this.childId].tasks[this.index]
+                this.oldObj = this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id]
                 this.transferObj()
-                this.repeatedTaskObject.id = this.lists[this.listId].listsArray[this.childId].tasks.length
+                this.repeatedTaskObject.id = this.lists[this.task.listId].listsArray[this.childId].tasks.length
             } else {
-                this.oldObj = this.lists[this.listId].tasks[this.index]
+                this.oldObj = this.lists[this.task.listId].tasks[this.task.id]
                 this.transferObj()
-                this.repeatedTaskObject.id = this.lists[this.listId].tasks.length
+                this.repeatedTaskObject.id = this.lists[this.task.listId].tasks.length
             }
 
             if (this.repeatedTaskObject.realRepeatDueDateName === 'Daily') {
@@ -123,13 +123,13 @@ export default {
             }
 
             if (childList) {
-                this.lists[this.listId].listsArray[this.childId].tasks.push(this.repeatedTaskObject)
-                this.lists[this.listId].listsArray[this.childId].tasks[this.index].complete = true
-                this.lists[this.listId].listsArray[this.childId].tasks[this.index].repeatedTask = false
+                this.lists[this.task.listId].listsArray[this.childId].tasks.push(this.repeatedTaskObject)
+                this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].complete = true
+                this.lists[this.task.listId].listsArray[this.childId].tasks[this.task.id].repeatedTask = false
             } else {
-                this.lists[this.listId].tasks.push(this.repeatedTaskObject)
-                this.lists[this.listId].tasks[this.index].complete = true
-                this.lists[this.listId].tasks[this.index].repeatedTask = false
+                this.lists[this.task.listId].tasks.push(this.repeatedTaskObject)
+                this.lists[this.task.listId].tasks[this.task.id].complete = true
+                this.lists[this.task.listId].tasks[this.task.id].repeatedTask = false
             }
 
             this.repeatedTaskObject = {}

@@ -20,7 +20,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'RenameTask',
-    props: ['listId', 'childId', 'taskElementId'],
+    props: ['listId', 'childId', 'taskElementId', 'selectTask'],
     data() {
         return {
             showRename: false,
@@ -30,10 +30,10 @@ export default {
         }
     },
     beforeMount() {
-        if (!!this.childId) {
-            this.taskName = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name
+        if (!!this.selectTask.childListId) {
+            this.taskName = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].name
         } else {
-            this.taskName = this.lists[this.listId].tasks[this.taskElementId].name
+            this.taskName = this.lists[this.selectTask.listId].tasks[this.selectTask.id].name
         }
     },
     computed: {
@@ -57,10 +57,10 @@ export default {
         },
         newTaskName() {
             if (this.newName.length > 0) {
-                if (!!this.childId) {
-                    this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name = this.newName
+                if (!!this.selectTask.childListId) {
+                    this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].name = this.newName
                 } else {
-                    this.lists[this.listId].tasks[this.taskElementId].name = this.newName
+                    this.lists[this.selectTask.listId].tasks[this.selectTask.id].name = this.newName
                 }
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.newName = ''

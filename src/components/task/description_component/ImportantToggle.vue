@@ -36,26 +36,26 @@ export default {
                     if (this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important) {
                         this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = false
                         event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-                        this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
-                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
-                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
+                        // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
+                        // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.push(this.importantTask)
+                        // this.importantTask = {}
                     } else {
                         event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                         this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].important = true
-                        this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
-                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
-                        this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex]
+                        // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.splice(this.taskIndex, 1)
+                        // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.unshift(this.importantTask)
+                        // this.importantTask = {}
                     }
                 }
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((singleTask, index) => {
-                    if (singleTask.id == this.task.id) {
-                        this.$emit('componentEvent', index)
-                    }
-                })
+                // this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks.forEach((singleTask, index) => {
+                //     if (singleTask.id == this.task.id) {
+                //         this.$emit('componentEvent', index)
+                //     }
+                // })
             } else {
                 if (+this.descriptionTaskList === 1) {
                     this.lists[1].tasks.splice(this.taskIndex, 1)
@@ -64,26 +64,26 @@ export default {
                     if (this.lists[this.descriptionTaskList].tasks[this.taskIndex].important) {
                         this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = false
                         event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
-                        this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
-                        this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
-                        this.lists[this.descriptionTaskList].tasks.push(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
+                        // this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
+                        // this.lists[this.descriptionTaskList].tasks.push(this.importantTask)
+                        // this.importantTask = {}
                     } else {
                         event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                         this.lists[this.descriptionTaskList].tasks[this.taskIndex].important = true
-                        this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
-                        this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
-                        this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.descriptionTaskList].tasks[this.taskIndex]
+                        // this.lists[this.descriptionTaskList].tasks.splice(this.taskIndex, 1)
+                        // this.lists[this.descriptionTaskList].tasks.unshift(this.importantTask)
+                        // this.importantTask = {}
                     }
                 }
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
-                this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
-                    if (singleTask.id == this.task.id) {
-                        this.$emit('componentEvent', index)
-                    }
-                })
+                // this.lists[this.descriptionTaskList].tasks.forEach((singleTask, index) => {
+                //     if (singleTask.id == this.task.id) {
+                //         this.$emit('componentEvent', index)
+                //     }
+                // })
             }
         },
     }

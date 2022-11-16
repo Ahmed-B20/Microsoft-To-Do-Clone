@@ -172,8 +172,8 @@
 </template>
 
 <script>
-import PopUp from './PopUp.vue'
-import DropDown from '../components/DropDown.vue';
+import DropDown from '../global-components/DropDown.vue'
+import PopUp from '../global-components/PopUp.vue'
 
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
@@ -426,6 +426,10 @@ export default {
         ungroupLists() {
             this.lists[this.groupOfListId].listsArray.forEach((childList, index, arr) => {
                 childList.id = +this.groupOfListId + index
+                childList.tasks.forEach((task) => {
+                    task.childListId = ''
+                    task.listId = childList.id
+                })
                 this.ungroupListsArray.push(childList)
 
                 if (index + 1 === arr.length) {
@@ -436,6 +440,10 @@ export default {
 
                         if (index >= +this.groupOfListId + arr.length - 2) {
                             list.id = index
+
+                            list.tasks.forEach((task) => {
+                                task.listId = index
+                            })
                         }
                     })
                     localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
@@ -513,26 +521,37 @@ export default {
             this.newName = ''
         },
         deleteList() {
-            if (+this.lists.length === 1 && this.lists.at(-1).listChildren) {
-                this.$router.push({ name: 'my-day' })
-            }
+            // if (+this.lists.length === 1 && this.lists.at(-1).listChildren) {
+            //     this.$router.push({ name: 'my-day' })
+            // }
 
             this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
             this.lists[this.parentId].listsArray.forEach((list, index) => {
                 if (index >= this.selectedChildListId) {
                     list.id = list.id - 1
+
+                    if (list.listChildren) {
+                        list.listsArray.forEach((childList) => {
+                            childList.tasks.forEach((task) => {
+                                task.childListId -= 1
+                                task.listId -= 1
+                            })
+                        })
+                    }
                 }
             })
 
-            if (+this.lists.length > 1) {
-                if (+this.selectedChildListId > +this.$route.params.childId && +this.$route.params.childId !== 0) {
-                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: +this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
-                } else if (+this.$route.params.childId >= +this.selectedChildListId && +this.$route.params.childId !== 0) {
-                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId - 1 }, props: { name: this.randomString(10), currentListName: this.listName } })
-                } else {
-                    this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
-                }
-            }
+            this.$router.push({ name: 'home' })
+
+            // if (+this.lists.length > 1) {
+            //     if (+this.selectedChildListId > +this.$route.params.childId && +this.$route.params.childId !== 0) {
+            //         this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: +this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
+            //     } else if (+this.$route.params.childId >= +this.selectedChildListId && +this.$route.params.childId !== 0) {
+            //         this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId - 1 }, props: { name: this.randomString(10), currentListName: this.listName } })
+            //     } else {
+            //         this.$router.push({ name: 'list', params: { listId: this.$route.params.listId, childId: this.$route.params.childId }, props: { name: this.randomString(10), currentListName: this.listName } })
+            //     }
+            // }
 
             localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
 
@@ -599,6 +618,11 @@ export default {
         MoveChildListTo() {
             this.lists[this.$refs.selectedLists.value].listsArray.push(this.lists[this.parentId].listsArray[this.selectedChildListId])
 
+            this.lists[this.$refs.selectedLists.value].listsArray.at(-1).tasks.forEach((task) => {
+                task.listId = this.$refs.selectedLists.value
+                task.childListId = this.lists[this.$refs.selectedLists.value].listsArray.length
+            })
+
             if (this.lists[this.$refs.selectedLists.value].listsArray.length > 0) {
                 let index = this.lists[this.$refs.selectedLists.value].listsArray.length - 1
                 this.lists[this.$refs.selectedLists.value].listsArray[index].id = this.lists[this.$refs.selectedLists.value].listsArray.length
@@ -606,6 +630,10 @@ export default {
                 this.lists[this.parentId].listsArray.forEach((list, index) => {
                     if (index >= +this.selectedChildListId) {
                         list.id -= 1
+
+                        list.tasks.forEach((task) => {
+                            task.childListId -= 1
+                        })
                     }
                 })
             } else {
@@ -625,13 +653,22 @@ export default {
             this.promoteList.id = this.lists.length
             this.promoteList.listName = list.listName
             this.promoteList.listChildren = false
-            this.promoteList.tasks = []
+            this.promoteList.tasks = this.lists[this.parentId].listsArray[this.selectedChildListId].tasks
+
+            this.promoteList.tasks.forEach((task) => {
+                task.childListId = ''
+                task.listId = this.lists.length
+            })
 
             this.lists[this.parentId].listsArray.splice(this.selectedChildListId, 1)
 
             this.lists[this.parentId].listsArray.forEach((list, index) => {
                 if (index >= +this.selectedChildListId) {
                     list.id -= 1
+
+                    list.tasks.forEach((task) => {
+                        task.childListId -= 1
+                    })
                 }
             })
 

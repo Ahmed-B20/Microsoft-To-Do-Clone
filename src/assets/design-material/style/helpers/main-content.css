@@ -71,3 +71,12 @@
     opacity: 1;
     transform: translateX(-280px);
 }
+
+.main-content-enter-active,
+.main-content-leave-active {
+  transition: opacity 0.2s ease;
+}
+.main-content-enter-from,
+.main-content-leave-to {
+  opacity: 0.7;
+}

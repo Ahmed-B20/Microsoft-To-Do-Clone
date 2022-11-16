@@ -13,7 +13,7 @@
     </div>
 
     <div v-else @click="addDueDate(date)">
-        <img src="@/assets/design-material/icons/date.png" alt="">
+        <img src="@/assets/design-material/icons/next-week.png" alt="next week">
         <span>{{ date }}</span>
     </div>
 </template>
@@ -23,8 +23,8 @@ import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 
 export default {
-    name: 'DueDate',
-    props: ['listId', 'childId', 'taskElementId', 'taskElements', 'date', 'selectTask'],
+    name: 'AddDueDate',
+    props: ['descriptionTaskList', 'descriptionTaskChildList', 'descriptionTaskIndex', 'taskIndex', 'date'],
     data() {
         return {
             pickCustomDate: false,
@@ -38,12 +38,12 @@ export default {
         }
     },
     computed: {
-        ...mapState(allLists, ['returnLists', 'smartList']),
-        ...mapWritableState(allLists, ['lists', 'smartList']),
+        ...mapState(allLists, ['returnLists']),
+        ...mapWritableState(allLists, ['lists']),
     },
     methods: {
         addDueDate(date) {
-            if (!!this.selectTask.childListId) {
+            if (!!this.descriptionTaskChildList) {
                 if (date === 'today') {
                     this.calcTime(new Date())
                     this.$emit('componentEvent')
@@ -74,7 +74,7 @@ export default {
         },
         addCustomDate() {
             if (!!this.pickedCustomDate) {
-                if (!!this.selectTask.childListId) {
+                if (!!this.descriptionTaskChildList) {
                     this.calcTime(this.pickedCustomDate)
                 } else {
                     this.calcTime(this.pickedCustomDate)
@@ -82,9 +82,8 @@ export default {
 
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.lists))
                 this.pickCustomDate = false
-                this.pickedCustomDate = null
-
                 this.$emit('componentEvent')
+                this.pickedCustomDate = null
             } else {
                 if (!!this.errorCustomDateToggle) {
                     this.errorCustomDateToggle = false
@@ -110,28 +109,25 @@ export default {
 
             if (!!this.descriptionTaskChildList) {
                 this.lists[2].tasks.forEach((task, index) => {
-                    if (+task.id === +this.selectTask.id && +task.listId === +this.selectTask.listId && +task.childListId === +this.selectTask.childListId) {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList && +task.childListId === +this.descriptionTaskChildList) {
                         this.lists[2].tasks.splice(index, 1)
                     }
                 })
-
-                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].dueTime = this.time
-                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
-                this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id].realDueDateName = time
-                this.lists[2].tasks.push(this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.selectTask.id])
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueTime = this.time
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
+                this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex].realDueDateName = time
+                this.lists[2].tasks.push(this.lists[this.descriptionTaskList].listsArray[this.descriptionTaskChildList].tasks[this.taskIndex])
             } else {
                 this.lists[2].tasks.forEach((task, index) => {
-                    if (+task.id === +this.selectTask.id && +task.listId === +this.selectTask.listId) {
+                    if (+task.id === +this.taskIndex && +task.listId === +this.descriptionTaskList) {
                         this.lists[2].tasks.splice(index, 1)
                     }
                 })
-
-                this.lists[this.selectTask.listId].tasks[this.selectTask.id].dueTime = this.time
-                this.lists[this.selectTask.listId].tasks[this.selectTask.id].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
-                this.lists[this.selectTask.listId].tasks[this.selectTask.id].realDueDateName = time
-                this.lists[2].tasks.push(this.lists[this.selectTask.listId].tasks[this.selectTask.id])
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueTime = this.time
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].dueDateName = `${this.time.toDateString().slice(0, 10)} at ${this.strTime}`
+                this.lists[this.descriptionTaskList].tasks[this.taskIndex].realDueDateName = time
+                this.lists[2].tasks.push(this.lists[this.descriptionTaskList].tasks[this.taskIndex])
             }
-
         }
     }
 }

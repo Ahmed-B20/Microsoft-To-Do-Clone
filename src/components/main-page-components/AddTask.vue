@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { statistics } from '@/stores/statistics.js'
 import { allLists } from '@/stores/allLists.js'
 import { mapState, mapWritableState } from 'pinia'
 
@@ -44,7 +45,8 @@ export default {
     },
     computed: {
         ...mapState(allLists, ['returnLists']),
-        ...mapWritableState(allLists, ['lists', 'smartList']),
+        ...mapWritableState(allLists, ['lists']),
+        ...mapWritableState(statistics, ['statistics']),
     },
     methods: {
         addTaskToList() {
@@ -52,15 +54,12 @@ export default {
                 this.errorToggle = false
 
                 this.allLists = this.returnLists || []
-                if (!!this.chosenSmartList) {
-                    this.chosenList = this.smartList[this.chosenSmartList]
+                if (!!this.chosenListId() && !this.chosenChildIdListId()) {
+                    this.chosenList = this.allLists[this.chosenListId()]
                 } else {
-                    if (!!this.chosenListId() && !this.chosenChildIdListId()) {
-                        this.chosenList = this.allLists[this.chosenListId()]
-                    } else {
-                        this.chosenList = this.allLists[this.chosenListId()].listsArray[this.chosenChildIdListId()]
-                    }
+                    this.chosenList = this.allLists[this.chosenListId()].listsArray[this.chosenChildIdListId()]
                 }
+
 
                 this.chosenListTasks = this.chosenList.tasks
 
@@ -131,10 +130,11 @@ export default {
                 this.taskObj = {}
 
 
+                this.statistics.allTasks.allTasks++
+                localStorage.setItem("allListAndTasksStatistics", JSON.stringify(this.statistics));
 
                 this.taskId++
                 localStorage.setItem("allListAndTasks", JSON.stringify(this.allLists))
-                localStorage.setItem("allSmartLists", JSON.stringify(this.smartList))
                 this.lists = this.allLists
 
             } else {
@@ -153,7 +153,7 @@ export default {
         SearchForTask(event) {
             if (this.inputValue.length > 0) {
                 this.lists[4].tasks = []
-                this.lists.forEach((list) => {
+                this.lists.slice(5).forEach((list) => {
                     if (list.listChildren) {
                         list.listsArray.forEach((childList) => {
                             childList.tasks.forEach((task) => {

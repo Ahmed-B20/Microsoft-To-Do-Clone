@@ -14,7 +14,7 @@ import { mapState, mapWritableState } from 'pinia'
 
 export default {
     name: 'MarkAsImportant',
-    props: ['listId', 'childId', 'taskElementId', 'taskElements'],
+    props: ['listId', 'childId', 'taskElementId', 'taskElements', 'selectTask'],
     data() {
         return {
             taskElement: '',
@@ -22,10 +22,10 @@ export default {
         }
     },
     beforeMount() {
-        if (!!this.childId) {
-            this.taskName = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].name
+        if (!!this.selectTask.childListId) {
+            this.taskName = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId].name
         } else {
-            this.taskName = this.lists[this.listId].tasks[this.taskElementId].name
+            this.taskName = this.lists[this.selectTask.listId].tasks[this.taskElementId].name
         }
     },
     computed: {
@@ -33,10 +33,10 @@ export default {
         ...mapWritableState(allLists, ['lists', 'smartList']),
 
         returnImportantState() {
-            if (!!this.childId) {
-                return this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].important
+            if (!!this.selectTask.childListId) {
+                return this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId].important
             } else {
-                return this.lists[this.listId].tasks[this.taskElementId].important
+                return this.lists[this.selectTask.listId].tasks[this.taskElementId].important
             }
         }
     },
@@ -46,53 +46,53 @@ export default {
 
             this.taskElement.classList.remove('add-animation-x')
             this.taskElement.classList.remove('add-animation')
-            if (!!this.childId) {
-                if (+this.listId === 1) {
+            if (!!this.selectTask.childListId) {
+                if (+this.selectTask.listId === 1) {
                     this.lists[1].tasks.splice(this.taskElementId, 1)
                 } else {
-                    if (this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].important) {
-                        this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].important = false
+                    if (this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId].important) {
+                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId].important = false
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
                         }
-                        this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId]
-                        this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
-                        this.lists[this.listId].listsArray[this.childId].tasks.push(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId]
+                        // this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.splice(this.taskElementId, 1)
+                        // this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.push(this.importantTask)
+                        // this.importantTask = {}
                     } else {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                         }
-                        this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId].important = true
-                        this.importantTask = this.lists[this.listId].listsArray[this.childId].tasks[this.taskElementId]
-                        this.lists[this.listId].listsArray[this.childId].tasks.splice(this.taskElementId, 1)
-                        this.lists[this.listId].listsArray[this.childId].tasks.unshift(this.importantTask)
-                        this.importantTask = {}
+                        this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId].important = true
+                        // this.importantTask = this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks[this.taskElementId]
+                        // this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.splice(this.taskElementId, 1)
+                        // this.lists[this.selectTask.listId].listsArray[this.selectTask.childListId].tasks.unshift(this.importantTask)
+                        // this.importantTask = {}
                     }
                 }
 
             } else {
-                if (+this.listId === 1) {
+                if (+this.selectTask.listId === 1) {
                     this.lists[1].tasks.splice(this.taskElementId, 1)
                 } else {
-                    if (this.lists[this.listId].tasks[this.taskElementId].important) {
-                        this.lists[this.listId].tasks[this.taskElementId].important = false
+                    if (this.lists[this.selectTask.listId].tasks[this.taskElementId].important) {
+                        this.lists[this.selectTask.listId].tasks[this.taskElementId].important = false
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-task', 'important-hover'))
                         }
-                        this.importantTask = this.lists[this.listId].tasks[this.taskElementId]
-                        this.lists[this.listId].tasks.splice(this.taskElementId, 1)
-                        this.lists[this.listId].tasks.push(this.importantTask)
-                        this.importantTask = {}
+                        // this.importantTask = this.lists[this.selectTask.listId].tasks[this.taskElementId]
+                        // this.lists[this.selectTask.listId].tasks.splice(this.taskElementId, 1)
+                        // this.lists[this.selectTask.listId].tasks.push(this.importantTask)
+                        // this.importantTask = {}
                     } else {
                         if (!!event.target.getAttribute('src')) {
                             event.target.setAttribute('src', event.target.getAttribute('src').replace('important-hover', 'important-task'))
                         }
-                        this.lists[this.listId].tasks[this.taskElementId].important = true
-                        this.importantTask = this.lists[this.listId].tasks[this.taskElementId]
-                        this.lists[this.listId].tasks.splice(this.taskElementId, 1)
-                        this.lists[this.listId].tasks.unshift(this.importantTask)
-                        this.importantTask = {}
+                        this.lists[this.selectTask.listId].tasks[this.taskElementId].important = true
+                        // this.importantTask = this.lists[this.selectTask.listId].tasks[this.taskElementId]
+                        // this.lists[this.selectTask.listId].tasks.splice(this.taskElementId, 1)
+                        // this.lists[this.selectTask.listId].tasks.unshift(this.importantTask)
+                        // this.importantTask = {}
                     }
                 }
 
