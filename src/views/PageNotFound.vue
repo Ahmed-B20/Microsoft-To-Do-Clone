@@ -20,7 +20,6 @@ import { toggleAside } from '@/stores/toggleAside.js'
 export default {
     name: 'PageNotFound',
     beforeRouteEnter(to, from, next) {
-        console.log(to, from);
         if (!!JSON.parse(localStorage.getItem("allUsers"))[0].idOfLoginUser) {
             next()
         } else {

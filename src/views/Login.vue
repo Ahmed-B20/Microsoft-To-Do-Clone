@@ -119,8 +119,6 @@ export default {
     methods: {
         signUp(event) {
             event.preventDefault();
-            console.log(this.emailState, this.usernameState, this.passwordState, this.signInBefore);
-
             if (this.emailState && this.usernameState && this.passwordState && this.signInBefore) {
                 this.signUpData.id = this.allUsers[0].numberOfUsers + 1
                 this.signUpData.loginStatus = true
@@ -139,7 +137,6 @@ export default {
                 this.signUpData = {}
 
                 setTimeout(() => {
-                    console.log('work');
                     this.$router.push({ name: 'home' })
                 }, 100)
             } else {
@@ -148,7 +145,6 @@ export default {
         },
         login(event) {
             event.preventDefault();
-            console.log(this.emailState, this.passwordState, this.loginEmailState, this.loginPasswordState);
             if (this.emailState && this.passwordState && this.loginEmailState && this.loginPasswordState) {
                 this.allUsers[0].usersCredentials[this.loginIndex].lastLogin = new Date()
                 localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
@@ -187,7 +183,7 @@ export default {
                     this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
                         if (userInfo.email === this.email) {
                             this.signInBefore = false
-                            this.allUsers[0].idOfLoginUser = userInfo.id
+                            this.allUsers[0].idOfLoginUser =
 
                             this.loginEmailState = true
                             this.loginIndex = index

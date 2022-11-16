@@ -212,9 +212,6 @@ export default {
             this.listId = index
             this.listName = list.listName
 
-            console.log(this.listId);
-
-
             if (event.target.tagName === 'SPAN' || event.target.tagName === 'IMG') {
                 this.elementDomRect = event.target.parentElement.parentElement.getBoundingClientRect()
                 this.listElement = event.target.parentElement.parentElement
