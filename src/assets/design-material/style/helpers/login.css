@@ -205,6 +205,31 @@
     border-radius: 60px;
 }
 
+.screen .gif-img {
+    position: absolute;
+    height: 70px;
+}
+
+.screen .gif-img.one {
+    transform: rotate(180deg);
+    left: 5%;
+    bottom: 20%;
+}
+
+.screen .gif-img.two {
+    transform: rotate(180deg);
+    left: 0%;
+    top: 10%;
+    height: 80px;
+}
+
+.screen .gif-img.three {
+    transform: translateX(-50%) translateY(-50%) rotate(180deg);
+    left: 50%;
+    top: 50%;
+    height: 90px;
+}
+
 /* ========================= user-setting */
 .user-setting {
     cursor: pointer;

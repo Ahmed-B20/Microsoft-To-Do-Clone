@@ -10,6 +10,11 @@
                             <span class="screen__background__shape screen__background__shape2"></span>
                             <span class="screen__background__shape screen__background__shape1"></span>
                         </div>
+
+                        <!-- <img class="one gif-img" src="@/assets/design-material/gif/asteroid.gif" alt="gif">
+                        <img class="two gif-img" src="@/assets/design-material/gif/astronaut.gif" alt="gif">
+                        <img class="three gif-img" ref="loginAnimation"
+                            src="@/assets/design-material/gif/rocket-launch.png" alt="gif"> -->
                     </div>
                 </div>
 
@@ -156,9 +161,16 @@ export default {
                 this.showPassword = false
                 this.signUpData = {}
 
+                // this.$refs.loginAnimation.style.height = '120px'
+                // this.$refs.loginAnimation.src = this.$refs.loginAnimation.src.replace('png', 'gif')
+
+                // setTimeout(() => {
+                //     this.$router.push({ name: 'home' })
+                // }, 2000)
+
                 setTimeout(() => {
                     this.$router.push({ name: 'home' })
-                }, 100)
+                }, 200)
             } else {
                 this.showWarning = true
                 this.warningMessage = "Wrong Data Formate"
@@ -166,6 +178,8 @@ export default {
         },
         login(event) {
             event.preventDefault();
+            console.log(this.emailState, this.passwordState, this.loginEmailState, this.loginPasswordState)
+
             if (this.emailState && this.passwordState && this.loginEmailState && this.loginPasswordState) {
                 this.allUsers[0].usersCredentials[this.loginIndex].lastLogin = new Date()
                 localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
@@ -176,9 +190,16 @@ export default {
                 this.loginPasswordState = false
                 this.showPassword = false
 
+                // this.$refs.loginAnimation.src = this.$refs.loginAnimation.src.replace('png', 'gif')
+                // this.$refs.loginAnimation.style.height = '120px'
+
+                // setTimeout(() => {
+                //     // this.$router.push({ name: 'home' })
+                // }, 2000)
+
                 setTimeout(() => {
                     this.$router.push({ name: 'home' })
-                }, 100)
+                }, 200)
             } else {
                 this.showWarning = true
                 this.warningMessage = 'Wrong Email Or Password'
@@ -207,10 +228,10 @@ export default {
                     this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
                         if (userInfo.email === this.email) {
                             this.signInBefore = false
-                            // this.allUsers[0].idOfLoginUser =
+                            this.allUsers[0].idOfLoginUser = index + 1
 
-                            this.showWarning = true
-                            this.warningMessage = 'This Mail Is Already Sign In'
+                            // this.showWarning = true
+                            // this.warningMessage = 'This Mail Is Already Sign In'
 
                             this.loginEmailState = true
                             this.loginIndex = index
