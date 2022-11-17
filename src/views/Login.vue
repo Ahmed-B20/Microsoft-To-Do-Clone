@@ -10,6 +10,11 @@
                             <span class="screen__background__shape screen__background__shape2"></span>
                             <span class="screen__background__shape screen__background__shape1"></span>
                         </div>
+
+                        <!-- <img class="one gif-img" src="@/assets/design-material/gif/asteroid.gif" alt="gif">
+                        <img class="two gif-img" src="@/assets/design-material/gif/astronaut.gif" alt="gif">
+                        <img class="three gif-img" ref="loginAnimation"
+                            src="@/assets/design-material/gif/rocket-launch.png" alt="gif"> -->
                     </div>
                 </div>
 
@@ -78,10 +83,25 @@
                 </div>
             </div>
         </div>
+        <warning-message :showWarning="showWarning">
+            <template #warningIcon>
+                <img src="@/assets/design-material/icons/warning.png" alt="warning icon">
+            </template>
+
+            <template #warningMessage>
+                <p>{{ warningMessage }}</p>
+            </template>
+
+            <template #closeWarning>
+                <img @click="closeWarning" src="@/assets/design-material/icons/close.png" alt="close icon">
+            </template>
+        </warning-message>
     </teleport>
 </template>
 
 <script>
+import WarningMessage from '../components/global-components/WarningMessage.vue'
+
 import { allUsers } from '@/stores/allUsers.js'
 import { mapState, mapWritableState } from 'pinia'
 
@@ -93,6 +113,9 @@ export default {
         } else {
             next()
         }
+    },
+    components: {
+        WarningMessage
     },
     data() {
         return {
@@ -110,7 +133,9 @@ export default {
             loginPasswordState: false,
             loginIndex: null,
             signUpData: {},
-            showPassword: false
+            showPassword: false,
+            warningMessage: '',
+            showWarning: false
         }
     },
     computed: {
@@ -119,8 +144,6 @@ export default {
     methods: {
         signUp(event) {
             event.preventDefault();
-            console.log(this.emailState, this.usernameState, this.passwordState, this.signInBefore);
-
             if (this.emailState && this.usernameState && this.passwordState && this.signInBefore) {
                 this.signUpData.id = this.allUsers[0].numberOfUsers + 1
                 this.signUpData.loginStatus = true
@@ -138,33 +161,48 @@ export default {
                 this.showPassword = false
                 this.signUpData = {}
 
+                // this.$refs.loginAnimation.style.height = '120px'
+                // this.$refs.loginAnimation.src = this.$refs.loginAnimation.src.replace('png', 'gif')
+
+                // setTimeout(() => {
+                //     this.$router.push({ name: 'home' })
+                // }, 2000)
+
                 setTimeout(() => {
-                    console.log('work');
                     this.$router.push({ name: 'home' })
-                }, 100)
+                }, 200)
             } else {
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = "Wrong Data Formate"
             }
         },
         login(event) {
             event.preventDefault();
-            console.log(this.emailState, this.passwordState, this.loginEmailState, this.loginPasswordState);
+            console.log(this.emailState, this.passwordState, this.loginEmailState, this.loginPasswordState)
+
             if (this.emailState && this.passwordState && this.loginEmailState && this.loginPasswordState) {
                 this.allUsers[0].usersCredentials[this.loginIndex].lastLogin = new Date()
                 localStorage.setItem("allUsers", JSON.stringify(this.allUsers));
 
-                console.log('the first login');
                 this.emailState = false
                 this.passwordState = false
                 this.loginEmailState = false
                 this.loginPasswordState = false
                 this.showPassword = false
 
+                // this.$refs.loginAnimation.src = this.$refs.loginAnimation.src.replace('png', 'gif')
+                // this.$refs.loginAnimation.style.height = '120px'
+
+                // setTimeout(() => {
+                //     // this.$router.push({ name: 'home' })
+                // }, 2000)
+
                 setTimeout(() => {
                     this.$router.push({ name: 'home' })
-                }, 100)
+                }, 200)
             } else {
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = 'Wrong Email Or Password'
             }
         },
         togglePassword(event, target) {
@@ -177,6 +215,9 @@ export default {
                     event.target.src = event.target.src.replace('eye', 'hidden')
                 }
             }
+        },
+        closeWarning() {
+            this.showWarning = false
         }
     },
     watch: {
@@ -187,7 +228,10 @@ export default {
                     this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
                         if (userInfo.email === this.email) {
                             this.signInBefore = false
-                            this.allUsers[0].idOfLoginUser = userInfo.id
+                            this.allUsers[0].idOfLoginUser = index + 1
+
+                            // this.showWarning = true
+                            // this.warningMessage = 'This Mail Is Already Sign In'
 
                             this.loginEmailState = true
                             this.loginIndex = index
@@ -205,7 +249,8 @@ export default {
                 }
             } else {
                 this.emailState = false
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = 'Wrong Email Format'
             }
         },
         password() {
@@ -225,7 +270,8 @@ export default {
                 })
             } else {
                 this.passwordState = false
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = "Wrong Password Format, Must Contain Numbers, - Character, _ Character, Capital and Small latter's And Length Between 3-16"
             }
         },
         username() {
@@ -234,7 +280,15 @@ export default {
                 this.signUpData.username = this.username
             } else {
                 this.usernameState = false
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = "Wrong UserName Format, Can Contain Numbers, Special Character, Capital and Small latter's And Length Between 6-16"
+            }
+        },
+        showWarning() {
+            if (this.showWarning) {
+                setTimeout(() => {
+                    this.showWarning = false
+                }, 3000)
             }
         }
     }
