@@ -78,10 +78,25 @@
                 </div>
             </div>
         </div>
+        <warning-message :showWarning="showWarning">
+            <template #warningIcon>
+                <img src="@/assets/design-material/icons/warning.png" alt="warning icon">
+            </template>
+
+            <template #warningMessage>
+                <p>{{ warningMessage }}</p>
+            </template>
+
+            <template #closeWarning>
+                <img @click="closeWarning" src="@/assets/design-material/icons/close.png" alt="close icon">
+            </template>
+        </warning-message>
     </teleport>
 </template>
 
 <script>
+import WarningMessage from '../components/global-components/WarningMessage.vue'
+
 import { allUsers } from '@/stores/allUsers.js'
 import { mapState, mapWritableState } from 'pinia'
 
@@ -93,6 +108,9 @@ export default {
         } else {
             next()
         }
+    },
+    components: {
+        WarningMessage
     },
     data() {
         return {
@@ -110,7 +128,9 @@ export default {
             loginPasswordState: false,
             loginIndex: null,
             signUpData: {},
-            showPassword: false
+            showPassword: false,
+            warningMessage: '',
+            showWarning: false
         }
     },
     computed: {
@@ -140,7 +160,8 @@ export default {
                     this.$router.push({ name: 'home' })
                 }, 100)
             } else {
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = "Wrong Data Formate"
             }
         },
         login(event) {
@@ -159,7 +180,8 @@ export default {
                     this.$router.push({ name: 'home' })
                 }, 100)
             } else {
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = 'Wrong Email Or Password'
             }
         },
         togglePassword(event, target) {
@@ -172,6 +194,9 @@ export default {
                     event.target.src = event.target.src.replace('eye', 'hidden')
                 }
             }
+        },
+        closeWarning() {
+            this.showWarning = false
         }
     },
     watch: {
@@ -182,7 +207,10 @@ export default {
                     this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
                         if (userInfo.email === this.email) {
                             this.signInBefore = false
-                            this.allUsers[0].idOfLoginUser =
+                            // this.allUsers[0].idOfLoginUser =
+
+                            this.showWarning = true
+                            this.warningMessage = 'This Mail Is Already Sign In'
 
                             this.loginEmailState = true
                             this.loginIndex = index
@@ -200,7 +228,8 @@ export default {
                 }
             } else {
                 this.emailState = false
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = 'Wrong Email Format'
             }
         },
         password() {
@@ -220,7 +249,8 @@ export default {
                 })
             } else {
                 this.passwordState = false
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = "Wrong Password Format, Must Contain Numbers, - Character, _ Character, Capital and Small latter's And Length Between 3-16"
             }
         },
         username() {
@@ -229,7 +259,15 @@ export default {
                 this.signUpData.username = this.username
             } else {
                 this.usernameState = false
-                console.log('error');
+                this.showWarning = true
+                this.warningMessage = "Wrong UserName Format, Can Contain Numbers, Special Character, Capital and Small latter's And Length Between 6-16"
+            }
+        },
+        showWarning() {
+            if (this.showWarning) {
+                setTimeout(() => {
+                    this.showWarning = false
+                }, 3000)
             }
         }
     }
