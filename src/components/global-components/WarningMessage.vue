@@ -1,7 +1,7 @@
 <template>
     <transition name="to-top">
         <div v-if="showWarning" class="warning-message-container">
-            <div class="warning-message-content">
+            <div class="warning-message-content" :class="{ info: info, hint: hint, check: check }">
                 <slot name="warningIcon"></slot>
                 <slot name="warningMessage"></slot>
                 <slot name="closeWarning"></slot>
@@ -13,6 +13,6 @@
 <script>
 export default {
     name: 'WarningMessage',
-    props: ['showWarning']
+    props: ['showWarning', 'info', 'hint', 'check']
 }
 </script>

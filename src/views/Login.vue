@@ -39,8 +39,8 @@
 
                             <label for="password" class="custom-label">
                                 <img for="password" src="@/assets/design-material/icons/lock.png" alt="password" />
-                                <input ref="signUpPass" type="password" name="password" placeholder="Password" required
-                                    id="password" v-model="password">
+                                <input @blur="checkPasswordStrength" ref="signUpPass" type="password" name="password"
+                                    placeholder="Password" required id="password" v-model="password">
                                 <img v-if="showPassword" @click="togglePassword($event, 'signUpPass')"
                                     src="@/assets/design-material/icons/eye.png" alt="show password" />
                             </label>
@@ -83,9 +83,9 @@
                 </div>
             </div>
         </div>
-        <warning-message :showWarning="showWarning">
+        <warning-message :showWarning="showWarning" :info="info" :hint='hint' :check='check'>
             <template #warningIcon>
-                <img src="@/assets/design-material/icons/warning.png" alt="warning icon">
+                <img :src="src" alt="warning icon">
             </template>
 
             <template #warningMessage>
@@ -135,7 +135,13 @@ export default {
             signUpData: {},
             showPassword: false,
             warningMessage: '',
-            showWarning: false
+            showWarning: false,
+            src: '',
+            info: false,
+            hint: false,
+            check: false,
+            passwordStrengthRegex: /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/,
+            passwordStrength: ''
         }
     },
     computed: {
@@ -174,6 +180,10 @@ export default {
             } else {
                 this.showWarning = true
                 this.warningMessage = "Wrong Data Formate"
+                this.src = '/src/assets/design-material/icons/warning.png'
+                this.info = false
+                this.hint = false
+                this.check = false
             }
         },
         login(event) {
@@ -203,6 +213,7 @@ export default {
             } else {
                 this.showWarning = true
                 this.warningMessage = 'Wrong Email Or Password'
+                this.src = '@/assets/design-material/icons/warning.png'
             }
         },
         togglePassword(event, target) {
@@ -218,6 +229,29 @@ export default {
         },
         closeWarning() {
             this.showWarning = false
+        },
+        checkPasswordStrength() {
+            if (this.regexForPassword.test(this.password)) {
+                this.hint = this.passwordStrength
+
+                console.log(this.passwordStrength);
+
+                if (this.passwordStrength) {
+                    this.showWarning = true
+                    this.warningMessage = "Your Password Is Strong"
+                    this.src = '/src/assets/design-material/icons/checked.png'
+                    this.info = false
+                    this.hint = false
+                    this.check = true
+                } else {
+                    this.showWarning = true
+                    this.warningMessage = "Your Password Is Weak"
+                    this.src = '/src/assets/design-material/icons/exclamation.png'
+                    this.info = false
+                    this.hint = true
+                    this.check = false
+                }
+            }
         }
     },
     watch: {
@@ -251,6 +285,7 @@ export default {
                 this.emailState = false
                 this.showWarning = true
                 this.warningMessage = 'Wrong Email Format'
+                this.src = '/src/assets/design-material/icons/warning.png'
             }
         },
         password() {
@@ -258,6 +293,12 @@ export default {
             if (this.regexForPassword.test(this.password)) {
                 this.passwordState = true
                 this.signUpData.password = this.password
+
+                if (this.passwordStrengthRegex.test(this.password)) {
+                    this.passwordStrength = true
+                } else {
+                    this.passwordStrength = false
+                }
 
                 this.allUsers[0].usersCredentials.forEach((userInfo, index) => {
                     if (userInfo.password === this.password) {
@@ -272,6 +313,10 @@ export default {
                 this.passwordState = false
                 this.showWarning = true
                 this.warningMessage = "Wrong Password Format, Must Contain Numbers, - Character, _ Character, Capital and Small latter's And Length Between 3-16"
+                this.src = '/src/assets/design-material/icons/info.png'
+                this.info = true
+                this.hint = false
+                this.check = false
             }
         },
         username() {
@@ -282,13 +327,17 @@ export default {
                 this.usernameState = false
                 this.showWarning = true
                 this.warningMessage = "Wrong UserName Format, Can Contain Numbers, Special Character, Capital and Small latter's And Length Between 6-16"
+                this.src = '/src/assets/design-material/icons/info.png'
+                this.info = true
+                this.hint = false
+                this.check = false
             }
         },
         showWarning() {
             if (this.showWarning) {
                 setTimeout(() => {
                     this.showWarning = false
-                }, 3000)
+                }, 2000)
             }
         }
     }

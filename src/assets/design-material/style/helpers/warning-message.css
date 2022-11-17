@@ -32,6 +32,19 @@
     background-color: #ee404c;
 }
 
+.warning-message-container .warning-message-content.info::after {
+    background-color: #08a8ee;
+}
+
+.warning-message-container .warning-message-content.hint::after {
+    background-color: #ffda6b;
+}
+
+.warning-message-container .warning-message-content.check::after {
+    background-color: #0aa06e;
+}
+
+
 .warning-message-container .warning-message-content img:not(:last-of-type) {
     height: 50px;
 }
