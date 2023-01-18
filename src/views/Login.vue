@@ -272,7 +272,8 @@ export default {
             } else {
                 this.passwordState = false
                 this.showWarning = true
-                this.warningMessage = "Wrong Password Format, Must Contain Numbers, - Character, _ Character, Capital and Small latter's And Length Between 3-16"
+                // this.warningMessage = "Wrong Password Format, Must Contain Numbers, - Character, _ Character, Capital and Small latter's And Length Between 3-16"
+                this.warningMessage = "Wrong Password Format, Must Contain Numbers, latter's And Length Between 3-16"
             }
         },
         username() {
